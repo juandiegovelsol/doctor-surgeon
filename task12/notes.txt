@@ -1,0 +1,23 @@
+There are no issues till Turn 3. However, there is an accuracy issue in Turn 4.
+The number 3 has been removed, so it should be calculated as 0 on the sum. The blank face
+could be shown on the front when rolling the dice. So the model should calculate the
+total number of possible outcomes for each roll as 6x6x6=216, not 6x6x5=180.
+
+Turn 1 tries to implement the slingshot and the target features. The rock can be dragged in some ways and the movement starts when the mouse is released.
+
+Turn 1 tries to implement a gravity simulation as required.
+
+Turn 1 implements a collision detection needed to take action when the rock hits the target
+
+Turn 2 tries to achieve the modifications required, now the rock can be thrown in any direction and the described issue is solved.
+
+Turn 3 follows the instructions and fixes the bug introduced in turn 2, by returning to the previous version of the mouseup event
+
+
+
+
+Turn 1 has an incomplete code error since the rock dragging feature is not correctly implemented. It partially works but when the rock is dragged outside the left bound of the slingshot and then released, the rock doesn't move
+
+Turn 2 has an incomplete code error since when the rock is released the movement does not follow the projection made between the initial position and the dragged position.
+
+Turn 2 adds information that was not requested because the mouseup event didn't require any change, introducing missalignements in the throwing direction

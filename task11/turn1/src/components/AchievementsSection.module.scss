@@ -1,0 +1,25 @@
+// src/components/AchievementsSection.module.scss
+@import "../styles/variables";
+
+.achievementsGrid {
+  display: grid;
+  gap: 20px;
+  position: relative; /* Add relative positioning */
+
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+    & > div:nth-child(odd) {
+      /* No margin adjustments needed for the left column */
+    }
+    & > div:nth-child(even) {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 100%; /* Ensure it takes full width of the grid cell */
+    }
+  }
+
+  @media (max-width: 767px) {
+    grid-template-columns: 1fr;
+  }
+}

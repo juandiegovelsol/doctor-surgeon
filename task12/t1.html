@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Rock Throwing Game</title>
+    <style>
+      body {
+        margin: 0;
+        overflow: hidden;
+      }
+      #gameContainer {
+        position: relative;
+        width: 800px;
+        height: 600px;
+        background-color: #f0e68c;
+        overflow: hidden;
+      }
+      #slingshot {
+        position: absolute;
+        left: 50px;
+        bottom: 50px;
+        width: 60px;
+        height: 100px;
+        background-color: brown;
+        border-radius: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: flex-end;
+      }
+      #rock {
+        position: absolute;
+        bottom: 20px;
+        width: 20px;
+        height: 20px;
+        background-color: gray;
+        border-radius: 50%;
+        cursor: grab;
+      }
+      #target {
+        position: absolute;
+        right: 100px;
+        top: 200px;
+        width: 50px;
+        height: 50px;
+        background-color: red;
+        border-radius: 50%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="gameContainer">
+      <div id="slingshot">
+        <div id="rock"></div>
+      </div>
+      <div id="target"></div>
+    </div>
+
+    <script>
+      const gameContainer = document.getElementById("gameContainer");
+      const slingshot = document.getElementById("slingshot");
+      const rock = document.getElementById("rock");
+      const target = document.getElementById("target");
+
+      let isDragging = false;
+      let initialMouseX, initialMouseY;
+      let rockStartX, rockStartY;
+
+      const gravity = 0.001; // Adjust for desired gravity effect
+      let velocityX = 0;
+      let velocityY = 0;
+      let isFlying = false;
+
+      rock.addEventListener("mousedown", (e) => {
+        isDragging = true;
+        initialMouseX = e.clientX;
+        initialMouseY = e.clientY;
+        rockStartX = rock.offsetLeft;
+        rockStartY = rock.offsetTop;
+        rock.style.cursor = "grabbing";
+      });
+
+      document.addEventListener("mousemove", (e) => {
+        if (!isDragging) return;
+
+        const dx = e.clientX - initialMouseX;
+        const dy = e.clientY - initialMouseY;
+
+        // Limit dragging within a reasonable area of the slingshot
+        const maxX = 30; // Adjust as needed
+        const maxY = 300; // Adjust as needed
+
+        let newRockX = rockStartX + dx;
+        let newRockY = rockStartY + dy;
+
+        if (newRockX > maxX) newRockX = maxX;
+        if (newRockY > maxY) newRockY = maxY;
+
+        rock.style.left = `${newRockX}px`;
+        rock.style.top = `${newRockY}px`;
+      });
+
+      document.addEventListener("mouseup", () => {
+        if (!isDragging) return;
+        isDragging = false;
+        rock.style.cursor = "grab";
+
+        const releaseMouseX = event.clientX;
+        const releaseMouseY = event.clientY;
+
+        const pullBackX = initialMouseX - releaseMouseX;
+        const pullBackY = initialMouseY - releaseMouseY;
+
+        // Calculate initial velocity based on pull-back distance
+        velocityX = pullBackX * 0.1; // Adjust the multiplier to control speed
+        velocityY = pullBackY * 0.1;
+
+        isFlying = true;
+        animateRock();
+      });
+
+      function animateRock() {
+        if (!isFlying) return;
+
+        // Apply gravity
+        velocityY += gravity;
+
+        // Update rock position
+        const currentRockX = rock.offsetLeft;
+        const currentRockY = rock.offsetTop;
+
+        const newRockX = currentRockX + velocityX;
+        const newRockY = currentRockY + velocityY;
+
+        rock.style.left = `${newRockX}px`;
+        rock.style.top = `${newRockY}px`;
+
+        // Collision detection
+        const rockRect = rock.getBoundingClientRect();
+        const targetRect = target.getBoundingClientRect();
+
+        if (
+          rockRect.right > targetRect.left &&
+          rockRect.left < targetRect.right &&
+          rockRect.bottom > targetRect.top &&
+          rockRect.top < targetRect.bottom
+        ) {
+          isFlying = false;
+          console.log("Target hit!");
+          // You can add game over or score update logic here
+        }
+
+        // Stop if rock goes out of bounds
+        if (
+          newRockY > gameContainer.offsetHeight ||
+          newRockX < 0 ||
+          newRockX > gameContainer.offsetWidth
+        ) {
+          isFlying = false;
+        }
+
+        if (isFlying) {
+          requestAnimationFrame(animateRock);
+        } else {
+          resetRockPosition();
+        }
+      }
+
+      function resetRockPosition() {
+        rock.style.left = ""; // Reset to CSS defined position within slingshot
+        rock.style.top = "";
+        velocityX = 0;
+        velocityY = 0;
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,22 @@
+There are no issues till Turn 3. However, there is an accuracy issue in Turn 4.
+The number 3 has been removed, so it should be calculated as 0 on the sum. The blank face
+could be shown on the front when rolling the dice. So the model should calculate the
+total number of possible outcomes for each roll as 6x6x6=216, not 6x6x5=180.
+
+
+Turn 1 has an outdated fact error since the suggested way to create the React
+application is deprecated, and if the user has React 19 or newer versions,
+it may be several installation issues.
+
+Turn 1 has an incorrect code error since the npm command to create the React
+application makes the code to be impossible to execute
+
+Turn 1 and 2 has a "Doesn't follow formatting constraints" since the border
+is colored darker than the cards background, the prompt asks that it must be lighter
+
+
+
+Turn 1 and turn 2 implements a mostly correct prototype since it includes a
+centered rounded image, a name in bold and capital letters, an assosiated email
+in thinner and grey letters, and a status in red or green.
+

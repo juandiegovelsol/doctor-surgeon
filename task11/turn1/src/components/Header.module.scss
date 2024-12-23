@@ -1,0 +1,9 @@
+// src/components/Header.module.scss
+@import "../styles/variables";
+
+.header {
+  background-color: $primary-color;
+  color: $white-color;
+  padding: 20px;
+  text-align: center;
+}

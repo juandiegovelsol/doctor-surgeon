@@ -1,0 +1,10 @@
+// src/components/Footer.module.scss
+@import "../styles/variables";
+
+.footer {
+  background-color: $primary-color;
+  color: $white-color;
+  text-align: center;
+  padding: 10px;
+  width: 100%;
+}
