@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Japanese Candle Chart</title>
+    <style>
+      #chart-container {
+        width: 100%;
+        height: 300px; /* Adjust as needed */
+        position: relative;
+        border-bottom: 1px solid #ccc;
+        border-left: 1px solid #ccc;
+      }
+
+      .candle {
+        position: absolute;
+      }
+
+      .green {
+        background-color: green;
+      }
+
+      .red {
+        background-color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      <button onclick="setTimeframe(5)">5-Minute</button>
+      <button onclick="setTimeframe(10)">10-Minute</button>
+      <button onclick="setTimeframe(15)">15-Minute</button>
+      <button onclick="setTimeframe(60)">1-Hour</button>
+    </div>
+    <div id="chart-container"></div>
+
+    <script>
+      const initialNumRecords = 289;
+      let priceData = [];
+      let currentPrice = 150.0;
+      const volatility = 0.5;
+      const trend = 0.02;
+
+      function generateInitialData(numRecords) {
+        priceData = [];
+        currentPrice = 150.0;
+        for (let i = 0; i < numRecords; i++) {
+          const randomVariation = Math.random() * volatility * 2 - volatility;
+          currentPrice += randomVariation + trend;
+          priceData.push(parseFloat(currentPrice.toFixed(2)));
+        }
+      }
+
+      generateInitialData(initialNumRecords);
+
+      let currentTimeframe = 5; // Default to 5-minute
+
+      const chartContainer = document.getElementById("chart-container");
+
+      function drawChart(timeframe) {
+        chartContainer.innerHTML = ""; // Clear the existing chart
+        let aggregatedData = aggregateData(timeframe);
+
+        if (aggregatedData.length === 0) return;
+
+        const containerWidth = chartContainer.offsetWidth;
+        const candleWidth = containerWidth / (aggregatedData.length - 1);
+        const allPrices = aggregatedData.flatMap((candle) => [
+          candle.open,
+          candle.high,
+          candle.low,
+          candle.close,
+        ]);
+        const minPrice = Math.min(...allPrices);
+        const maxPrice = Math.max(...allPrices);
+        const priceRange = maxPrice - minPrice;
+        const chartHeight = chartContainer.offsetHeight;
+
+        aggregatedData.forEach((candleData, index) => {
+          const candle = document.createElement("div");
+          candle.classList.add("candle");
+          candle.style.width = candleWidth * 0.8 + "px"; // Adjust width for better visualization
+          candle.style.marginLeft = candleWidth * 0.1 + "px"; // Add some spacing
+
+          if (candleData.close > candleData.open) {
+            candle.classList.add("green");
+            candle.style.height =
+              ((candleData.close - candleData.open) / priceRange) *
+                chartHeight +
+              "px";
+            candle.style.top =
+              chartHeight -
+              ((candleData.close - minPrice) / priceRange) * chartHeight +
+              "px";
+          } else {
+            candle.classList.add("red");
+            candle.style.height =
+              ((candleData.open - candleData.close) / priceRange) *
+                chartHeight +
+              "px";
+            candle.style.top =
+              chartHeight -
+              ((candleData.open - minPrice) / priceRange) * chartHeight +
+              "px";
+          }
+
+          candle.style.left = index * candleWidth + "px";
+          chartContainer.appendChild(candle);
+        });
+      }
+
+      function aggregateData(timeframe) {
+        const aggregatedData = [];
+        const interval = timeframe / 5; // Number of 5-minute intervals
+        if (priceData.length < interval) return [];
+
+        for (let i = 0; i < priceData.length - interval; i += interval) {
+          const chunk = priceData.slice(i, i + interval + 1);
+          const open = chunk[0];
+          const close = chunk[chunk.length - 1];
+          const high = Math.max(...chunk);
+          const low = Math.min(...chunk);
+          aggregatedData.push({ open, high, low, close });
+        }
+        return aggregatedData;
+      }
+
+      function setTimeframe(timeframe) {
+        currentTimeframe = timeframe;
+        drawChart(currentTimeframe);
+      }
+
+      // Initial chart draw
+      drawChart(currentTimeframe);
+    </script>
+  </body>
+</html>

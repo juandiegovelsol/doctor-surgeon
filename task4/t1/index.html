@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Online Store</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      header {
+        background-color: #f0f0f0;
+        padding: 20px;
+        text-align: center;
+      }
+
+      .products-container {
+        padding: 20px;
+        overflow-x: auto; /* Enable horizontal scroll */
+      }
+
+      .product-card {
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        margin-right: 15px;
+        min-width: 300px; /* Base width for desktop */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 15px;
+        text-align: center;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        flex: 0 0 auto; /* Don't grow, don't shrink, base size */
+      }
+
+      .product-card img {
+        max-width: 100%;
+        height: auto;
+        margin-bottom: 10px;
+      }
+
+      .product-card h3 {
+        margin-top: 0;
+        margin-bottom: 5px;
+      }
+
+      .product-card .price {
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
+
+      .product-card .description {
+        margin-bottom: 15px;
+        font-size: 0.9em;
+        color: #555;
+      }
+
+      .product-card button {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      footer {
+        background-color: #333;
+        color: white;
+        text-align: center;
+        padding: 10px;
+        position: sticky;
+        bottom: 0;
+      }
+
+      /* Media query for narrow screens */
+      @media (max-width: 768px) {
+        .products-container {
+          display: flex;
+          flex-direction: column;
+          align-items: center; /* Center items on mobile */
+          overflow-x: hidden; /* Disable horizontal scroll on mobile */
+        }
+
+        .product-card {
+          min-width: auto; /* Allow cards to take full width */
+          width: 80%; /* Adjust width as needed */
+          margin-bottom: 20px;
+          margin-right: 0; /* Remove right margin on mobile */
+        }
+
+        .product-card .description {
+          display: none;
+        }
+
+        .product-card button {
+          margin-top: auto; /* Push button to the bottom */
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Welcome to Our Online Store</h1>
+    </header>
+
+    <main>
+      <section class="products-container">
+        <div id="products" style="display: flex; flex-wrap: nowrap">
+          <!-- Product cards will be added here by JavaScript -->
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>&copy; 2023 Online Store</p>
+    </footer>
+
+    <script>
+      const productsData = [
+        {
+          image: "https://via.placeholder.com/150/FFD700/000000?Text=Product+1",
+          title: "Awesome Gadget",
+          price: "$19.99",
+          description:
+            "This is an awesome gadget that will make your life easier.",
+        },
+        {
+          image: "https://via.placeholder.com/150/87CEFA/000000?Text=Product+2",
+          title: "Cool Tech Item",
+          price: "$49.99",
+          description:
+            "A cool tech item you definitely need in your collection.",
+        },
+        {
+          image: "https://via.placeholder.com/150/98FB98/000000?Text=Product+3",
+          title: "Useful Utility",
+          price: "$29.99",
+          description:
+            "A very useful utility that can help you with everyday tasks.",
+        },
+        {
+          image: "https://via.placeholder.com/150/FFA07A/000000?Text=Product+4",
+          title: "Fancy Accessory",
+          price: "$39.99",
+          description: "A fancy accessory to complement your style.",
+        },
+        {
+          image: "https://via.placeholder.com/150/DDA0DD/000000?Text=Product+5",
+          title: "Essential Supply",
+          price: "$9.99",
+          description: "An essential supply that you will use regularly.",
+        },
+        {
+          image: "https://via.placeholder.com/150/B0E0E6/000000?Text=Product+6",
+          title: "Innovative Tool",
+          price: "$59.99",
+          description: "An innovative tool designed for modern needs.",
+        },
+      ];
+
+      const productsContainer = document.getElementById("products");
+
+      productsData.forEach((product) => {
+        const productCard = document.createElement("div");
+        productCard.classList.add("product-card");
+
+        const image = document.createElement("img");
+        image.src = product.image;
+        image.alt = product.title;
+
+        const title = document.createElement("h3");
+        title.textContent = product.title;
+
+        const price = document.createElement("p");
+        price.classList.add("price");
+        price.textContent = product.price;
+
+        const description = document.createElement("p");
+        description.classList.add("description");
+        description.textContent = product.description;
+
+        const addButton = document.createElement("button");
+        addButton.textContent = "Add to Cart";
+
+        productCard.appendChild(image);
+        productCard.appendChild(title);
+        productCard.appendChild(price);
+        productCard.appendChild(description);
+        productCard.appendChild(addButton);
+
+        productsContainer.appendChild(productCard);
+      });
+    </script>
+  </body>
+</html>

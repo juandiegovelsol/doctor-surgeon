@@ -1,0 +1,81 @@
+/* styles.css */
+
+body {
+  font-family: sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+header,
+nav,
+main,
+footer {
+  padding: 20px;
+  text-align: center;
+}
+
+header {
+  background-color: #f0f0f0;
+}
+
+nav {
+  background-color: #e0e0e0;
+}
+
+nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+nav a {
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  background-color: #fafafa;
+}
+
+main article {
+  padding: 20px;
+}
+
+footer {
+  background-color: #d0d0d0;
+}
+
+/* Styles for PC screen (768px and wider) */
+@media (min-width: 768px) {
+  main {
+    flex-direction: row;
+  }
+
+  nav {
+    text-align: left;
+  }
+
+  nav ul {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  main article {
+    flex: 2; /* Takes up more space */
+  }
+
+  main nav {
+    /* Applying styles to the repositioned nav */
+    flex: 1;
+    background-color: #eee;
+    text-align: left; /* Ensure alignment if needed */
+    padding: 20px; /* Keep the padding */
+  }
+}

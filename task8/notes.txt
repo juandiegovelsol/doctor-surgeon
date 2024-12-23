@@ -1,0 +1,36 @@
+There are no issues till Turn 3. However, there is an accuracy issue in Turn 4.
+The number 3 has been removed, so it should be calculated as 0 on the sum. The blank face
+could be shown on the front when rolling the dice. So the model should calculate the
+total number of possible outcomes for each roll as 6x6x6=216, not 6x6x5=180.
+
+
+
+
+
+Turn 1 successfully implements the navbar with react-router-dom, allowing the single page
+application to have multiple sections as required. The cart information is stored in a CartContext
+allowing all the pages to access and modify the information in a simple way.
+
+Turn 2 sucessfully achieves all the requested modifications, the key problem was solved by adding the
+cartItems index to the hey value, the item remove problem was solved by finding the last index that
+matches the corresponging item id. Now the removeItem method only removes one of the selected items
+
+
+
+Turn 1 has an incorrect code error when adding clothes, the li element keys inside
+the Cart component are repeated when a same article is added to the cart multiple times. This creates
+an execution error since a list item generated through a map method must have unique key elements
+
+Turn 1 has an incorrect code error when removing clother, the removeItem method defined in the
+context removes all the items with the clicked id, so if an item is added multiple times and one of
+them is removed, all the others are removed as well. This is not desired.
+
+Turn 1 adds information that was not asked for, the summary page shows the required information but
+the it is not expected to have a cart page and that the summary page is accessible from it. This was
+not requested and is not functional.
+
+Turn 1 has readability issues since the clothes components can be integrated in only one component
+reused to render shoes, pants, shirts, and hats. It is not necessary to have a separate component for
+each type of clothing
+
+

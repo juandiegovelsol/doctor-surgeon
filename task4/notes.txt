@@ -1,0 +1,33 @@
+There are no issues till Turn 3. However, there is an accuracy issue in Turn 4.
+The number 3 has been removed, so it should be calculated as 0 on the sum. The blank face
+could be shown on the front when rolling the dice. So the model should calculate the
+total number of possible outcomes for each roll as 6x6x6=216, not 6x6x5=180.
+
+In turn 1, the model successfully achieves the wide screen layout as requested, it included a header, a product
+section, and a footer section. The product section contains corner rounded cards and the requested
+information (placeholder image, title, price, description, and an add to cart button)
+
+In Turn 1, the model successfully achieves hiding the description for narrower screens as requested
+
+
+Turn 1 has an incorrect code error (Accuracy) because the media query applies the flex-direction property to
+vertically align the products to the products-container class, not to the products id selector which
+is the HTML tag that contains the products. This brakes the responsiveness of the code to work as requested
+
+Turn 1 has a misleading claim (Accuracy) because the min-width propertie set on the media query
+does not allow cards to take full width, as the comment expresses. The min-with propertie does not limit
+a box width on its maximum allowed with, it limits on its minimum witdh.
+
+
+Turn 2 has still an incorrect code error (Accuracy) because the media query is still applying the same
+flawed styles that does not allow the products to be vertically aligned one below each other
+
+Turn 2 also has a major inaccuracy issue since it claims that the flex-wrap property was erased
+from the inline style while this is not true, that property is still present in the delivered code.
+
+Turn 2 has a misleading issue since removing the flex-wrap: nowrap property does not allow the items
+to wrap when they exceed the container witdh, the flex-warp: wrap property does so.
+
+Turn 2 has an analytical thinking issue since the second CSS Media Query modification explanation
+is not decomposing the reasoning into smaller peaces appropiately, the flex-direction: column
+property is not applied to the product-card parent (which is the products id element)

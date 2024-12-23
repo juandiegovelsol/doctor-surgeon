@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Japanese Candle Chart</title>
+    <style>
+      #chart-container {
+        width: 100%;
+        height: 300px; /* Adjust as needed */
+        position: relative;
+        border-bottom: 1px solid #ccc;
+        border-left: 1px solid #ccc;
+        overflow: hidden; /* Prevent dashed lines from overflowing */
+      }
+
+      .candle {
+        position: absolute;
+      }
+
+      .green {
+        background-color: green;
+      }
+
+      .red {
+        background-color: red;
+      }
+
+      .crosshair-line {
+        position: absolute;
+        background-color: #666;
+        pointer-events: none;
+        z-index: 10;
+      }
+
+      .crosshair-label {
+        position: absolute;
+        background-color: rgba(0, 0, 0, 0.7);
+        color: white;
+        padding: 2px 5px;
+        border-radius: 3px;
+        font-size: 12px;
+        pointer-events: none;
+        z-index: 11;
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      <button onclick="setTimeframe(5)">5-Minute</button>
+      <button onclick="setTimeframe(10)">10-Minute</button>
+      <button onclick="setTimeframe(15)">15-Minute</button>
+      <button onclick="setTimeframe(60)">1-Hour</button>
+    </div>
+    <div id="chart-container">
+      <div
+        id="horizontal-crosshair"
+        class="crosshair-line"
+        style="
+          height: 1px;
+          width: 100%;
+          display: none;
+          border-bottom: 1px dashed #666;
+        "
+      ></div>
+      <div
+        id="vertical-crosshair"
+        class="crosshair-line"
+        style="
+          width: 1px;
+          height: 100%;
+          display: none;
+          border-left: 1px dashed #666;
+        "
+      ></div>
+      <div
+        id="price-label"
+        class="crosshair-label"
+        style="display: none; left: 5px"
+      ></div>
+      <div
+        id="time-label"
+        class="crosshair-label"
+        style="display: none; bottom: 5px"
+      ></div>
+    </div>
+
+    <script>
+      const initialNumRecords = 289;
+      let priceData = [];
+      let currentPrice = 150.0;
+      const volatility = 0.5;
+      const trend = 0.02;
+
+      function generateInitialData(numRecords) {
+        priceData = [];
+        currentPrice = 150.0;
+        for (let i = 0; i < numRecords; i++) {
+          const randomVariation = Math.random() * volatility * 2 - volatility;
+          currentPrice += randomVariation + trend;
+          priceData.push(parseFloat(currentPrice.toFixed(2)));
+        }
+      }
+
+      generateInitialData(initialNumRecords);
+
+      let currentTimeframe = 5; // Default to 5-minute
+
+      const chartContainer = document.getElementById("chart-container");
+      const horizontalCrosshair = document.getElementById(
+        "horizontal-crosshair"
+      );
+      const verticalCrosshair = document.getElementById("vertical-crosshair");
+      const priceLabel = document.getElementById("price-label");
+      const timeLabel = document.getElementById("time-label");
+
+      function drawChart(timeframe) {
+        chartContainer.innerHTML = ""; // Clear the existing chart
+        let aggregatedData = aggregateData(timeframe);
+
+        if (aggregatedData.length === 0) return;
+
+        const containerWidth = chartContainer.offsetWidth;
+        const candleWidth = containerWidth / (aggregatedData.length - 1);
+        const allPrices = aggregatedData.flatMap((candle) => [
+          candle.open,
+          candle.high,
+          candle.low,
+          candle.close,
+        ]);
+        const minPrice = Math.min(...allPrices);
+        const maxPrice = Math.max(...allPrices);
+        const priceRange = maxPrice - minPrice;
+        const chartHeight = chartContainer.offsetHeight;
+
+        aggregatedData.forEach((candleData, index) => {
+          const candle = document.createElement("div");
+          candle.classList.add("candle");
+          candle.style.width = candleWidth * 0.8 + "px"; // Adjust width for better visualization
+          candle.style.marginLeft = candleWidth * 0.1 + "px"; // Add some spacing
+
+          if (candleData.close > candleData.open) {
+            candle.classList.add("green");
+            candle.style.height =
+              ((candleData.close - candleData.open) / priceRange) *
+                chartHeight +
+              "px";
+            candle.style.top =
+              chartHeight -
+              ((candleData.close - minPrice) / priceRange) * chartHeight +
+              "px";
+          } else {
+            candle.classList.add("red");
+            candle.style.height =
+              ((candleData.open - candleData.close) / priceRange) *
+                chartHeight +
+              "px";
+            candle.style.top =
+              chartHeight -
+              ((candleData.open - minPrice) / priceRange) * chartHeight +
+              "px";
+          }
+
+          candle.style.left = index * candleWidth + "px";
+          chartContainer.appendChild(candle);
+        });
+      }
+
+      function aggregateData(timeframe) {
+        const aggregatedData = [];
+        const interval = timeframe / 5; // Number of 5-minute intervals
+        if (priceData.length < interval) return [];
+
+        for (let i = 0; i < priceData.length - interval; i += interval) {
+          const chunk = priceData.slice(i, i + interval + 1);
+          const open = chunk[0];
+          const close = chunk[chunk.length - 1];
+          const high = Math.max(...chunk);
+          const low = Math.min(...chunk);
+          aggregatedData.push({ open, high, low, close });
+        }
+        return aggregatedData;
+      }
+
+      function setTimeframe(timeframe) {
+        currentTimeframe = timeframe;
+        drawChart(currentTimeframe);
+      }
+
+      function formatTime(index) {
+        const totalMinutes = index * currentTimeframe;
+        const hours = Math.floor(totalMinutes / 60);
+        const minutes = String(totalMinutes % 60).padStart(2, "0");
+        return `${String(hours).padStart(2, "0")}:${minutes}`;
+      }
+
+      chartContainer.addEventListener("mousemove", (event) => {
+        const rect = chartContainer.getBoundingClientRect();
+        const x = event.clientX - rect.left;
+        const y = event.clientY - rect.top;
+
+        const aggregatedData = aggregateData(currentTimeframe);
+
+        if (aggregatedData.length === 0) return;
+
+        const containerWidth = chartContainer.offsetWidth;
+        const candleWidth = containerWidth / (aggregatedData.length - 1);
+        const allPrices = aggregatedData.flatMap((candle) => [
+          candle.open,
+          candle.high,
+          candle.low,
+          candle.close,
+        ]);
+
+        const minPrice = Math.min(...allPrices);
+        const maxPrice = Math.max(...allPrices);
+        const priceRange = maxPrice - minPrice;
+        const chartHeight = chartContainer.offsetHeight;
+        console.log("Move", minPrice, maxPrice, priceRange, chartHeight);
+
+        // Horizontal crosshair
+        horizontalCrosshair.style.top = y + "px";
+        horizontalCrosshair.style.display = "block";
+        priceLabel.style.top = y - 15 + "px";
+        const hoveredPrice = maxPrice - (y / chartHeight) * priceRange;
+        priceLabel.textContent = hoveredPrice.toFixed(2);
+        priceLabel.style.display = "block";
+
+        // Vertical crosshair
+        verticalCrosshair.style.left = x + "px";
+        verticalCrosshair.style.display = "block";
+        timeLabel.style.left = x + 5 + "px";
+
+        const hoveredIndex = Math.floor(x / candleWidth);
+        if (hoveredIndex >= 0 && hoveredIndex < aggregatedData.length) {
+          timeLabel.textContent = formatTime(hoveredIndex);
+        } else {
+          timeLabel.textContent = "";
+        }
+        timeLabel.style.display = "block";
+      });
+
+      chartContainer.addEventListener("mouseout", () => {
+        horizontalCrosshair.style.display = "none";
+        verticalCrosshair.style.display = "none";
+        priceLabel.style.display = "none";
+        timeLabel.style.display = "none";
+      });
+
+      // Initial chart draw
+      drawChart(currentTimeframe);
+    </script>
+  </body>
+</html>

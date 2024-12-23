@@ -1,0 +1,30 @@
+There are no issues till Turn 3. However, there is an accuracy issue in Turn 4.
+The number 3 has been removed, so it should be calculated as 0 on the sum. The blank face
+could be shown on the front when rolling the dice. So the model should calculate the
+total number of possible outcomes for each roll as 6x6x6=216, not 6x6x5=180.
+
+
+
+Turn 1 successfully creates the restaurand API, that stores the dishes information in a
+global variable, and exposes a get endpoint to retrieve all dishes with the corresponding
+informnation.
+
+Turn 2 successfully implements the required modifications, the package json is updated
+to support ECMAScript modules instead of common JS and the enpoint returns a OK status
+
+Turn 3 successfully integrates the new required endpoint. The API now allows to create orders
+with the available dishes, calculates the order total and returns an adequate response message.
+It is great that the new endpoint covers many edge cases such as when the request body format is
+incorrect, the ID and quantity values are negative, the ordered dish has no sufficient available
+quantity, and there requested item does not exist. This turn also provides test cases as requested
+
+
+
+
+The turn 3 has an Instruction following error, because it adds information that was not asked for
+and that is unneccessary. In the first turn, the prompt requires installation instructions, those
+are still applicable for turn 2 since the package json was modified, but it is redundant and
+unrequested information for the turn 3. The code only has modifications but the project is already
+installed.
+
+

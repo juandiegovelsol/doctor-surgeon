@@ -1,0 +1,30 @@
+There are no issues till Turn 3. However, there is an accuracy issue in Turn 4.
+The number 3 has been removed, so it should be calculated as 0 on the sum. The blank face
+could be shown on the front when rolling the dice. So the model should calculate the
+total number of possible outcomes for each roll as 6x6x6=216, not 6x6x5=180.
+
+
+Turn 1 handles most of the requirements and understands almost all the prompt instructions.
+3 different falling shapes are generated that can be caught with a click adding 1 point. If the shape
+falls below the game container a point is subtracted. The game is won when 20 points are
+reached and lost when the score is 0.
+
+Turn 1 prevents any action to be taken when the game is over as the prompt requires which
+reflects deep understanding of the user intent.
+
+Turn 1 has an incorrect code error since the triangle shape is not a triangle, it is a square since
+the shape and the triangle classes are applied at the same time. The shape
+class gives the square shape and the triangle class can't be applied correctly
+
+Turn 1 has multiple major inaccurate claims since in the explanation the model mentions that the
+triangle is actually a triangle, when it is not.
+
+Turn 1 has an instruction following issue since the model does not understand the user intent
+for the explanations to be concise, it provides the user with extensive explanations.
+
+Turn 2 still has an incorrect code error since the triangular shape is not correctly achieved. The
+triangle class does not generate a triangle
+
+Turn 3 correctly implements the triangular shape as required, the width and height properties are
+removed from the shape class and set in only for the circle and square classes. This allows the
+triangle to have only the border shape, creating a geometric triangle.

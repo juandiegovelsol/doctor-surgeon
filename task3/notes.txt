@@ -1,0 +1,12 @@
+T1, the model achieves the time frame interactive feature to visualize different candles according to the requested instructions.
+
+T1, The model has an incomplete code error since all the price values are not being displayed,
+for instance, the last hour values are not correctly displayed when the time frame is changed
+to hourly candles
+
+T2, the model delivers incorrect code since the drawChart function wipes out the chart inner HTML
+which erases the poreviously created horizontal and vertical crosshairs. This gives the illusion that the model
+did not understood the prompt but crosshairs with price and time labels were added, just the implementation is not correct.
+
+T2, the code calls the aggregateData method each time the mousemove event is triggered which is a suboptimal and innecessary implementation.
+This may cause efficiency issues when handling considerable size data.

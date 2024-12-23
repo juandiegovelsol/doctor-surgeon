@@ -1,0 +1,34 @@
+There are no issues till Turn 3. However, there is an accuracy issue in Turn 4.
+The number 3 has been removed, so it should be calculated as 0 on the sum. The blank face
+could be shown on the front when rolling the dice. So the model should calculate the
+total number of possible outcomes for each roll as 6x6x6=216, not 6x6x5=180.
+
+
+Turn 1 handles almost all the requirements successfully, it creates 20 cards with 10 pairs of
+different numbers, each number hidden and revealed when the card is pressed. The model understands
+the requirement to hide the pair after 0.5 seconds if the cards are different, and keep the
+found pairs revealed. Also the game implements the timing functionality as requested, adding and
+subtracting the corresponding time.
+
+Turn 1 provides a clear and detailed explanation about how the game works, it is very precise on
+describing how each code file and key feature works (e,g it explains the 3d flipping effect, how the
+cards are randomnly generated, how the timer works, and so on).
+
+Turn 1 has an incomplete code error because the game is not ended when the time is over. The cards
+can still be flipped, the pairs can be found, and the game can be won. This exposes an incomplete
+game over implementation that does not block the cards when the time ends.
+
+Turn 1 has an instruction followin error because a game over implies the game can't be played and
+won, this does not makes sense; the model failed to understand the user intent.
+
+Turn 2 implements all the requirements, the cards are blocked so any can't be revealed when the
+game has been won or lost. The play again button is included and restarts all the game's initial
+conditions as required (which implies restarting the timer, the flipped cards, and so on)
+
+Turn 2 adds information that was not asked for, pausing the game when the 2 different cards are
+flipped (Inside the unmatched function). This blocks the timer in an undesired way, potentially
+giving more time to the player if if the setinterval function is executed when the game is paused.
+
+The error explained above can be clasified as a wrong logical direction issue, since the game should
+not be paused to block the cards from flipping, the cards are already blocked when 2 of them are
+selected due to the conditional inside the flipCard method.

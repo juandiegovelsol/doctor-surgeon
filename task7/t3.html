@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Shape Catcher</title>
+    <style>
+      #game-container {
+        position: relative;
+        width: 400px;
+        height: 500px;
+        border: 1px solid black;
+        overflow: hidden;
+        background-color: #f0f0f0;
+      }
+
+      .shape {
+        position: absolute;
+        top: 0;
+        animation-name: fall;
+        animation-timing-function: linear;
+      }
+
+      .circle {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background-color: red; /* Placeholder, color set by JS */
+      }
+
+      .square {
+        width: 30px;
+        height: 30px;
+        background-color: blue; /* Placeholder, color set by JS */
+      }
+
+      .triangle {
+        width: 0;
+        height: 0;
+        border-left: 15px solid transparent;
+        border-right: 15px solid transparent;
+        border-bottom: 30px solid green; /* Placeholder, color set by JS */
+      }
+
+      @keyframes fall {
+        to {
+          transform: translateY(530px); /* Slightly below the container */
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Shape Catcher</h1>
+    <div id="game-container"></div>
+    <p>Score: <span id="score">10</span></p>
+    <p id="message"></p>
+
+    <script>
+      const gameContainer = document.getElementById("game-container");
+      const scoreDisplay = document.getElementById("score");
+      const messageDisplay = document.getElementById("message");
+      let score = 10;
+      let gameRunning = true;
+
+      function getRandomColor() {
+        const letters = "0123456789ABCDEF";
+        let color = "#";
+        for (let i = 0; i < 6; i++) {
+          color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+      }
+
+      function getRandomShape() {
+        const shapes = ["circle", "square", "triangle"];
+        return shapes[Math.floor(Math.random() * shapes.length)];
+      }
+
+      function createShape() {
+        if (!gameRunning) return;
+
+        const shapeType = getRandomShape();
+        const shape = document.createElement("div");
+        shape.classList.add("shape");
+        shape.classList.add(shapeType);
+
+        const startPosition = Math.random() * (gameContainer.offsetWidth - 30);
+        shape.style.left = `${startPosition}px`;
+
+        const randomColor = getRandomColor();
+        if (shapeType === "circle" || shapeType === "square") {
+          shape.style.backgroundColor = randomColor;
+        } else if (shapeType === "triangle") {
+          shape.style.borderBottomColor = randomColor;
+        }
+
+        const randomDuration = Math.random() * 2 + 2; // Duration between 2 and 4 seconds
+        shape.style.animationDuration = `${randomDuration}s`;
+
+        gameContainer.appendChild(shape);
+
+        shape.addEventListener("animationend", () => {
+          if (gameRunning) {
+            updateScore(-1);
+            shape.remove();
+          }
+        });
+
+        shape.addEventListener("click", () => {
+          if (gameRunning) {
+            updateScore(1);
+            shape.remove();
+          }
+        });
+      }
+
+      function updateScore(amount) {
+        score += amount;
+        scoreDisplay.textContent = score;
+        checkGameStatus();
+      }
+
+      function checkGameStatus() {
+        if (score >= 20) {
+          endGame("You Win!");
+        } else if (score <= 0) {
+          endGame("You Lose!");
+        }
+      }
+
+      function endGame(message) {
+        gameRunning = false;
+        messageDisplay.textContent = message;
+        // You can add actions here, like restarting the game
+        // For example:
+        // const restartButton = document.createElement('button');
+        // restartButton.textContent = 'Restart';
+        // restartButton.onclick = restartGame;
+        // messageDisplay.appendChild(restartButton);
+      }
+
+      function startGameLoop() {
+        if (gameRunning) {
+          createShape();
+          setTimeout(startGameLoop, 1000); // Create a new shape every 1 second
+        }
+      }
+
+      // function restartGame() {
+      //   score = 10;
+      //   scoreDisplay.textContent = score;
+      //   messageDisplay.textContent = '';
+      //   gameRunning = true;
+      //   // Remove existing shapes
+      //   const shapes = document.querySelectorAll('.shape');
+      //   shapes.forEach(shape => shape.remove());
+      //   startGameLoop();
+      // }
+
+      startGameLoop();
+    </script>
+  </body>
+</html>

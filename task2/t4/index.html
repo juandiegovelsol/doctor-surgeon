@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Japanese Candle Chart</title>
+    <style>
+      #chart-container {
+        width: 100%;
+        height: 300px; /* Adjust as needed */
+        position: relative;
+        border-bottom: 1px solid #ccc;
+        border-left: 1px solid #ccc;
+      }
+
+      .candle {
+        position: absolute;
+      }
+
+      .green {
+        background-color: green;
+      }
+
+      .red {
+        background-color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="chart-container"></div>
+
+    <script>
+      const numRecords = 289;
+      const priceData = [];
+      let currentPrice = 150.0;
+      const volatility = 0.5;
+      const trend = 0.02;
+
+      for (let i = 0; i < numRecords; i++) {
+        const randomVariation = Math.random() * volatility * 2 - volatility;
+        currentPrice += randomVariation + trend;
+        priceData.push(parseFloat(currentPrice.toFixed(2)));
+      }
+
+      const chartContainer = document.getElementById("chart-container");
+      const containerWidth = chartContainer.offsetWidth;
+      const candleWidth = containerWidth / (numRecords - 1);
+      const minPrice = Math.min(...priceData);
+      const maxPrice = Math.max(...priceData);
+      const priceRange = maxPrice - minPrice;
+      const chartHeight = chartContainer.offsetHeight;
+
+      for (let i = 0; i < numRecords - 1; i++) {
+        const currentPrice = priceData[i];
+        const nextPrice = priceData[i + 1];
+
+        const candle = document.createElement("div");
+        candle.classList.add("candle");
+        candle.style.width = candleWidth + "px";
+
+        if (nextPrice > currentPrice) {
+          candle.classList.add("green");
+          candle.style.height =
+            ((nextPrice - currentPrice) / priceRange) * chartHeight + "px";
+          candle.style.top =
+            chartHeight -
+            ((nextPrice - minPrice) / priceRange) * chartHeight +
+            "px";
+        } else {
+          candle.classList.add("red");
+          candle.style.height =
+            ((currentPrice - nextPrice) / priceRange) * chartHeight + "px";
+          candle.style.top =
+            chartHeight -
+            ((currentPrice - minPrice) / priceRange) * chartHeight +
+            "px";
+        }
+
+        candle.style.left = i * candleWidth + "px";
+
+        chartContainer.appendChild(candle);
+      }
+      console.log(priceData.length);
+    </script>
+  </body>
+</html>

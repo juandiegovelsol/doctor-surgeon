@@ -1,0 +1,31 @@
+There are no issues till Turn 3. However, there is an accuracy issue in Turn 4.
+The number 3 has been removed, so it should be calculated as 0 on the sum. The blank face
+could be shown on the front when rolling the dice. So the model should calculate the
+total number of possible outcomes for each roll as 6x6x6=216, not 6x6x5=180.
+
+
+
+
+Turn 1 successfully implements the game mechanics required, creating a super grid that is filled
+whith the smaller game winner. The game ends when a played wins 3 games in a row creating a row of
+its character
+
+Turn 2 tries to achieve the given instructions and reflects user intent understanding as it claims in
+the explanation text. It also tries to achieve the enablement feature but this can be correctly tested
+because the game is not playable (it seems to work correctly)
+
+Turn 3 achieves the described dimension issues and makes all the cells to fit inside the super-cell.
+
+Turn 1 has a minor incomplete code error because the smaller grid is not contained inside the bigger
+box, which gives an undesired looking to the super grid. Smaller grids are overflowed from the super
+grid cells.
+
+Turn 2 has a major incorrect code error because the grid is broken, now each smaller cell has the width
+of a bigger cell making the game unpleyable.
+
+Turn 2 has an incorrect claim because it says the modifications ensure the smaller grids fit perfectly
+within the bigger grid cells, which is not happening.
+
+Turn 3 has a minor incomplete code error since when a cell is pressed its heigth changes, making the cell
+unproportioned
+

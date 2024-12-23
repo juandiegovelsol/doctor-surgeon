@@ -1,0 +1,10 @@
+T1, The model generates incorrect code since it uses a frac syntax that does not exists
+in JavaScript. This generates a syntax error that makes the code unexcecutable
+
+T1, The model also generates incorrect code using scape characters that can't be executed
+
+T1 and T2, The model does not  does not generate 289 data records as required so it doesn't
+follow non-formatting constraints
+
+T1, T2, and T3 the candles are horizontally overlapped between them, this should be prevented
+and counts as a style issue
