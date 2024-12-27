@@ -1,0 +1,17 @@
+There are no issues till Turn 3. However, there is an accuracy issue in Turn 4.
+The number 3 has been removed, so it should be calculated as 0 on the sum. The blank face
+could be shown on the front when rolling the dice. So the model should calculate the
+total number of possible outcomes for each roll as 6x6x6=216, not 6x6x5=180.
+
+
+Turn 1 implements the mental agility game as required.
+The model includes any of the two different question posibilities.
+The model understands the game must display a colored word with only two color and textual options.
+The model displays the 2 different options to pick, each colored in red or blue.
+
+Turn 2 designs and implements the scoring system so now the game counts the correct answers,
+increments the score in the user interface, and ends the game if an incorrect answer is pressed.
+
+Turn 3 implements the timer exactly as requested in the prompt. It consists of a timer in the
+SS format that counts down until a correct answer is pressed. Every two correct questions the
+timer's initial time is reduced by 1 second untilt the minimum of 3 seconds is reached.

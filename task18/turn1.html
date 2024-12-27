@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Mental Agility Game</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        margin: 0;
+      }
+
+      #question {
+        font-size: 1.5em;
+        margin-bottom: 20px;
+      }
+
+      #word-container {
+        font-size: 3em;
+        margin-bottom: 30px;
+      }
+
+      .option-container {
+        display: flex;
+        gap: 20px;
+        margin-bottom: 20px;
+      }
+
+      .option {
+        padding: 10px 20px;
+        border: 2px solid #333;
+        cursor: pointer;
+        font-size: 1.2em;
+      }
+
+      #result {
+        font-size: 1.2em;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="question"></div>
+    <div id="word-container"></div>
+    <div class="option-container">
+      <div class="option" id="option1"></div>
+      <div class="option" id="option2"></div>
+    </div>
+    <div id="result"></div>
+
+    <script>
+      const questions = [
+        "What color is the following word?",
+        "What color does the following word mean?",
+      ];
+      const colors = ["BLUE", "RED"];
+
+      let currentQuestionType;
+      let currentWordText;
+      let currentWordColor;
+      let option1Text;
+      let option1Color;
+      let option2Text;
+      let option2Color;
+
+      const questionElement = document.getElementById("question");
+      const wordContainerElement = document.getElementById("word-container");
+      const option1Element = document.getElementById("option1");
+      const option2Element = document.getElementById("option2");
+      const resultElement = document.getElementById("result");
+
+      function generateQuestion() {
+        currentQuestionType =
+          questions[Math.floor(Math.random() * questions.length)];
+        currentWordText = colors[Math.floor(Math.random() * colors.length)];
+        currentWordColor = colors[Math.floor(Math.random() * colors.length)];
+
+        let correctOptionValue;
+        if (currentQuestionType === "What color is the following word?") {
+          correctOptionValue = currentWordColor;
+        } else {
+          correctOptionValue = currentWordText;
+        }
+
+        option1Text = "BLUE";
+        option2Text = "RED";
+        option1Color = colors[Math.floor(Math.random() * colors.length)];
+        option2Color = colors[Math.floor(Math.random() * colors.length)];
+
+        if (Math.random() < 0.5) {
+          if (correctOptionValue === "BLUE") {
+            option1Color = "BLUE";
+            option2Color = "RED";
+          } else {
+            option1Color = "RED";
+            option2Color = "BLUE";
+          }
+        } else {
+          if (correctOptionValue === "BLUE") {
+            option1Color = "RED";
+            option2Color = "BLUE";
+          } else {
+            option1Color = "BLUE";
+            option2Color = "RED";
+          }
+        }
+
+        questionElement.textContent = currentQuestionType;
+        wordContainerElement.textContent = currentWordText;
+        wordContainerElement.style.color = currentWordColor.toLowerCase();
+        option1Element.textContent = option1Text;
+        option1Element.style.color = option1Color.toLowerCase();
+        option2Element.textContent = option2Text;
+        option2Element.style.color = option2Color.toLowerCase();
+        resultElement.textContent = "";
+      }
+
+      function checkAnswer(selectedOption) {
+        let correctAnswer;
+        if (currentQuestionType === "What color is the following word?") {
+          correctAnswer = currentWordColor;
+        } else {
+          correctAnswer = currentWordText;
+        }
+
+        let selectedAnswer;
+        if (selectedOption === 1) {
+          selectedAnswer = option1Text;
+        } else {
+          selectedAnswer = option2Text;
+        }
+
+        if (selectedAnswer === correctAnswer) {
+          resultElement.textContent = "correct";
+        } else {
+          resultElement.textContent = "incorrect";
+        }
+      }
+
+      option1Element.addEventListener("click", () => checkAnswer(1));
+      option2Element.addEventListener("click", () => checkAnswer(2));
+
+      generateQuestion();
+    </script>
+  </body>
+</html>

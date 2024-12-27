@@ -1,0 +1,35 @@
+There are no issues till Turn 3. However, there is an accuracy issue in Turn 4.
+The number 3 has been removed, so it should be calculated as 0 on the sum. The blank face
+could be shown on the front when rolling the dice. So the model should calculate the
+total number of possible outcomes for each roll as 6x6x6=216, not 6x6x5=180.
+
+
+
+Turn 1 implements the agility game mostly as required. It has the circle that colors at a "delay" random
+time between the requested interval, it measures the elapsed time between the circle coloring and the event
+click, and displays the top 10 lowest times.
+
+Turn 2 modifies the code to display an initial instructions paragraph and to allow the game to start with
+with the first circle click. Now, the circle's border is visible every time and only the background is
+transparent or colored. This turn does not have issues according to the prompt. 
+
+Turn 3 sucessfully identifies and removes the CSS line that was causing a potential delay in the reaction time
+
+Turn 4 stores the 10 fastest reaction times in the localstorage to allow that information to be persistent.
+When the page is loaded, the localstorage is consulted to get the recorded values, when a new time is recorded
+the localstorage is set.
+
+
+
+
+Incomplete code: Turn 1 has this error because the initial intruction paragraph can't be seen, since the game
+is started inmediatly after the page is loaded.
+
+Doesn't understand user intent: Turn 1 has this error because technically the initial instructions
+paragraph is displayed but it is inmediatly replaced which is not the user's intent
+
+Adds information that was not asked for: the model adds a transition when the circle is colored which was not
+asked and can potentially delay the user's reaction time.
+
+Minor Inaccuracy: Turn 1 has this error because states the CSS code must be stored as style.css in the same
+directory while the CSS code is embeeded in the HTML file.

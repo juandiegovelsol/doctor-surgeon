@@ -1,0 +1,31 @@
+There are no issues till Turn 3. However, there is an accuracy issue in Turn 4.
+The number 3 has been removed, so it should be calculated as 0 on the sum. The blank face
+could be shown on the front when rolling the dice. So the model should calculate the
+total number of possible outcomes for each roll as 6x6x6=216, not 6x6x5=180.
+
+Turn 1 sucessfully creates the checking list as required where the list elements impacts the displayed percentage.
+
+Turn 1 implements a circular progress bar as was required in the prompt
+
+Turn 1 calculates the progress percentage according to the checked elements
+
+Turn 3 achieves reflecting a change as the items are checked so every element checked or
+unchecked creates a new visualization of the progress bar
+
+
+Incomplete code: Turns 1, 2, and 4 have this error because the loading percentage is not reflected in the
+progress bar, it is only reflected in the progress number.
+
+Doesn't understand user intent: Turns 1, 2, and 4 have this error becuase the main goal of including a
+progress bar is to display the percentage filling the corresponding part of the bar.
+
+Formatting error: Turns 1, 2, and 4 have this error because the progress percentage does not match with the
+progress bar filled part, creating inconsistencies between the information displayed and the
+graphical representation.
+
+Incorrect code: Turn 3 has this error because the model completly changes the progress bar, creating
+something that is not a circular progress bar. Now, there are oval-shaped clips that rotates as
+the progress changes
+
+Wrong logical direction: Turn 3 has this error because the model takes a complete different approach
+that significantly deviates from what a progress bar is.

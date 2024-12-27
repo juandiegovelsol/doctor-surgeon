@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Agility Game</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        margin: 0;
+        background-color: #f0f0f0;
+      }
+
+      .game-container {
+        text-align: center;
+      }
+
+      #instructions {
+        margin-bottom: 20px;
+      }
+
+      #circle {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        border: 2px solid #333;
+        cursor: pointer;
+        opacity: 0; /* Initially transparent */
+        transition: background-color 0.1s ease;
+        margin: 20px auto;
+      }
+
+      #results {
+        margin-top: 30px;
+        text-align: left;
+      }
+
+      #results h2 {
+        margin-bottom: 10px;
+      }
+
+      #ranking {
+        list-style-type: none;
+        padding: 0;
+      }
+
+      #ranking li {
+        margin-bottom: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="game-container">
+      <p id="instructions">Click the circle as soon as it turns blue!</p>
+      <div id="circle"></div>
+      <div id="results">
+        <h2>Top 10 Times</h2>
+        <ul id="ranking"></ul>
+      </div>
+    </div>
+
+    <script>
+      const instructions = document.getElementById("instructions");
+      const circle = document.getElementById("circle");
+      const rankingList = document.getElementById("ranking");
+
+      let startTime;
+      let reactionTime;
+      let gameStarted = false;
+      let times = [];
+
+      function getRandomDelay() {
+        return Math.random() * 10000; // Random delay between 0 and 10 seconds in milliseconds
+      }
+
+      function formatTime(milliseconds) {
+        const seconds = Math.floor(milliseconds / 1000);
+        const ms = milliseconds % 1000;
+        return `${String(seconds).padStart(2, "0")}:${String(ms).padStart(
+          3,
+          "0"
+        )}`;
+      }
+
+      function updateRanking() {
+        times.sort((a, b) => a - b); // Sort times in ascending order
+        const top10 = times.slice(0, 10); // Get the top 10 times
+
+        rankingList.innerHTML = ""; // Clear the current ranking
+        top10.forEach((time) => {
+          const listItem = document.createElement("li");
+          listItem.textContent = formatTime(time);
+          rankingList.appendChild(listItem);
+        });
+      }
+
+      function startGame() {
+        gameStarted = true;
+        circle.style.opacity = 0;
+        circle.style.backgroundColor = "";
+        instructions.textContent = "Get ready...";
+
+        const delay = getRandomDelay();
+        setTimeout(() => {
+          if (gameStarted) {
+            circle.style.opacity = 1;
+            circle.style.backgroundColor = "lightblue";
+            startTime = Date.now();
+            instructions.textContent = "Click now!";
+          }
+        }, delay);
+      }
+
+      circle.addEventListener("click", () => {
+        if (gameStarted && startTime) {
+          const endTime = Date.now();
+          reactionTime = endTime - startTime;
+          times.push(reactionTime);
+          updateRanking();
+          gameStarted = false;
+          instructions.textContent = `Your time: ${formatTime(
+            reactionTime
+          )}. Click the circle to play again.`;
+          circle.style.opacity = 0; // Reset circle visibility
+          circle.style.backgroundColor = "";
+          startTime = null; // Reset start time
+        } else if (!gameStarted) {
+          startGame();
+        }
+      });
+
+      // Start the game on initial load
+      startGame();
+    </script>
+  </body>
+</html>
