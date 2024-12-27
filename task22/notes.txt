@@ -1,0 +1,42 @@
+There are no issues till Turn 3. However, there is an accuracy issue in Turn 4.
+The number 3 has been removed, so it should be calculated as 0 on the sum. The blank face
+could be shown on the front when rolling the dice. So the model should calculate the
+total number of possible outcomes for each roll as 6x6x6=216, not 6x6x5=180.
+
+
+Turn 1 understands the requirements for creating a 5x5 grid that can be filled in alternating
+turns by two different players.
+
+Turn 1 successfully implements the game mechanincs for fillin the corresponding cell with the
+current player's color.
+
+Turn 1 ends the game when there are no more available cells.
+
+Turn 2 correctly implements the ending condition, now the game finishes only when no more cells
+are available.
+
+Turn 2 seems to understand better the wining conditions than Turn 1 because in tries to evaluate
+chained cells.
+
+
+Incorrect condition: Turn 1 implements an incorrect winning condition since the code checks
+for complete rows, columns, or diagonals with the same color. This is not the requested winning 
+condition.
+
+Wrong logical direction: Turn 1 does not implement the requested game, the game ends when a row,
+column, or diagonal is filled with the same color, leaving available cells.
+
+Doesn't understand the user intent: in the turn 1 the model does not understand that the main
+goal of the game is to achieve the longest cell chain in any possible direction.
+
+Doesn't understand the user intent: in Turn 1 the model does not return brief explanations as
+required
+
+Incorrect code: In turn 2 the game is not able to evaluate which player has the longest chained
+cells, leading to incorrect winners or draws when it is a clear winner.
+
+Incorrect loop: in Turn 2, the loop inside the checkChain method checks only for chains within a single row
+or column, but a chain can be achieved in multiple rows and columns at the same time.
+
+Wrong logical direction: in Turn 2, the winner is not correctly calculated because chains are
+only counted if cells are withing the same row or column.

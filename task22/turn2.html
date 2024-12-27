@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Grid Game</title>
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        margin: 0;
+        background-color: #f0f0f0;
+      }
+      .grid-container {
+        display: grid;
+        grid-template-columns: repeat(5, 50px);
+        grid-template-rows: repeat(5, 50px);
+        gap: 2px;
+      }
+      .cell {
+        width: 50px;
+        height: 50px;
+        border: 1px solid #ccc;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 20px;
+      }
+      .red {
+        background-color: red;
+      }
+      .blue {
+        background-color: blue;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="grid-container" id="grid"></div>
+    <script>
+      const gridSize = 5;
+      const grid = document.getElementById("grid");
+      let currentPlayer = "red";
+      let cells = [];
+      let moves = 0;
+
+      function createGrid() {
+        for (let i = 0; i < gridSize * gridSize; i++) {
+          const cell = document.createElement("div");
+          cell.classList.add("cell");
+          cell.dataset.index = i;
+          cell.addEventListener("click", handleCellClick);
+          grid.appendChild(cell);
+          cells.push(cell);
+        }
+      }
+
+      function handleCellClick(event) {
+        const cell = event.target;
+        if (
+          !cell.classList.contains("red") &&
+          !cell.classList.contains("blue")
+        ) {
+          cell.classList.add(currentPlayer);
+          cell.textContent = currentPlayer === "red" ? "R" : "B";
+          moves++;
+          if (moves === gridSize * gridSize) {
+            determineWinner();
+            return;
+          }
+          currentPlayer = currentPlayer === "red" ? "blue" : "red";
+        }
+      }
+
+      function determineWinner() {
+        const redScore = calculateLongestChain("red");
+        const blueScore = calculateLongestChain("blue");
+        console.log(redScore, blueScore);
+        if (redScore > blueScore) {
+          alert("Red wins!");
+        } else if (blueScore > redScore) {
+          alert("Blue wins!");
+        } else {
+          alert("It's a draw!");
+        }
+        disableCells();
+      }
+
+      function calculateLongestChain(player) {
+        let maxChain = 0;
+        for (let i = 0; i < gridSize; i++) {
+          for (let j = 0; j < gridSize; j++) {
+            if (cells[i * gridSize + j].classList.contains(player)) {
+              maxChain = Math.max(
+                maxChain,
+                checkChain(i, j, 0, 1, player), // Right
+                checkChain(i, j, 0, -1, player), // Left
+                checkChain(i, j, 1, 0, player), // Down
+                checkChain(i, j, -1, 0, player) // Up
+              );
+            }
+          }
+        }
+        return maxChain;
+      }
+
+      function checkChain(row, col, rowDir, colDir, player) {
+        let count = 0;
+        let r = row;
+        let c = col;
+        while (
+          r >= 0 &&
+          r < gridSize &&
+          c >= 0 &&
+          c < gridSize &&
+          cells[r * gridSize + c].classList.contains(player)
+        ) {
+          count++;
+          r += rowDir;
+          c += colDir;
+        }
+        return count;
+      }
+
+      function disableCells() {
+        cells.forEach((cell) => (cell.style.pointerEvents = "none"));
+      }
+
+      createGrid();
+    </script>
+  </body>
+</html>

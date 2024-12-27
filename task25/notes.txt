@@ -1,0 +1,24 @@
+There are no issues till Turn 3. However, there is an accuracy issue in Turn 4.
+The number 3 has been removed, so it should be calculated as 0 on the sum. The blank face
+could be shown on the front when rolling the dice. So the model should calculate the
+total number of possible outcomes for each roll as 6x6x6=216, not 6x6x5=180.
+
+
+Turn 1 successfully achieves the requested responsive behavior. The grids are vertically centered
+for desktop devices and horizontally centered for mobile devices. Also they are evenly spaced
+in the required direction accorging to the instructions.
+
+Turn 2 does not hide the left grid so all the time is visible, understanding and following the main
+request.
+
+Doesn't follow non-formatting constraints: in turn 2, the model does not remain all the other
+features intact because it modifies the way the colored cells are displayed.
+
+Incomplete code: in turn 2, the model breaks the previous game functionality because the cells are
+not properly colored for each game turn.
+
+Doesn't understand user intent: for turn 3. The main goal of the game is to memorize the pattern displayed
+on the left grid, it does not makes sense to keep it visible as in this turn.
+
+Wrong (logical) direction: the code significnatly deviates from the intended task logic. The memorizing
+process implies that the initial displayed pattern must be hidden and reproduced on the left grid.

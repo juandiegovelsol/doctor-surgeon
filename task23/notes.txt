@@ -1,0 +1,52 @@
+There are no issues till Turn 3. However, there is an accuracy issue in Turn 4.
+The number 3 has been removed, so it should be calculated as 0 on the sum. The blank face
+could be shown on the front when rolling the dice. So the model should calculate the
+total number of possible outcomes for each roll as 6x6x6=216, not 6x6x5=180.
+
+
+Turn 1 implements the described grids, the grid on the rigth shows the colored cells that have
+to be memorized, the grid on the rigth allows the user to click on the empty cells to color them.
+
+Turn 1 implements the start button that starts the memorization phase of the game, and a finish
+button to end the game turn.
+
+Turn 1 evaluates correctly when the game is won.
+
+Turn 2 modifies the flawed logic that caused the previous turns colored cells to remain active.
+Now only 10 random cells are colored in each turn.
+
+Turn 3 displays the colored cells before the start button is clicked as requested in the prompt.
+
+Turn 4 allows the game to be played indefintely, now the finish button displays 10 new colored
+cells on the rigth grid.
+
+Turn 5 finally implements the desired behavior, now the game can be undefinitely played, each
+turn prints a new pattern to be memorized, and the right grid is clear to enter the learned
+pattern.
+
+
+
+
+
+
+Doesn't understand user intent: in turn 1, the model shows the colored cells once the start
+button is clicked, and then it hides the entire grid. This is not the user intent because the
+prompt asks to hide the grid when the button is clicked, which implies the colored cells must
+be present before the button is clicked.
+
+Doesn't follow formatting constraints: in turn 1, the prompt requires the textual explanations
+must be brief but the model provides an extensive explanation.
+
+Doesn't follow non-formatting constraints: in turn 1, the prompt ask to color only 10 cells but
+the model colors more than 10 after the first turn.
+
+Incomplete code: in turn 1, the cells for subsequent turns are not cleared, making new turns to
+have more than the requested colored cells
+
+Incomplete code: in turn 3, the model removes the logic that allowed to play multiple turns,
+now once the first turn is finished the game can't be played anymore
+
+Doesn't understand user intent: In turn 4 the main purpose of starting new turns is to have a
+reset grid every time a new turn starts, the rigth grid is not reset so the colored cells remain
+from previous turns.
+

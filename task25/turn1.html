@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Memory Game</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-height: 100vh;
+      }
+
+      h1 {
+        margin-top: 20px;
+        margin-bottom: 20px;
+        text-align: center;
+      }
+
+      .container {
+        display: flex;
+        gap: 20px;
+        /* Default for desktop: row layout */
+        align-items: center; /* Vertically center for desktop */
+        justify-content: space-around; /* Evenly space horizontally for desktop */
+        width: 80%; /* Limit container width on desktop */
+        max-width: 800px;
+        margin-bottom: 20px;
+        flex: 1; /* Allow container to take up remaining vertical space */
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(5, 50px);
+        grid-template-rows: repeat(5, 50px);
+        gap: 5px;
+      }
+
+      .cell {
+        width: 50px;
+        height: 50px;
+        border: 1px solid black;
+        cursor: pointer;
+      }
+
+      .colored {
+        background-color: blue;
+      }
+
+      /* Styles for mobile devices */
+      @media (max-width: 768px) {
+        .container {
+          flex-direction: column; /* Column layout for mobile */
+          align-items: center; /* Horizontally center for mobile */
+          justify-content: space-around; /* Evenly space vertically for mobile */
+          width: 90%; /* Take up more width on mobile */
+          height: 80vh; /* Set a height for vertical spacing on mobile */
+          margin-top: 20px;
+        }
+      }
+
+      /* Styles for buttons and message */
+      #controls {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+      }
+
+      #message {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Memory Game</h1>
+    <div class="container">
+      <div id="leftGrid" class="grid">
+        <!-- Left grid cells will be generated here -->
+      </div>
+      <div id="rightGrid" class="grid">
+        <!-- Right grid cells will be generated here -->
+      </div>
+    </div>
+    <div id="controls">
+      <button id="startButton">Start</button>
+      <button id="finishButton" disabled>Finish</button>
+    </div>
+    <div id="message"></div>
+
+    <script>
+      const leftGrid = document.getElementById("leftGrid");
+      const rightGrid = document.getElementById("rightGrid");
+      const startButton = document.getElementById("startButton");
+      const finishButton = document.getElementById("finishButton");
+      const messageDiv = document.getElementById("message");
+      let coloredCells = []; // Array to store the initial colored cells on the left grid
+      let gameStarted = false;
+
+      // Function to create a grid
+      function createGrid(gridElement, isLeft) {
+        for (let i = 0; i < 25; i++) {
+          const cell = document.createElement("div");
+          cell.classList.add("cell");
+          cell.dataset.index = i; // Store the index of the cell
+          if (!isLeft) {
+            cell.addEventListener("click", function () {
+              if (gameStarted) {
+                this.classList.toggle("colored");
+              }
+            });
+          }
+          gridElement.appendChild(cell);
+        }
+      }
+
+      // Create both grids
+      createGrid(leftGrid, true);
+      createGrid(rightGrid, false);
+
+      const leftGridCells = leftGrid.querySelectorAll(".cell");
+      const rightGridCells = rightGrid.querySelectorAll(".cell");
+
+      // Function to randomly select cells to color on the left grid
+      function selectRandomCells() {
+        coloredCells = [];
+        const indices = Array.from({ length: 25 }, (_, i) => i); // Array of indices from 0 to 24
+        for (let i = 0; i < 10; i++) {
+          const randomIndex = Math.floor(Math.random() * indices.length);
+          const selectedIndex = indices.splice(randomIndex, 1)[0];
+          coloredCells.push(selectedIndex);
+        }
+      }
+
+      // Function to color the selected cells on the left grid
+      function colorLeftGrid() {
+        leftGridCells.forEach((cell) => cell.classList.remove("colored")); // Clear previous colors
+        coloredCells.forEach((index) => {
+          leftGridCells[index].classList.add("colored");
+        });
+      }
+
+      // Function to hide the left grid
+      function hideLeftGrid() {
+        leftGrid.style.display = "none";
+      }
+
+      // Function to show the left grid
+      function showLeftGrid() {
+        leftGrid.style.display = "grid";
+      }
+
+      // Function to clear the right grid
+      function clearRightGrid() {
+        rightGridCells.forEach((cell) => cell.classList.remove("colored"));
+      }
+
+      // Function to check if the right grid matches the left grid
+      function checkMatch() {
+        let match = true;
+        for (let i = 0; i < 25; i++) {
+          const leftColored = leftGridCells[i].classList.contains("colored");
+          const rightColored = rightGridCells[i].classList.contains("colored");
+          if (leftColored !== rightColored) {
+            match = false;
+            break;
+          }
+        }
+        if (match) {
+          messageDiv.textContent = "Correct!";
+        } else {
+          messageDiv.textContent = "Incorrect, try again!";
+        }
+        gameStarted = false;
+        finishButton.disabled = true;
+        startButton.disabled = false;
+
+        // Show the left grid with new random cells for the next round
+        showLeftGrid();
+        selectRandomCells();
+        colorLeftGrid();
+        clearRightGrid(); // Clear the right grid for the new turn
+      }
+
+      // Initial coloring on page load
+      selectRandomCells();
+      colorLeftGrid();
+
+      // Start button functionality
+      startButton.addEventListener("click", () => {
+        // Hide the left grid
+        hideLeftGrid();
+
+        // Enable the finish button and disable the start button
+        finishButton.disabled = false;
+        startButton.disabled = true;
+        messageDiv.textContent = "";
+        gameStarted = true;
+      });
+
+      // Finish button functionality
+      finishButton.addEventListener("click", checkMatch);
+    </script>
+  </body>
+</html>

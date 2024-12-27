@@ -1,0 +1,28 @@
+There are no issues till Turn 3. However, there is an accuracy issue in Turn 4.
+The number 3 has been removed, so it should be calculated as 0 on the sum. The blank face
+could be shown on the front when rolling the dice. So the model should calculate the
+total number of possible outcomes for each roll as 6x6x6=216, not 6x6x5=180.
+
+Turn 1 develops the new grades endpoints in a new route/controller, maintaining consistency, readability and scalabilitie
+in the application.
+
+Turn 1 implements most of the logic correctly since the new controller imports the users variable created in the users
+controlled and operates it to return the requested data.
+
+Turn 2 fixes the described issue by exporting the users variable in the userController module, making it available for the
+gradesController module.
+
+Incorrect code: Turn 1 has a major incorrect code since when the grades endpoints are called, the application fails because
+some variables can be found. This is produced because the userController does not exports the users variable and
+the gradesController is trying to import it.
+
+Undefined Variable: The gradesController module tries to import a not exported variable on other module causing an Undefined variable
+major issue.
+
+Verbosity: in Turn 2 the model response is repetitive, including all the project's files which is completely unnecessary since only 2 files required changes. This makes the response hard to read.
+
+Overgeneralization: in Turn 2 the model extrapolates the concept that variables takes a while to initialize to the specific undefined variable error.
+
+False Causality: in turn 2 the model incorrectly assumes that initializing times cause the undefined error simply because they occurred togheter, one thing has nothing to do with the other.
+
+Major Inaccuracy: in Turn 2 the model contains factual errors that are completly incorrect. The issue is generated because the users variable is not exported in the users module, not because of initializing times.

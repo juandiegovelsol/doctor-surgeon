@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Grid Game</title>
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        margin: 0;
+        background-color: #f0f0f0;
+      }
+      .grid-container {
+        display: grid;
+        grid-template-columns: repeat(5, 50px);
+        grid-template-rows: repeat(5, 50px);
+        gap: 2px;
+      }
+      .cell {
+        width: 50px;
+        height: 50px;
+        border: 1px solid #ccc;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 20px;
+      }
+      .red {
+        background-color: red;
+      }
+      .blue {
+        background-color: blue;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="grid-container" id="grid"></div>
+    <script>
+      const gridSize = 5;
+      const grid = document.getElementById("grid");
+      let currentPlayer = "red";
+      let cells = [];
+
+      function createGrid() {
+        for (let i = 0; i < gridSize * gridSize; i++) {
+          const cell = document.createElement("div");
+          cell.classList.add("cell");
+          cell.dataset.index = i;
+          cell.addEventListener("click", handleCellClick);
+          grid.appendChild(cell);
+          cells.push(cell);
+        }
+      }
+
+      function handleCellClick(event) {
+        const cell = event.target;
+        if (
+          !cell.classList.contains("red") &&
+          !cell.classList.contains("blue")
+        ) {
+          cell.classList.add(currentPlayer);
+          cell.textContent = currentPlayer === "red" ? "R" : "B";
+          if (checkWin(currentPlayer)) {
+            alert(`${currentPlayer.toUpperCase()} wins!`);
+            disableCells();
+            return;
+          }
+          if (
+            cells.every(
+              (c) => c.classList.contains("red") || c.classList.contains("blue")
+            )
+          ) {
+            alert("Game over! It's a draw.");
+            return;
+          }
+          currentPlayer = currentPlayer === "red" ? "blue" : "red";
+        }
+      }
+
+      function checkWin(player) {
+        for (let i = 0; i < gridSize; i++) {
+          for (let j = 0; j < gridSize; j++) {
+            const index = i * gridSize + j;
+            if (cells[index].classList.contains(player)) {
+              if (
+                checkLine(i, j, 1, 0, player) || // Horizontal
+                checkLine(i, j, 0, 1, player) || // Vertical
+                checkLine(i, j, 1, 1, player) || // Diagonal
+                checkLine(i, j, 1, -1, player)
+              ) {
+                // Anti-diagonal
+                return true;
+              }
+            }
+          }
+        }
+        return false;
+      }
+
+      function checkLine(row, col, rowDir, colDir, player) {
+        let count = 0;
+        for (let i = 0; i < gridSize; i++) {
+          const r = row + i * rowDir;
+          const c = col + i * colDir;
+          if (
+            r >= 0 &&
+            r < gridSize &&
+            c >= 0 &&
+            c < gridSize &&
+            cells[r * gridSize + c].classList.contains(player)
+          ) {
+            count++;
+          } else {
+            break;
+          }
+        }
+        return count === gridSize;
+      }
+
+      function disableCells() {
+        cells.forEach((cell) => (cell.style.pointerEvents = "none"));
+      }
+
+      createGrid();
+    </script>
+  </body>
+</html>
