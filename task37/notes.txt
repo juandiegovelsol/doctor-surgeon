@@ -1,0 +1,21 @@
+There are no issues till Turn 3. However, there is an accuracy issue in Turn 4.
+The number 3 has been removed, so it should be calculated as 0 on the sum. The blank face
+could be shown on the front when rolling the dice. So the model should calculate the
+total number of possible outcomes for each roll as 6x6x6=216, not 6x6x5=180.
+
+In turn 1, the model implements a customized bullet point as the prompt required for an unordered
+list using HTML and CSS.
+
+In turn 1, the model includes a bumping effect that increases and decreases the bullet point size.
+
+
+In turn 1, the model has an incomplete code issue because the generated figure is not a heart. It 
+is a rotated square.
+
+In turn 1, the model has a major inaccurate claim because all the explanation about how the heart
+shape is created is incorrect. The generated shape is not a heart
+
+In turn 1, the model has a verbosity issue because the explanation is too long, the code is simple
+and does not require such a long explanation, only to highlight the key points.
+
+

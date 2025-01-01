@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Planetary Motion Simulation</title>
+    <style>
+      body {
+        margin: 0;
+        overflow: hidden;
+        background-color: #000;
+      }
+      #simulation-container {
+        position: relative;
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
+      }
+      .celestial-body {
+        position: absolute;
+        border-radius: 50%;
+      }
+      #star {
+        width: 40px;
+        height: 40px;
+        background-color: yellow;
+        top: calc(50% - 20px);
+        left: calc(50% - 20px);
+      }
+      #planet1 {
+        width: 20px;
+        height: 20px;
+        background-color: blue;
+      }
+      #planet2 {
+        width: 20px;
+        height: 20px;
+        background-color: red;
+      }
+      #controls {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        background-color: rgba(255, 255, 255, 0.8);
+        padding: 10px;
+        border-radius: 5px;
+      }
+      #controls label,
+      #controls input,
+      #controls select,
+      #controls button {
+        display: block;
+        margin-bottom: 5px;
+      }
+      .velocity-control {
+        display: flex;
+        align-items: center;
+      }
+      .velocity-control span {
+        width: 60px;
+        text-align: right;
+        margin-right: 5px;
+      }
+      .velocity-control button {
+        width: 25px;
+        height: 20px;
+        font-size: 12px;
+        line-height: 10px;
+        padding: 0;
+        margin: 0 2px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="simulation-container">
+      <div id="star" class="celestial-body"></div>
+      <div id="planet1" class="celestial-body"></div>
+      <div id="planet2" class="celestial-body"></div>
+    </div>
+
+    <div id="controls">
+      <label for="star-mass">Star Mass:</label>
+      <input type="number" id="star-mass" value="5000000" />
+
+      <label for="selected-planet">Select Planet:</label>
+      <select id="selected-planet">
+        <option value="planet1">Planet 1 (Blue)</option>
+        <option value="planet2">Planet 2 (Red)</option>
+      </select>
+
+      <label for="planet-mass">Planet Mass:</label>
+      <input type="number" id="planet-mass" value="1" />
+
+      <label>Planet Velocity X:</label>
+      <div class="velocity-control">
+        <button id="planet-vx-down">-</button>
+        <span id="planet-vx-value">0</span>
+        <button id="planet-vx-up">+</button>
+      </div>
+
+      <label>Planet Velocity Y:</label>
+      <div class="velocity-control">
+        <button id="planet-vy-down">-</button>
+        <span id="planet-vy-value">0</span>
+        <button id="planet-vy-up">+</button>
+      </div>
+    </div>
+
+    <script>
+      const simulationContainer = document.getElementById(
+        "simulation-container"
+      );
+      const star = document.getElementById("star");
+      const planet1 = document.getElementById("planet1");
+      const planet2 = document.getElementById("planet2");
+      const starMassInput = document.getElementById("star-mass");
+      const selectedPlanetInput = document.getElementById("selected-planet");
+      const planetMassInput = document.getElementById("planet-mass");
+      const planetVxValueDisplay = document.getElementById("planet-vx-value");
+      const planetVyValueDisplay = document.getElementById("planet-vy-value");
+      const planetVxUpButton = document.getElementById("planet-vx-up");
+      const planetVxDownButton = document.getElementById("planet-vx-down");
+      const planetVyUpButton = document.getElementById("planet-vy-up");
+      const planetVyDownButton = document.getElementById("planet-vy-down");
+
+      // Gravitational constant
+      const G = 6.674e-2; // Scaled for visual effect
+
+      // Star properties
+      let starMass = parseFloat(starMassInput.value);
+      const starRadius = 20;
+      const starPosition = {
+        x: simulationContainer.offsetWidth / 2,
+        y: simulationContainer.offsetHeight / 2,
+      };
+
+      // Planet 1 properties
+      let planet1Mass = parseFloat(planetMassInput.value);
+      const planet1Radius = 10;
+      let planet1Position = {
+        x: simulationContainer.offsetWidth / 2 + 200,
+        y: simulationContainer.offsetHeight / 2,
+      };
+      let planet1Velocity = { x: 0, y: 0 };
+
+      // Planet 2 properties
+      let planet2Mass = parseFloat(planetMassInput.value);
+      const planet2Radius = 10;
+      let planet2Position = {
+        x: simulationContainer.offsetWidth / 2 - 400, // Twice the distance, other side
+        y: simulationContainer.offsetHeight / 2,
+      };
+      let planet2Velocity = { x: 0, y: 0 };
+
+      // Time step for the simulation
+      const timeStep = 0.016; // Roughly 60 frames per second
+
+      function calculateCircularOrbitVelocity(planetPosition, starMass) {
+        const dx = starPosition.x - planetPosition.x;
+        const dy = starPosition.y - planetPosition.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        const circularOrbitSpeed = Math.sqrt((G * starMass) / distance);
+
+        const tangentX = -dy / distance;
+        const tangentY = dx / distance;
+
+        return {
+          x: circularOrbitSpeed * tangentX,
+          y: circularOrbitSpeed * tangentY,
+        };
+      }
+
+      function updatePlanetPosition() {
+        updateSinglePlanet(
+          planet1,
+          planet1Position,
+          planet1Velocity,
+          planet1Mass,
+          planet1Radius
+        );
+        updateSinglePlanet(
+          planet2,
+          planet2Position,
+          planet2Velocity,
+          planet2Mass,
+          planet2Radius
+        );
+        requestAnimationFrame(updatePlanetPosition);
+      }
+
+      function updateSinglePlanet(
+        planetElement,
+        planetPosition,
+        planetVelocity,
+        planetMass,
+        planetRadius
+      ) {
+        const dx = starPosition.x - planetPosition.x;
+        const dy = starPosition.y - planetPosition.y;
+        const distanceSquared = dx * dx + dy * dy;
+        const distance = Math.sqrt(distanceSquared);
+
+        const forceMagnitude = (G * starMass * planetMass) / distanceSquared;
+
+        const forceDirectionX = dx / distance;
+        const forceDirectionY = dy / distance;
+
+        const forceX = forceMagnitude * forceDirectionX;
+        const forceY = forceMagnitude * forceDirectionY;
+
+        const accelerationX = forceX / planetMass;
+        const accelerationY = forceY / planetMass;
+
+        planetVelocity.x += accelerationX * timeStep;
+        planetVelocity.y += accelerationY * timeStep;
+
+        planetPosition.x += planetVelocity.x * timeStep;
+        planetPosition.y += planetVelocity.y * timeStep;
+
+        planetElement.style.left = `${planetPosition.x - planetRadius}px`;
+        planetElement.style.top = `${planetPosition.y - planetRadius}px`;
+      }
+
+      function initializeCircularOrbits() {
+        planet1Velocity = calculateCircularOrbitVelocity(
+          planet1Position,
+          starMass
+        );
+        planet2Velocity = calculateCircularOrbitVelocity(
+          planet2Position,
+          starMass
+        );
+        planet2Velocity.x *= -1;
+        planet2Velocity.y *= -1;
+      }
+
+      function updateSelectedPlanetControls() {
+        const selectedPlanet = selectedPlanetInput.value;
+        let currentPlanetMass, currentPlanetVelocity;
+
+        if (selectedPlanet === "planet1") {
+          currentPlanetMass = planet1Mass;
+          currentPlanetVelocity = planet1Velocity;
+        } else if (selectedPlanet === "planet2") {
+          currentPlanetMass = planet2Mass;
+          currentPlanetVelocity = planet2Velocity;
+        }
+
+        planetMassInput.value = currentPlanetMass;
+        planetVxValueDisplay.textContent = currentPlanetVelocity.x;
+        planetVyValueDisplay.textContent = currentPlanetVelocity.y;
+      }
+
+      function applyControlValuesToPlanet() {
+        const selectedPlanet = selectedPlanetInput.value;
+        const mass = parseFloat(planetMassInput.value);
+
+        if (selectedPlanet === "planet1") {
+          planet1Mass = mass;
+        } else if (selectedPlanet === "planet2") {
+          planet2Mass = mass;
+        }
+      }
+
+      // Event listeners for input changes
+      starMassInput.addEventListener("change", () => {
+        starMass = parseFloat(starMassInput.value);
+        initializeCircularOrbits();
+        updateSelectedPlanetControls();
+      });
+
+      selectedPlanetInput.addEventListener("change", () => {
+        updateSelectedPlanetControls();
+      });
+
+      planetMassInput.addEventListener("change", () => {
+        applyControlValuesToPlanet();
+      });
+
+      planetVxUpButton.addEventListener("click", () => {
+        const selectedPlanet = selectedPlanetInput.value;
+        if (selectedPlanet === "planet1") {
+          planet1Velocity.x += 1;
+        } else if (selectedPlanet === "planet2") {
+          planet2Velocity.x += 1;
+        }
+        updateSelectedPlanetControls();
+      });
+
+      planetVxDownButton.addEventListener("click", () => {
+        const selectedPlanet = selectedPlanetInput.value;
+        if (selectedPlanet === "planet1") {
+          planet1Velocity.x -= 1;
+        } else if (selectedPlanet === "planet2") {
+          planet2Velocity.x -= 1;
+        }
+        updateSelectedPlanetControls();
+      });
+
+      planetVyUpButton.addEventListener("click", () => {
+        const selectedPlanet = selectedPlanetInput.value;
+        if (selectedPlanet === "planet1") {
+          planet1Velocity.y += 1;
+        } else if (selectedPlanet === "planet2") {
+          planet2Velocity.y += 1;
+        }
+        updateSelectedPlanetControls();
+      });
+
+      planetVyDownButton.addEventListener("click", () => {
+        const selectedPlanet = selectedPlanetInput.value;
+        if (selectedPlanet === "planet1") {
+          planet1Velocity.y -= 1;
+        } else if (selectedPlanet === "planet2") {
+          planet2Velocity.y -= 1;
+        }
+        updateSelectedPlanetControls();
+      });
+
+      // Initial planet positioning
+      planet1.style.left = `${planet1Position.x - planet1Radius}px`;
+      planet1.style.top = `${planet1Position.y - planet1Radius}px`;
+      planet2.style.left = `${planet2Position.x - planet2Radius}px`;
+      planet2.style.top = `${planet2Position.y - planet2Radius}px`;
+
+      // Initialize the planets' velocities for circular orbits
+      initializeCircularOrbits();
+      updateSelectedPlanetControls();
+
+      // Start the simulation
+      updatePlanetPosition();
+    </script>
+  </body>
+</html>

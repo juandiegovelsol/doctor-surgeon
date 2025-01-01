@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Piano Sound Pattern Game</title>
+    <style>
+      .keyboard {
+        display: flex;
+        align-items: flex-start;
+        border: 1px solid #ccc;
+      }
+      .key {
+        height: 150px;
+        border: 1px solid #000;
+        box-sizing: border-box;
+        cursor: pointer;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        padding-bottom: 10px;
+        user-select: none;
+      }
+      .white {
+        width: 50px;
+        background-color: white;
+        z-index: 1;
+      }
+      .black {
+        width: 30px;
+        height: 90px;
+        background-color: black;
+        color: white;
+        margin-left: -15px;
+        margin-right: -15px;
+        z-index: 2;
+      }
+      .highlight {
+        background-color: yellow;
+      }
+      #message {
+        margin-top: 20px;
+        font-weight: bold;
+      }
+      #timer {
+        margin-top: 10px;
+        font-weight: bold;
+      }
+      #score {
+        margin-top: 10px;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Piano Sound Pattern Game</h1>
+
+    <div class="keyboard" id="keyboard">
+      <div class="key white" data-note="C4">C4</div>
+      <div class="key black" data-note="C#4">C#4</div>
+      <div class="key white" data-note="D4">D4</div>
+      <div class="key black" data-note="D#4">D#4</div>
+      <div class="key white" data-note="E4">E4</div>
+      <div class="key white" data-note="F4">F4</div>
+      <div class="key black" data-note="F#4">F#4</div>
+      <div class="key white" data-note="G4">G4</div>
+      <div class="key black" data-note="G#4">G#4</div>
+      <div class="key white" data-note="A4">A4</div>
+      <div class="key black" data-note="A#4">A#4</div>
+      <div class="key white" data-note="B4">B4</div>
+      <div class="key white" data-note="C5">C5</div>
+    </div>
+
+    <button id="startButton">Start Game</button>
+    <div id="message"></div>
+    <div id="timer"></div>
+    <div id="score"></div>
+
+    <script>
+      const keyboard = document.getElementById("keyboard");
+      const startButton = document.getElementById("startButton");
+      const messageDiv = document.getElementById("message");
+      const timerDiv = document.getElementById("timer");
+      const scoreDiv = document.getElementById("score");
+      const keys = document.querySelectorAll(".key");
+
+      const notes = {
+        C4: 261.63,
+        "C#4": 277.18,
+        D4: 293.66,
+        "D#4": 311.13,
+        E4: 329.63,
+        F4: 349.23,
+        "F#4": 369.99,
+        G4: 392.0,
+        "G#4": 415.3,
+        A4: 440.0,
+        "A#4": 466.16,
+        B4: 493.88,
+        C5: 523.25,
+      };
+
+      let pattern = [];
+      let playerPattern = [];
+      let patternPlaying = false;
+      const noteDuration = 300; // Duration each note is played
+      const timeBetweenNotes = 600; // Time between the start of each note
+      let patternLength = 4; // Initial pattern length
+      let timerInterval;
+      let timeLeft = 60; // Initial timer value in seconds
+      let correctAnswers = 0;
+      let incorrectAnswers = 0;
+
+      function playSound(frequency) {
+        const audioContext = new (window.AudioContext ||
+          window.webkitAudioContext)();
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+
+        oscillator.type = "sine";
+        oscillator.frequency.setValueAtTime(
+          frequency,
+          audioContext.currentTime
+        );
+        gainNode.gain.setValueAtTime(0.5, audioContext.currentTime); // Adjust volume
+
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+
+        oscillator.start();
+        oscillator.stop(audioContext.currentTime + noteDuration / 1000); // Play for the specified duration
+      }
+
+      function generatePattern(length) {
+        pattern = [];
+        const availableNotes = Object.keys(notes);
+        for (let i = 0; i < length; i++) {
+          const randomIndex = Math.floor(Math.random() * availableNotes.length);
+          pattern.push(availableNotes[randomIndex]);
+        }
+        return pattern;
+      }
+
+      async function playPattern() {
+        patternPlaying = true;
+        playerPattern = [];
+        messageDiv.textContent = "Watch and Listen!";
+
+        for (let i = 0; i < pattern.length; i++) {
+          const note = pattern[i];
+          const keyElement = document.querySelector(
+            `.key[data-note="${note}"]`
+          );
+          if (keyElement) {
+            keyElement.classList.add("highlight");
+            playSound(notes[note]);
+            await new Promise((resolve) => setTimeout(resolve, noteDuration)); // Keep highlight during sound
+            keyElement.classList.remove("highlight");
+          }
+          if (i < pattern.length - 1) {
+            await new Promise((resolve) =>
+              setTimeout(resolve, timeBetweenNotes - noteDuration)
+            ); // Delay until next note starts
+          }
+        }
+
+        messageDiv.textContent = "Your turn!";
+        patternPlaying = false;
+      }
+
+      function handleKeyPress(note) {
+        if (patternPlaying) return;
+        playSound(notes[note]);
+        playerPattern.push(note);
+        checkPattern();
+        const keyElement = document.querySelector(`.key[data-note="${note}"]`);
+        if (keyElement) {
+          keyElement.classList.add("highlight");
+          setTimeout(() => {
+            keyElement.classList.remove("highlight");
+          }, 200);
+        }
+      }
+
+      function updateTimerDisplay() {
+        timerDiv.textContent = `Time Left: ${timeLeft} seconds`;
+      }
+
+      function startTimer() {
+        clearInterval(timerInterval);
+        updateTimerDisplay();
+        timerInterval = setInterval(() => {
+          timeLeft--;
+          updateTimerDisplay();
+          if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            messageDiv.textContent = "Game Over!";
+            patternPlaying = true; // Disable further input
+            displayScore();
+          }
+        }, 1000);
+      }
+
+      function displayScore() {
+        scoreDiv.textContent = `Score: Correct - ${correctAnswers}, Incorrect - ${incorrectAnswers}`;
+      }
+
+      function checkPattern() {
+        if (playerPattern.length === pattern.length) {
+          if (JSON.stringify(playerPattern) === JSON.stringify(pattern)) {
+            messageDiv.textContent = "Correct!";
+            correctAnswers++;
+            timeLeft += 5;
+            patternLength++;
+            pattern = generatePattern(patternLength);
+            setTimeout(playPattern, 1000); // Wait before playing next pattern
+          } else {
+            messageDiv.textContent = "Incorrect. Try again!";
+            incorrectAnswers++;
+            timeLeft -= 10;
+            if (timeLeft < 0) timeLeft = 0; // Prevent negative time
+            if (patternLength > 1) {
+              patternLength--;
+            }
+            pattern = generatePattern(patternLength);
+            setTimeout(playPattern, 1000);
+          }
+          updateTimerDisplay();
+        } else if (playerPattern.length > pattern.length) {
+          messageDiv.textContent = "Incorrect. Too many notes!";
+          incorrectAnswers++;
+          timeLeft -= 10;
+          if (timeLeft < 0) timeLeft = 0; // Prevent negative time
+          if (patternLength > 1) {
+            patternLength--;
+          }
+          pattern = generatePattern(patternLength);
+          setTimeout(playPattern, 1000);
+          updateTimerDisplay();
+        }
+      }
+
+      keys.forEach((key) => {
+        key.addEventListener("click", function () {
+          if (!patternPlaying) {
+            const note = this.dataset.note;
+            handleKeyPress(note);
+          }
+        });
+      });
+
+      startButton.addEventListener("click", () => {
+        patternLength = 4; // Reset pattern length on start
+        pattern = generatePattern(patternLength);
+        timeLeft = 60;
+        correctAnswers = 0;
+        incorrectAnswers = 0;
+        scoreDiv.textContent = "";
+        startTimer();
+        playPattern();
+      });
+    </script>
+  </body>
+</html>

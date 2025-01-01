@@ -1,0 +1,41 @@
+There are no issues till Turn 3. However, there is an accuracy issue in Turn 4.
+The number 3 has been removed, so it should be calculated as 0 on the sum. The blank face
+could be shown on the front when rolling the dice. So the model should calculate the
+total number of possible outcomes for each roll as 6x6x6=216, not 6x6x5=180.
+
+
+In turn 1, the model seems to understand the increasing/decreasing difficulty system and heads the code modifications
+to achieve the main goals.
+
+In turn 1, when the incorrect syntax is removed, the application can be executed and the required modifications
+can be verified, now when the player enters a correct pattern the difficulty is increased, and when not it is
+decreased.
+
+In turn 2, the model understands which characters have to be removed, now the game can be played as required in
+the initial prompt.
+
+In turn 2, the model prevents an edgecase when the player keeps missing the pattern, a negative patternLength
+value is prevented.
+
+In turn 3, the model implements correctly the timer feature. It counts precisely how much remaining time the 
+player has, if the player is correct 5 seconds are added to the remaining time, if is incorrect 10 seconds are
+subtracted.
+
+In turn 3, the model prevents an edgecase when the timer is less than 10 seconds and negative timeLeft values
+are prevented.
+
+
+
+In turn 1, the model has a Constant value error because it adds backslash characters in the notes constant,
+using an incorrect syntax.
+
+In turn 1, the model has a major incorrect code issue because due to the incorrect syntax used in the notes object, 
+the game can't be executed
+
+In turn 3, the model has an incorrect branching issue because the conditional statements that prevent negative
+timeLeft values should be written as if-else, not as if-if.
+
+In turn 4 and 5, the model has a "Doesn't understand user intent" issue because any modification is made to the code,
+this exhibits the model did not understand the meaning of the prompt.
+
+INSTRUCTION FOLLOWING FOR TURN 1

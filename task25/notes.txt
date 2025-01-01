@@ -20,5 +20,9 @@ not properly colored for each game turn.
 Doesn't understand user intent: for turn 3. The main goal of the game is to memorize the pattern displayed
 on the left grid, it does not makes sense to keep it visible as in this turn.
 
-Wrong (logical) direction: the code significnatly deviates from the intended task logic. The memorizing
+Wrong (logical) direction: in turn 3, the code significnatly deviates from the intended task logic. The memorizing
 process implies that the initial displayed pattern must be hidden and reproduced on the left grid.
+
+Doesn't understand user intent: for turn 4. The prompt explicitly ask that a new pattern must be displayed when
+the finish button is pressed. This doesn't happen, and the cells remain empty.
+

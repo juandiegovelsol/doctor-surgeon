@@ -1,0 +1,43 @@
+There are no issues till Turn 3. However, there is an accuracy issue in Turn 4.
+The number 3 has been removed, so it should be calculated as 0 on the sum. The blank face
+could be shown on the front when rolling the dice. So the model should calculate the
+total number of possible outcomes for each roll as 6x6x6=216, not 6x6x5=180.
+
+
+
+Turn 1 implements an scrambled word that has to be reordered and displays it in corner rounded cards
+as the prompt requests. 
+
+Turn 1 seems to understand the main game objective since displayes corner rounded cards to include
+letters and a check button to ensure the word is correct.
+
+Turn 1 dinamically generates the corresponding cards according to the word letters enabling
+the game to be scaled.
+
+Turn 3 removes all the logic related to the dragging system, following the prompt's instruction.
+
+Turn 3 modifies the ordered word cards to be editable, now the game can be played and the word
+can be ordered as the initial prompt required.
+
+Turn 4 adds new words to a words array so now when the first word is ordered, new words appear and the game can continue.
+
+
+
+
+Turn 1 has an incorrect code error because the letters can't be written or dragged inside the
+ordered word fields, making the game impossible to play.
+
+Turn 1 has a "Doesn't follow non-formatting constraints" because the letters can't be written in the
+ordered word cards as the prompt required
+
+Turn 1 Adds information that was not asked for because the prompt does not asks that the cards have to
+be dragged.
+
+Turn 2 Doesn't understand user intent because the prompt is clear explaining the fields can't be edited
+and the solution does not solve the described issue.
+
+Turn 2 has an incorrect code error because the letters can't be written or dragged inside the
+ordered word fields, making the game impossible to play.
+
+Turn 4 Doesn't understand user intent because the suggestion for including external libraries is related
+to selecting new words from the library, not using the library to select words from a fixed array.

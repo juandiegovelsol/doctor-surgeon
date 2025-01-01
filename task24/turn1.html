@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Planetary Motion Simulation</title>
+    <style>
+      body {
+        margin: 0;
+        overflow: hidden;
+        background-color: #000;
+      }
+      #simulation-container {
+        position: relative;
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
+      }
+      .celestial-body {
+        position: absolute;
+        border-radius: 50%;
+      }
+      #star {
+        width: 40px;
+        height: 40px;
+        background-color: yellow;
+        top: calc(50% - 20px);
+        left: calc(50% - 20px);
+      }
+      #planet {
+        width: 20px;
+        height: 20px;
+        background-color: blue;
+      }
+      #controls {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        background-color: rgba(255, 255, 255, 0.8);
+        padding: 10px;
+        border-radius: 5px;
+      }
+      #controls label,
+      #controls input {
+        display: block;
+        margin-bottom: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="simulation-container">
+      <div id="star" class="celestial-body"></div>
+      <div id="planet" class="celestial-body"></div>
+    </div>
+
+    <div id="controls">
+      <label for="planet-mass">Planet Mass:</label>
+      <input type="number" id="planet-mass" value="1" />
+
+      <label for="planet-vx">Planet Velocity X:</label>
+      <input type="number" id="planet-vx" value="5" />
+
+      <label for="planet-vy">Planet Velocity Y:</label>
+      <input type="number" id="planet-vy" value="0" />
+    </div>
+
+    <script>
+      const simulationContainer = document.getElementById(
+        "simulation-container"
+      );
+      const star = document.getElementById("star");
+      const planet = document.getElementById("planet");
+      const planetMassInput = document.getElementById("planet-mass");
+      const planetVxInput = document.getElementById("planet-vx");
+      const planetVyInput = document.getElementById("planet-vy");
+
+      // Gravitational constant
+      const G = 6.674e-2; // Scaled down for visual effect
+
+      // Star properties
+      const starMass = 10000000;
+      const starRadius = 20; // Half of the width/height
+      const starPosition = {
+        x: simulationContainer.offsetWidth / 2,
+        y: simulationContainer.offsetHeight / 2,
+      };
+
+      // Planet properties
+      let planetMass = parseFloat(planetMassInput.value);
+      let planetRadius = 10; // Half of the width/height
+      let planetPosition = {
+        x: simulationContainer.offsetWidth / 2 + 200,
+        y: simulationContainer.offsetHeight / 2,
+      };
+      let planetVelocity = {
+        x: parseFloat(planetVxInput.value),
+        y: parseFloat(planetVyInput.value),
+      };
+
+      // Time step for the simulation
+      const timeStep = 0.016; // Roughly 60 frames per second
+
+      function updatePlanetPosition() {
+        // Calculate the distance between the star and the planet
+        const dx = starPosition.x - planetPosition.x;
+        const dy = starPosition.y - planetPosition.y;
+        const distanceSquared = dx * dx + dy * dy;
+        const distance = Math.sqrt(distanceSquared);
+
+        // Calculate the gravitational force
+        const forceMagnitude = (G * starMass * planetMass) / distanceSquared;
+
+        // Calculate the direction of the force (vector pointing from planet to star)
+        const forceDirectionX = dx / distance;
+        const forceDirectionY = dy / distance;
+
+        // Calculate the force vector
+        const forceX = forceMagnitude * forceDirectionX;
+        const forceY = forceMagnitude * forceDirectionY;
+
+        // Calculate the acceleration of the planet (F = ma => a = F/m)
+        const accelerationX = forceX / planetMass;
+        const accelerationY = forceY / planetMass;
+
+        // Update the planet's velocity
+        planetVelocity.x += accelerationX * timeStep;
+        planetVelocity.y += accelerationY * timeStep;
+
+        // Update the planet's position
+        planetPosition.x += planetVelocity.x * timeStep;
+        planetPosition.y += planetVelocity.y * timeStep;
+
+        // Keep the planet within the simulation boundaries (optional, for visual consistency)
+        if (planetPosition.x < 0) planetPosition.x = 0;
+        if (planetPosition.x > simulationContainer.offsetWidth)
+          planetPosition.x = simulationContainer.offsetWidth;
+        if (planetPosition.y < 0) planetPosition.y = 0;
+        if (planetPosition.y > simulationContainer.offsetHeight)
+          planetPosition.y = simulationContainer.offsetHeight;
+
+        // Update the planet's visual position
+        planet.style.left = `${planetPosition.x - planetRadius}px`;
+        planet.style.top = `${planetPosition.y - planetRadius}px`;
+
+        requestAnimationFrame(updatePlanetPosition);
+      }
+
+      // Event listeners for input changes
+      planetMassInput.addEventListener("change", () => {
+        planetMass = parseFloat(planetMassInput.value);
+      });
+
+      planetVxInput.addEventListener("change", () => {
+        planetVelocity.x = parseFloat(planetVxInput.value);
+      });
+
+      planetVyInput.addEventListener("change", () => {
+        planetVelocity.y = parseFloat(planetVyInput.value);
+      });
+
+      // Initial planet positioning
+      planet.style.left = `${planetPosition.x - planetRadius}px`;
+      planet.style.top = `${planetPosition.y - planetRadius}px`;
+
+      // Start the simulation
+      updatePlanetPosition();
+    </script>
+  </body>
+</html>

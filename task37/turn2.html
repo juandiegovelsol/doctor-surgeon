@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bumping Heart Bullet Points</title>
+    <style>
+      ul {
+        list-style-type: none;
+        padding-left: 0;
+      }
+
+      li {
+        padding-left: 20px;
+        margin-bottom: 10px;
+        position: relative;
+      }
+
+      li::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 2px; /* Adjust vertical alignment */
+        width: 16px; /* Adjust size */
+        height: 16px; /* Adjust size */
+        background-image: url("heart.svg"); /* Replace with your image path */
+        background-size: contain;
+        background-repeat: no-repeat;
+        display: inline-block;
+        animation: bump-image 1s infinite alternate;
+        transform-origin: center;
+      }
+
+      @keyframes bump-image {
+        0% {
+          transform: scale(1);
+        }
+        100% {
+          transform: scale(1.2);
+        }
+      }
+
+      /* Optional: Hover effect */
+      li:hover::before {
+        animation-play-state: running;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>My List with Bumping Heart Bullets</h2>
+
+    <ul>
+      <li>Item one</li>
+      <li>Another important item</li>
+      <li>This is a list item with a heart</li>
+      <li>And yet another item here</li>
+    </ul>
+  </body>
+</html>

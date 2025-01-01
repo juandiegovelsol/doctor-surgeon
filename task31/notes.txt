@@ -1,0 +1,45 @@
+There are no issues till Turn 3. However, there is an accuracy issue in Turn 4.
+The number 3 has been removed, so it should be calculated as 0 on the sum. The blank face
+could be shown on the front when rolling the dice. So the model should calculate the
+total number of possible outcomes for each roll as 6x6x6=216, not 6x6x5=180.
+
+
+In turn 1, the model understands the main goal of the prompt and implements a piano keyboard that reproduce
+sounds when pressed.
+
+In turn 1, the model creates a pattern that is shown to the user, once displayed and the sounds reproduced
+the user can enter it and the application checks if it is correct or not. 
+
+In turn 1, the explanation is mostly correct and accurate, explaining how the keyboard works and how sounds are reproduced.
+
+In turn 2, the model fully understands that the user would like to generate a gap between notes, and at the end of the explanation gives an option to adjust the code variables to allow a 300ms space between notes
+
+In turn 2, the model generates a mostly correct explanation, that showcases how the
+
+
+
+In turn 1, the model has a minor style issue because the piano has a container with a displayed border, which
+does not look visually appealing to the user.
+
+In turn 1, the model has a minor formatting issue because the keyboard could be dinamically created, this could
+simplify the code, make it more readable, and more scalable.
+
+In turn 1, the model has a minor incomplete code issue because when the game has not started yet and the piano is
+played, and error message is displayed in the message section
+
+In turn 1 and 2, the model has a minor verbosity issue because the written explanation is too long and doesn't allow
+users to easily understand the key concepts
+
+In turn 1, the model has a "Doesn't follow non-formatting constraints" issue because the prompt asks that each
+sound must be spaced 300ms between them, in the implementation the sounds are spaced 100ms
+
+In turn 1, the model has a "Doesn't understand user intent" issue because doesn't understand the user requirement
+for spacing the notes
+
+In turn 1, the model has a minor inaccurate claim because the code line "await new Promise(resolve => setTimeout(resolve, 300))"
+doesn't introcude a 300ms delay between each note, this line allows the kay to remain highlighted while the sound
+is being played.
+
+In turn 2, the model has minor inaccurate claim because the playPattern function does not have a single
+setTimeout function to control the timing between notes because the await statements are blocking code,
+meaning that if the first setTimeout function is active the time between notes is affected.

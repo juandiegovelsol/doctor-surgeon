@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Flying Bird Game</title>
+    <style>
+      body {
+        margin: 0;
+        overflow: hidden;
+        background-color: lightblue;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+
+      canvas {
+        border: 2px solid black;
+        background-color: #87ceeb;
+      }
+
+      .star {
+        width: 20px;
+        height: 20px;
+        background: red;
+        -webkit-clip-path: polygon(
+          50% 0%,
+          61% 35%,
+          98% 35%,
+          68% 57%,
+          79% 91%,
+          50% 70%,
+          21% 91%,
+          32% 57%,
+          2% 35%,
+          39% 35%
+        );
+        clip-path: polygon(
+          50% 0%,
+          61% 35%,
+          98% 35%,
+          68% 57%,
+          79% 91%,
+          50% 70%,
+          21% 91%,
+          32% 57%,
+          2% 35%,
+          39% 35%
+        );
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="gameCanvas" width="400" height="600"></canvas>
+
+    <script>
+      const canvas = document.getElementById("gameCanvas");
+      const ctx = canvas.getContext("2d");
+
+      // Bird properties
+      const bird = {
+        x: 50,
+        y: canvas.height / 2,
+        radius: 20,
+        velocityY: 0,
+        gravity: 0.6,
+        initialFlapStrength: -10,
+        flapStrength: -10,
+        draw: function () {
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+          ctx.fillStyle = "yellow";
+          ctx.fill();
+          ctx.closePath();
+        },
+        update: function () {
+          this.velocityY += this.gravity;
+          this.y += this.velocityY;
+
+          // Keep bird within canvas boundaries
+          if (this.y - this.radius < 0) {
+            this.y = this.radius;
+            this.velocityY = 0;
+          }
+          if (this.y + this.radius > canvas.height) {
+            this.y = canvas.height - this.radius;
+            this.velocityY = 0;
+          }
+        },
+        flap: function () {
+          this.velocityY = this.flapStrength;
+        },
+      };
+
+      // Obstacle properties
+      const obstacles = [];
+      const obstacleWidth = 50;
+      const obstacleGap = 200;
+      let obstacleSpeed = 2;
+      let initialObstacleSpeed = 2;
+      let obstacleSpawnInterval = 150;
+      let obstacleCounter = 0;
+
+      // Bonus properties
+      let bonusActive = false;
+      let bonusTimeout;
+      let bonusChance = 0.3; // Initial bonus chance
+      let preBonusObstacleSpeed; // Store obstacle speed before bonus
+
+      function drawStar(x, y) {
+        const starSize = 20;
+        ctx.fillStyle = "red";
+        ctx.beginPath();
+        // Define the star's path
+        const angle = Math.PI / 5;
+        const outerRadius = starSize / 2;
+        const innerRadius = outerRadius * 0.382; // Approximate golden ratio
+        let rot = (Math.PI / 2) * 3;
+        let xCenter = x;
+        let yCenter = y;
+        for (let i = 0; i < 5; i++) {
+          ctx.lineTo(
+            xCenter + Math.cos(rot) * outerRadius,
+            yCenter + Math.sin(rot) * outerRadius
+          );
+          rot += angle;
+          ctx.lineTo(
+            xCenter + Math.cos(rot) * innerRadius,
+            yCenter + Math.sin(rot) * innerRadius
+          );
+          rot += angle;
+        }
+        ctx.closePath();
+        ctx.fill();
+      }
+
+      function createObstacle() {
+        const minObstacleHeight = 50;
+        const maxObstacleHeight =
+          canvas.height - obstacleGap - minObstacleHeight;
+        const topObstacleHeight =
+          Math.random() * maxObstacleHeight + minObstacleHeight;
+        const bottomObstacleY = topObstacleHeight + obstacleGap;
+        const bottomObstacleHeight = canvas.height - bottomObstacleY;
+        const hasBonus = !bonusActive && Math.random() < bonusChance;
+
+        const newObstacle = {
+          x: canvas.width,
+          topY: 0,
+          topHeight: topObstacleHeight,
+          bottomY: bottomObstacleY,
+          bottomHeight: bottomObstacleHeight,
+          hasBonus: hasBonus,
+          bonusX: hasBonus ? canvas.width + obstacleWidth / 2 : null,
+          bonusY: hasBonus ? topObstacleHeight + obstacleGap / 2 : null,
+          draw: function () {
+            ctx.fillStyle = "green";
+            ctx.fillRect(this.x, this.topY, obstacleWidth, this.topHeight);
+            ctx.fillRect(
+              this.x,
+              this.bottomY,
+              obstacleWidth,
+              this.bottomHeight
+            );
+            if (this.hasBonus) {
+              drawStar(this.bonusX, this.bonusY);
+            }
+          },
+          update: function () {
+            this.x -= obstacleSpeed;
+            if (this.hasBonus) {
+              this.bonusX -= obstacleSpeed;
+            }
+          },
+          isOffScreen: function () {
+            return this.x + obstacleWidth < 0;
+          },
+        };
+
+        obstacles.push(newObstacle);
+      }
+
+      // Collision detection
+      function checkCollision() {
+        for (let obstacle of obstacles) {
+          if (
+            bird.x + bird.radius > obstacle.x &&
+            bird.x - bird.radius < obstacle.x + obstacleWidth
+          ) {
+            if (
+              bird.y - bird.radius < obstacle.topHeight ||
+              bird.y + bird.radius > obstacle.bottomY
+            ) {
+              return true;
+            }
+          }
+
+          if (obstacle.hasBonus) {
+            const dx = bird.x - obstacle.bonusX;
+            const dy = bird.y - obstacle.bonusY;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            if (distance < bird.radius + 10) {
+              // 10 is approximately half the star's size
+              activateBonus();
+              obstacle.hasBonus = false;
+            }
+          }
+        }
+        return false;
+      }
+
+      // Bonus logic
+      function activateBonus() {
+        if (!bonusActive) {
+          bonusActive = true;
+          preBonusObstacleSpeed = obstacleSpeed; // Store current obstacle speed
+          console.log("Active", preBonusObstacleSpeed, obstacleSpeed);
+          bird.flapStrength *= 0.8;
+          obstacleSpeed *= 1.2;
+        }
+        clearTimeout(bonusTimeout);
+        bonusTimeout = setTimeout(() => {
+          deactivateBonus();
+        }, 10000);
+      }
+
+      function deactivateBonus() {
+        bonusActive = false;
+        bird.flapStrength = bird.initialFlapStrength;
+        obstacleSpeed = preBonusObstacleSpeed; // Restore obstacle speed
+        console.log("Deactive", preBonusObstacleSpeed, obstacleSpeed);
+      }
+
+      // Game state
+      let gameRunning = true;
+      let score = 0;
+
+      function drawScore() {
+        ctx.fillStyle = "black";
+        ctx.font = "20px Arial";
+        ctx.fillText("Score: " + score, 10, 30);
+      }
+
+      function resetGame() {
+        bird.y = canvas.height / 2;
+        bird.velocityY = 0;
+        obstacles.length = 0;
+        score = 0;
+        gameRunning = true;
+        obstacleCounter = 0;
+        bonusActive = false;
+        bird.flapStrength = bird.initialFlapStrength;
+        obstacleSpeed = initialObstacleSpeed;
+        bonusChance = 0.3; // Reset bonus chance
+        clearTimeout(bonusTimeout);
+      }
+
+      function gameOver() {
+        gameRunning = false;
+        ctx.fillStyle = "red";
+        ctx.font = "40px Arial";
+        ctx.fillText(
+          "Game Over!",
+          canvas.width / 2 - 100,
+          canvas.height / 2 - 20
+        );
+        ctx.font = "20px Arial";
+        ctx.fillText(
+          "Click to Restart",
+          canvas.width / 2 - 80,
+          canvas.height / 2 + 20
+        );
+      }
+
+      // Game loop
+      function gameLoop() {
+        if (!gameRunning) return;
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        bird.update();
+        bird.draw();
+
+        if (obstacleCounter % obstacleSpawnInterval === 0) {
+          createObstacle();
+        }
+        obstacleCounter++;
+
+        for (let i = obstacles.length - 1; i >= 0; i--) {
+          obstacles[i].update();
+          obstacles[i].draw();
+
+          if (
+            obstacles[i].x + obstacleWidth < bird.x - bird.radius &&
+            !obstacles[i].passed
+          ) {
+            score++;
+            obstacles[i].passed = true; // Mark obstacle as passed to avoid double scoring
+
+            // Increase difficulty every 10 points
+            if (score > 0 && score % 2 === 0) {
+              initialObstacleSpeed += 0.5;
+              if (!bonusActive) {
+                obstacleSpeed = initialObstacleSpeed; // Update current speed if bonus is not active
+              }
+              bonusChance = Math.max(0.05, bonusChance - 0.0); // Decrease bonus chance, but not below 5%
+            }
+          }
+
+          if (obstacles[i].isOffScreen()) {
+            obstacles.splice(i, 1);
+          }
+        }
+
+        drawScore();
+
+        if (checkCollision()) {
+          gameOver();
+        } else {
+          requestAnimationFrame(gameLoop);
+        }
+      }
+
+      // Event listeners
+      document.addEventListener("keydown", function (event) {
+        if (event.code === "Space" && gameRunning) {
+          bird.flap();
+        } else if (!gameRunning && event.code === "Space") {
+          resetGame();
+        }
+      });
+
+      canvas.addEventListener("click", function () {
+        if (gameRunning) {
+          bird.flap();
+        } else {
+          resetGame();
+        }
+      });
+
+      // Start the game
+      gameLoop();
+    </script>
+  </body>
+</html>

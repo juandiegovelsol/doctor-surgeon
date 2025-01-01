@@ -1,0 +1,38 @@
+There are no issues till Turn 3. However, there is an accuracy issue in Turn 4.
+The number 3 has been removed, so it should be calculated as 0 on the sum. The blank face
+could be shown on the front when rolling the dice. So the model should calculate the
+total number of possible outcomes for each roll as 6x6x6=216, not 6x6x5=180.
+
+
+
+In turn 1, the model understands and fixes the described issue, now the ships disappear at the bottom
+of the game container as required.
+
+In turn 2, the model understands most of the requirements and follows most of the instructions. Now the
+ships can be shot by the bullets, the score is increased when enemies are shot or friendly ships
+reach the bottom, and it is decreased when friendly shipe are shot or enemies reach the bottom
+
+In turn 3, the model fully understands the requirements, increasing the bullets speed and decreasing
+the ships speed.
+
+In turn 3, the model realizes that the ship speed modification logic is not implemented and includes a
+transition duration to modify the speed through the shipSpeed constant.
+
+
+
+
+In turn 1, the model has an incomplete code issue because the friendly ships cause the score to
+decrease when they reach the bottom, and the enemy ships to increase. It is the opposite way.
+
+In turn 1, the model has an incorrect condition issue because the handleShipBottom should decrease
+the score when the ship is enemy, not friendly.
+
+In turn 1, the model has a incorrect code issue because the collision detection system was broken.
+
+In turn 1, the model has a constant value issue because the shipSpeed cosntant is defined and never used.
+
+In turn 2, the model does not understand that the ships must move slower because the current implementation
+is ver difficult for the player to aim.
+
+In turn 2, the model adds information that was not requested, because it decreases the bullet speed.
+

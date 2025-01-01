@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shape Memory Game</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        margin: 0;
+        background-color: #f0f0f0;
+      }
+
+      .game-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .card-container {
+        display: flex;
+        gap: 20px;
+        margin-bottom: 20px;
+      }
+
+      .card {
+        width: 100px;
+        height: 150px;
+        border: 1px solid #ccc;
+        background-color: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 2em;
+        cursor: pointer;
+        user-select: none;
+      }
+
+      .shape-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+      }
+
+      .shape {
+        width: 60px;
+        height: 60px;
+      }
+
+      /* Black Shapes */
+      .circle.black {
+        border-radius: 50%;
+        background-color: black;
+      }
+
+      .square.black {
+        background-color: black;
+      }
+
+      .triangle.black {
+        border-bottom-color: black;
+      }
+
+      .star.black {
+        border-bottom-color: black;
+      }
+      .star.black:before {
+        border-bottom-color: black;
+      }
+      .star.black:after {
+        border-bottom-color: black;
+      }
+
+      /* Blue Shapes */
+      .circle.blue {
+        border-radius: 50%;
+        background-color: blue;
+      }
+
+      .square.blue {
+        background-color: blue;
+      }
+
+      .triangle.blue {
+        border-bottom-color: blue;
+      }
+
+      .star.blue {
+        border-bottom-color: blue;
+      }
+      .star.blue:before {
+        border-bottom-color: blue;
+      }
+      .star.blue:after {
+        border-bottom-color: blue;
+      }
+
+      #message {
+        font-size: 1.2em;
+        margin-top: 20px;
+      }
+
+      .hidden-shape {
+        background-color: #ccc;
+      }
+
+      .clickable {
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="game-container">
+      <h1>Shape Memory Game</h1>
+      <div class="card-container" id="memoryCards">
+        <div class="card"><div class="shape-container"></div></div>
+        <div class="card"><div class="shape-container"></div></div>
+        <div class="card"><div class="shape-container"></div></div>
+      </div>
+      <div class="card-container" id="selectionCards"></div>
+      <p id="message"></p>
+    </div>
+
+    <script>
+      const memoryCards = document.querySelectorAll("#memoryCards .card");
+      const selectionCardsContainer = document.getElementById("selectionCards");
+      const messageElement = document.getElementById("message");
+      const shapes = [
+        { name: "circle", color: "black" },
+        { name: "square", color: "black" },
+        { name: "triangle", color: "black" },
+        { name: "star", color: "black" },
+        { name: "circle", color: "blue" },
+        { name: "square", color: "blue" },
+        { name: "triangle", color: "blue" },
+        { name: "star", color: "blue" },
+      ];
+      let memorySequence = [];
+      let playerSequence = [];
+      let gameStarted = false;
+      let correctTurns = 0;
+
+      function createShapeElement(shape) {
+        const shapeDiv = document.createElement("div");
+        shapeDiv.classList.add("shape", shape.name, shape.color);
+        return shapeDiv;
+      }
+
+      function generateMemorySequence() {
+        memorySequence = [];
+        let availableShapes = [...shapes];
+
+        for (let i = 0; i < 3; i++) {
+          const randomIndex = Math.floor(
+            Math.random() * availableShapes.length
+          );
+          memorySequence.push(availableShapes[randomIndex]);
+          availableShapes.splice(randomIndex, 1);
+        }
+      }
+
+      function displayMemorySequence() {
+        generateMemorySequence();
+
+        memoryCards.forEach((card) => {
+          card.querySelector(".shape-container").innerHTML = ""; // Ensure empty
+          card.classList.remove("hidden-shape");
+        });
+
+        let index = 0;
+        const displayInterval = setInterval(() => {
+          if (index < memoryCards.length) {
+            memoryCards[index]
+              .querySelector(".shape-container")
+              .appendChild(createShapeElement(memorySequence[index]));
+            index++;
+          } else {
+            clearInterval(displayInterval);
+            setTimeout(hideMemorySequence, 1000);
+          }
+        }, 1000);
+      }
+
+      function hideMemorySequence() {
+        memoryCards.forEach((card) => {
+          card.querySelector(".shape-container").innerHTML = "";
+          card.classList.add("hidden-shape");
+        });
+        displaySelectionOptions();
+      }
+
+      function displaySelectionOptions() {
+        selectionCardsContainer.innerHTML = "";
+        shapes.forEach((shape) => {
+          const card = document.createElement("div");
+          card.classList.add("card", "clickable");
+          card.dataset.shape = JSON.stringify(shape); // Store the shape object
+          card.appendChild(createShapeElement(shape));
+          card.addEventListener("click", handleShapeSelection);
+          selectionCardsContainer.appendChild(card);
+        });
+        playerSequence = [];
+        messageElement.textContent = "Select the shapes in the correct order.";
+        gameStarted = true;
+      }
+
+      function handleShapeSelection(event) {
+        if (!gameStarted) return;
+        const selectedShape = JSON.parse(event.currentTarget.dataset.shape);
+        playerSequence.push(selectedShape);
+
+        if (playerSequence.length === memorySequence.length) {
+          gameStarted = false;
+          checkResult();
+        }
+      }
+
+      function checkResult() {
+        const isCorrect = memorySequence.every((shape, index) => {
+          return (
+            shape.name === playerSequence[index].name &&
+            shape.color === playerSequence[index].color
+          );
+        });
+        if (isCorrect) {
+          messageElement.textContent = "Correct! Get ready for the next round.";
+          correctTurns++;
+          setTimeout(startNewTurn, 2000);
+        } else {
+          messageElement.textContent = `Incorrect! Game Over. You memorized ${correctTurns} pattern(s) correctly.`;
+        }
+      }
+
+      function startNewTurn() {
+        displayMemorySequence();
+      }
+
+      // Start the game
+      displayMemorySequence();
+    </script>
+  </body>
+</html>

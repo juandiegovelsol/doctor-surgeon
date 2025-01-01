@@ -1,0 +1,30 @@
+There are no issues till Turn 3. However, there is an accuracy issue in Turn 4.
+The number 3 has been removed, so it should be calculated as 0 on the sum. The blank face
+could be shown on the front when rolling the dice. So the model should calculate the
+total number of possible outcomes for each roll as 6x6x6=216, not 6x6x5=180.
+
+
+Turn 1 tries to make modifications, which can be interpreted as an intent to fix the described issue.
+
+Turn 2 successfully includes the undefined variable as a parameter in the updateSinglePlanet method.
+
+Turn 2 modified the updateSinglePlanet calls to include each planet's radius.
+
+Turn 3 modifies the code to increase or decrease the planet velocity by 1 unit as requested in the prompt.
+
+Turn 3 changes the writable fields to plain text, to avoid textual inputs.
+
+
+
+Turn 1 has an incorrect code issue becuase the changes made do not fix the described issues, the planets
+still do not move as in the initial code.
+
+Turn 1 has a Wrong logical direction error because the model tries to simplify the code, removing the window
+boundaries and extracting some logic into a new function, but in the end those modifications have nothing to do
+with the described issue.
+
+Turn 3 has a "Doesn't understand user intent" because the prompt asks to dinamically update the speed values
+which is not achieved, the velocity values are updated only with a change in the planet selector or with a click
+in an speed change button.
+
+Turn 3 has a formatting error because the speed overflows below the increase speed button.

@@ -1,0 +1,35 @@
+There are no issues till Turn 3. However, there is an accuracy issue in Turn 4.
+The number 3 has been removed, so it should be calculated as 0 on the sum. The blank face
+could be shown on the front when rolling the dice. So the model should calculate the
+total number of possible outcomes for each roll as 6x6x6=216, not 6x6x5=180.
+
+
+
+In turn 1, the model understand that the game starts displaying figures in an specific order and it reveals the 
+shapes one by one as the prompt requires.
+
+In turn 1, the model allows the user to enter the memorized pattern and then it is checked.
+
+Finally, in turn 1, the code checks if the selected pattern matches with the initial pattern showed
+and shows a message.
+
+In turn 2, the model understands the prompt requirement and fixes the described issues. Now all the cards
+have a different figure, the displayed pattern does not have repeated figures, and the pattern is hidden
+once shown.
+
+In turn 3, the model imlpements the requested features, now the game allows the player to continue
+memorizing different patterns until an incorrect pattern is entered.
+
+
+
+
+
+Turn 1 has an incomplete code issue because two of the generated figures does not appear, so the pattern can't be
+correctly seen, memorized, and reproduced
+
+Turn 1 has a "Doesn't understand the user intent" issue because the displayed pattern has the same 3
+firgures. It is suposed to display random figures from all the possible options.
+
+Turn 1 has a "Wrong (logical) direction" issue because the code shows the pattern to reproduce all
+the time, this does not make any sense.
+

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bumping Heart Bullet Points</title>
+    <style>
+      ul {
+        list-style-type: none; /* Remove default bullet points */
+        padding-left: 0;
+      }
+
+      li {
+        padding-left: 20px; /* Space for the custom bullet */
+        margin-bottom: 10px;
+        position: relative; /* For positioning the pseudo-element */
+      }
+
+      li::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 5px; /* Adjust vertical alignment */
+        width: 10px;
+        height: 10px;
+        background-color: #e74c3c; /* Red heart color */
+        display: inline-block;
+        transform: rotate(25deg);
+        animation: bump 1s infinite alternate; /* Apply the animation */
+        transform-origin: center; /* Set the origin for scaling */
+      }
+
+      @keyframes bump {
+        0% {
+          transform: rotate(25deg) scale(1);
+        }
+        100% {
+          transform: rotate(25deg) scale(1.2);
+        }
+      }
+
+      /* Optional: Hover effect to make the bump more interactive */
+      li:hover::before {
+        animation-play-state: running; /* Ensure animation runs on hover */
+      }
+
+      li::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 5px;
+        width: 10px;
+        height: 10px;
+        background-color: #e74c3c;
+        display: inline-block;
+        transform: rotate(-25deg);
+        clip-path: polygon(
+          0 0,
+          100% 0,
+          100% 100%,
+          0 100%
+        ); /* Create the second half of the heart */
+        animation: bump-second 1s infinite alternate;
+        transform-origin: center;
+      }
+
+      @keyframes bump-second {
+        0% {
+          transform: rotate(-25deg) scale(1);
+        }
+        100% {
+          transform: rotate(-25deg) scale(1.2);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <h2>My List with Bumping Heart Bullets</h2>
+
+    <ul>
+      <li>Item one</li>
+      <li>Another important item</li>
+      <li>This is a list item with a heart</li>
+      <li>And yet another item here</li>
+    </ul>
+  </body>
+</html>

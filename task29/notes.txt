@@ -1,0 +1,42 @@
+There are no issues till Turn 3. However, there is an accuracy issue in Turn 4.
+The number 3 has been removed, so it should be calculated as 0 on the sum. The blank face
+could be shown on the front when rolling the dice. So the model should calculate the
+total number of possible outcomes for each roll as 6x6x6=216, not 6x6x5=180.
+
+
+
+
+In turn 1 the model understands the initial figures must be duplicated, creating new figures with
+another background color that can be memorized.
+
+In turn 3 the model applies the correct propertie as requested, making the shapes to be completly
+back or blue.
+
+In turn 3, the model changes the trapezium shape to a triangle as in the original code. The model
+understands how to fix the issue while maintaining the background color.
+
+In turn 4, the model implements the incresing dificulty system. Now with each correct pattern a new
+figure is added. This showcases the instruction following and comprehesiveness of the model.
+
+
+
+
+
+
+
+Turn 1 has an incomplete code issue since the CSS rules are not correctly applied to produce
+entire black or blue shapes
+
+Turn 1 has a style issue because the CSS properties are not correctly applied, producing irregular
+shapes different than the original ones
+
+Turn 2 has an incorrect code issue because two of the shapes were completly broken. Now the two last
+shapes are white.
+
+Turn 2 has a wrong logical direction issue because the model makes unnecessary code modifications that
+causes the shapes to be significnalty different than the original ones.
+
+Turn 2 has a Doesn't follow formatting constraints issue. The prompt is clear asking the shapes must
+be exactly as the original ones but with a different color.
+
+Turn 3 has an incomplete code issue because the triangle is a trapezium

@@ -1,0 +1,39 @@
+There are no issues till Turn 3. However, there is an accuracy issue in Turn 4.
+The number 3 has been removed, so it should be calculated as 0 on the sum. The blank face
+could be shown on the front when rolling the dice. So the model should calculate the
+total number of possible outcomes for each roll as 6x6x6=216, not 6x6x5=180.
+
+
+
+In turn 1, the model satisfies all the user expectatives, creating a very helpful game that is alligned
+with all the prompt requirements.
+
+In turn 1, the model understands that when the bird flaps an impulse is applied to allow him to keep
+flying. Then, the model creates obstacles that moves from right to left creating the illusion the bird
+flies towards. An obstacle collision ends the game as required in the prompt.
+
+In turn 2, the model removes the game-over condition for when the bird falls below the container's bottom.
+
+In turn 3, the model fully understands the instructions. The # character is removed from the background-color property, and now the bird is blocked from flying outside the container boundaries as requested. The turn 3 does not have any issues.
+
+In turn 3, the model understands that a pure CSS red star must be included in the response, following this constraint.
+
+
+
+In turn 1, the model has a minor "Adds information that was not asked for." issue because the prompt
+does not ask the game must end when the bird falls, only when an obstacle is hit.
+
+In turns 1 and 2, the model has a minor incomplete code issue because the body background color propertie
+is set as "#lightblue". This value does not exist and is incorrect, the "#" character must be removed.
+
+In turn 2, the model has a minor incomplete code issue because removing the game-over condition
+doesn't involve the bird can fall below the game container boundaries. It should remain visible
+
+In turn 4, the model has an incomplete code issue because the bonus star is not positioned correctly
+between the obstacles as requested in the prompt.
+
+In turn 4, the model has a "Doesn't follow non-formatting constraints" issue because the model does not
+position the star in the required place.
+
+In turn 4, the model has a "Doesn't understand user intent" issue because the star is not positioned
+in the gap between obstacles and its functionality can't be tested

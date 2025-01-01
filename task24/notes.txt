@@ -1,0 +1,40 @@
+There are no issues till Turn 3. However, there is an accuracy issue in Turn 4.
+The number 3 has been removed, so it should be calculated as 0 on the sum. The blank face
+could be shown on the front when rolling the dice. So the model should calculate the
+total number of possible outcomes for each roll as 6x6x6=216, not 6x6x5=180.
+
+
+Turn 1 simulates effectively a planetary movement between a fixed star and one planet.
+The calculated positions, velocities, accelerations, and forces are calculated precisely in both
+X and Y axis, producing an accurate movement.
+
+Turn 1 implements a control form to update the planet mass and velocity as requested, it works as
+expected.
+
+Turn 2 calculates the correct circularOrbitSpeed that produces the required movement. Now the planet
+initially moves circularly around the star.
+
+Turn 3 includes a new planet and calculates the corresponding initial speed to produce a circular circular orbit
+
+
+
+Turn 1 has a misleading claim because it explains the gravitational constant was scaled down for
+visual effect while it is scaled up, since its value is 9 magnitud orders higher than the real value
+
+Turn 1 has an ambiguity error because the starRadius variable has a comment that says
+"Half of the width/height" which is ambiguous and incorrect, it is not the half dimension related to
+other object, actually is double the planet dimansion.
+
+Turn 1 has an ambiguity error because the planetRadius variable has a comment that says
+"Half of the width/height" which is ambiguous and can lead to confusions, it is half the starRadius.
+
+Turn 1 has a "Doesn't understand user intent" error because the model does not understand that the user
+asks about simulating planets movement, which implies at least two simulated planets. The clarification
+"The star and one planet" is misunderstood, it only implies that the gravitational interaction
+must be calculated between two bodies.
+
+Turn 3 has an undefined variable error because the "planetRadius" variable is called inside the
+updateSinglePlanet method but it does not exists.
+
+Turn 3 has an incorrect code error because the undefined variable produces the entire code to fail
+and now the simulation does not work.
