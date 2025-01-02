@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interactive Story</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        line-height: 1.6;
+        margin: 20px;
+        background-color: #f4f4f4;
+        color: #333;
+      }
+
+      #story-container {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+      }
+
+      #story-text {
+        margin-bottom: 15px;
+      }
+
+      .options-container button {
+        padding: 10px 15px;
+        margin-right: 10px;
+        border: none;
+        background-color: #007bff;
+        color: white;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      .options-container button:hover {
+        background-color: #0056b3;
+      }
+
+      #story-history-container {
+        background-color: #e9ecef;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+      }
+
+      #story-history-title {
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
+
+      #story-history {
+        list-style: none;
+        padding: 0;
+      }
+
+      #story-history li {
+        margin-bottom: 5px;
+        padding: 8px;
+        background-color: #fff;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="story-container">
+      <div id="story-text"></div>
+      <div class="options-container"></div>
+    </div>
+
+    <div id="story-history-container">
+      <h2 id="story-history-title">Your Story:</h2>
+      <ul id="story-history"></ul>
+    </div>
+
+    <script>
+      const storyNodes = {
+        start: {
+          text: "You awaken in a dimly lit room. You don't remember how you got here. A cold draft blows from a cracked window.",
+          options: [
+            { text: "Check the window", next: "window" },
+            { text: "Search the room", next: "searchRoom" },
+          ],
+        },
+        window: {
+          text: "You approach the window and see a dense forest stretching as far as the eye can see. It's twilight. You notice something glinting on the ground outside.",
+          options: [
+            { text: "Try to open the window", next: "openWindow" },
+            {
+              text: "Ignore it and search the room",
+              next: "searchRoomFromWindow",
+            },
+          ],
+        },
+        searchRoom: {
+          text: "You cautiously search the room. You find a dusty old book and a locked wooden chest.",
+          options: [
+            { text: "Examine the book", next: "examineBook" },
+            { text: "Try to open the chest", next: "openChest" },
+          ],
+        },
+        openWindow: {
+          text: "The window is jammed shut. You try with all your might, but it won't budge. You hear a faint rustling outside.",
+          options: [
+            { text: "Look through the crack again", next: "lookThroughCrack" },
+            { text: "Turn back to the room", next: "backToRoomFromWindow" },
+          ],
+        },
+        searchRoomFromWindow: {
+          text: "Having seen the forest, you feel a sense of urgency. You quickly search the room and find a rusty key hidden under a loose floorboard.",
+          options: [
+            { text: "Try the key on the chest", next: "tryKeyOnChest" },
+            { text: "Go back to the window", next: "windowAgain" },
+          ],
+        },
+        examineBook: {
+          text: "The book is a collection of local folklore. One passage describes a hidden passage behind a loose stone in a nearby cave.",
+          options: [
+            {
+              text: "Remember the passage and look for the chest key",
+              next: "lookForKeyAfterBook",
+            },
+            {
+              text: "Forget the book and try the chest anyway",
+              next: "tryChestNoKey",
+            },
+          ],
+        },
+        openChest: {
+          text: "The chest is locked. You'll need to find a way to open it.",
+          options: [
+            { text: "Look around for a key", next: "lookForKey" },
+            { text: "Try to force it open", next: "forceChest" },
+          ],
+        },
+        lookThroughCrack: {
+          text: "Peering through the crack, you see a pair of glowing eyes staring back at you. A low growl sends shivers down your spine.",
+          options: [
+            {
+              text: "Quickly back away from the window",
+              next: "backFromWindowScared",
+            },
+            { text: "Try to get a better look", next: "betterLookScary" },
+          ],
+        },
+        backToRoomFromWindow: {
+          text: "Deciding the window is too risky for now, you turn back to the room. The dusty book on the table catches your eye.",
+          options: [
+            { text: "Read the book", next: "readBookAgain" },
+            { text: "Focus on the locked chest", next: "chestAgain" },
+          ],
+        },
+        tryKeyOnChest: {
+          text: "You insert the rusty key into the lock of the wooden chest. It turns with a click! Inside, you find a small pouch of gold coins and a sturdy-looking knife.",
+          options: [
+            { text: "Take the gold and the knife", next: "goldAndKnife" },
+            { text: "Just take the knife", next: "justKnife" },
+          ],
+        },
+        windowAgain: {
+          text: "You return to the window, the forest outside looking even more ominous in the fading light.",
+          options: [
+            { text: "Try the window again", next: "windowStuckAgain" },
+            { text: "Give up on the window", next: "giveUpWindow" },
+          ],
+        },
+        lookForKeyAfterBook: {
+          text: "With the image of the hidden passage in mind, you search the room more thoroughly and find a small, ornate key tucked inside the book's spine.",
+          options: [
+            { text: "Try the ornate key on the chest", next: "ornateKeyChest" },
+            { text: "Consider the hidden passage", next: "considerPassage" },
+          ],
+        },
+        tryChestNoKey: {
+          text: "Without a key, the chest remains stubbornly locked.",
+          options: [
+            { text: "Look for something to pry it open", next: "lookToPry" },
+            { text: "Give up on the chest for now", next: "giveUpChest" },
+          ],
+        },
+        lookForKey: {
+          text: "You frantically search the room for a key, checking under furniture and in every nook and cranny. You find nothing.",
+          options: [
+            {
+              text: "Try to force the chest open anyway",
+              next: "forceChestAgain",
+            },
+            { text: "Look for something else useful", next: "lookUseful" },
+          ],
+        },
+        forceChest: {
+          text: "You try to pry the chest open, but it's too sturdy. You only manage to splinter the wood slightly.",
+          options: [
+            { text: "Keep trying to force it", next: "forceMore" },
+            { text: "Give up and look elsewhere", next: "lookElsewhere" },
+          ],
+        },
+        backFromWindowScared: {
+          text: "Heart pounding, you stumble back from the window. The image of those eyes is burned into your mind.",
+          options: [
+            { text: "Hide under the bed", next: "hideBed" },
+            { text: "Arm yourself with something", next: "armSelf" },
+          ],
+        },
+        betterLookScary: {
+          text: "You lean closer, trying to make out the creature. Suddenly, a large, shadowy figure leaps at the window, making you jump back in terror!",
+          options: [
+            { text: "Run and hide!", next: "runHide" },
+            {
+              text: "Brace yourself for whatever comes next",
+              next: "braceSelf",
+            },
+          ],
+        },
+        readBookAgain: {
+          text: "You flip through the dusty pages again, focusing on the local folklore. The story of the hidden passage seems important.",
+          options: [
+            {
+              text: "Look for clues related to the passage",
+              next: "lookCluesPassage",
+            },
+            { text: "Re-examine the chest", next: "reexamineChest" },
+          ],
+        },
+        chestAgain: {
+          text: "The locked chest sits there, a silent challenge. You wonder what secrets it holds.",
+          options: [
+            { text: "Try to find something to open it", next: "findToOpen" },
+            {
+              text: "Focus on the other things in the room",
+              next: "focusOther",
+            },
+          ],
+        },
+        goldAndKnife: {
+          text: "Armed with gold and a knife, you feel slightly more confident. The forest still seems daunting.",
+          options: [
+            {
+              text: "Try the window again with the knife",
+              next: "windowWithKnife",
+            },
+            { text: "Look for another way out", next: "anotherWayOut" },
+          ],
+        },
+        justKnife: {
+          text: "You decide the gold might be a burden and just take the knife. It feels reassuring in your hand.",
+          options: [
+            { text: "Test the knife's sharpness", next: "testKnife" },
+            {
+              text: "Look for a way to use the knife to escape",
+              next: "useKnifeEscape",
+            },
+          ],
+        },
+        windowStuckAgain: {
+          text: "No matter how hard you try, the window remains stuck fast.",
+          options: [
+            { text: "Look for something to break it", next: "breakWindow" },
+            { text: "Accept the window is a dead end", next: "windowDeadEnd" },
+          ],
+        },
+        giveUpWindow: {
+          text: "Frustrated, you turn your back on the window and focus on the rest of the room.",
+          options: [
+            { text: "Examine the chest closely", next: "examineChestClose" },
+            { text: "Look at the book again", next: "bookAgainNow" },
+          ],
+        },
+        ornateKeyChest: {
+          text: "The ornate key slides smoothly into the lock. The chest creaks open, revealing a map and a compass.",
+          options: [
+            { text: "Take the map and compass", next: "mapCompass" },
+            { text: "Study the map carefully", next: "studyMap" },
+          ],
+        },
+        considerPassage: {
+          text: "The idea of a hidden passage seems promising. You start to examine the walls for anything unusual.",
+          options: [
+            { text: "Look for loose stones", next: "lookLooseStones" },
+            { text: "Check behind furniture", next: "checkBehindFurniture" },
+          ],
+        },
+        lookToPry: {
+          text: "You search for something sturdy to use as a lever. You find a heavy candlestick.",
+          options: [
+            {
+              text: "Try to pry the chest with the candlestick",
+              next: "pryCandlestick",
+            },
+            {
+              text: "Look for other uses for the candlestick",
+              next: "otherCandlestickUse",
+            },
+          ],
+        },
+        giveUpChest: {
+          text: "Deciding the chest isn't worth the effort right now, you look around for other clues.",
+          options: [
+            {
+              text: "Examine the book more carefully",
+              next: "examineBookMore",
+            },
+            { text: "Check the window again", next: "checkWindowAgain" },
+          ],
+        },
+        forceChestAgain: {
+          text: "With renewed determination, you try to force the chest, but it resists your efforts.",
+          options: [
+            { text: "Try a different angle", next: "differentAngle" },
+            { text: "Admit defeat with the chest", next: "defeatChest" },
+          ],
+        },
+        lookUseful: {
+          text: "You scan the room for anything that might help you. The heavy book catches your eye.",
+          options: [
+            {
+              text: "Try using the book to smash the lock",
+              next: "smashLockBook",
+            },
+            { text: "Look for clues within the book", next: "cluesInBook" },
+          ],
+        },
+        forceMore: {
+          text: "Despite your efforts, the chest remains firmly shut, and you risk injuring yourself.",
+          options: [
+            { text: "One last try!", next: "lastTryForce" },
+            { text: "Accept defeat and move on", next: "acceptDefeatMoveOn" },
+          ],
+        },
+        lookElsewhere: {
+          text: "Giving up on brute force, you look around the room for other clues or tools.",
+          options: [
+            { text: "Check under the rug", next: "underRug" },
+            { text: "Inspect the walls closely", next: "inspectWalls" },
+          ],
+        },
+        hideBed: {
+          text: "You quickly slide under the bed, hoping whatever is outside can't reach you. You hear it sniffing at the door.",
+          options: [
+            { text: "Stay hidden and quiet", next: "stayQuiet" },
+            { text: "Try to peek out", next: "peekOut" },
+          ],
+        },
+        armSelf: {
+          text: "You grab the heaviest object you can find - the dusty book - to defend yourself.",
+          options: [
+            { text: "Stand ready by the door", next: "readyDoor" },
+            { text: "Look for a better weapon", next: "betterWeapon" },
+          ],
+        },
+        runHide: {
+          text: "Panicked, you scramble to find a hiding spot, diving behind the only piece of furniture - a small table.",
+          options: [
+            { text: "Crouch and hold your breath", next: "holdBreath" },
+            {
+              text: "Try to find a better hiding place",
+              next: "betterHidingPlace",
+            },
+          ],
+        },
+        braceSelf: {
+          text: "You stand your ground, ready to face whatever breaks through the window.",
+          options: [
+            { text: "Grab the nearest object as a weapon", next: "grabWeapon" },
+            { text: "Prepare to run if necessary", next: "prepareRun" },
+          ],
+        },
+        lookCluesPassage: {
+          text: "You reread the passage about the hidden passage, noting details about carvings and markings.",
+          options: [
+            {
+              text: "Search the walls for these markings",
+              next: "searchMarkings",
+            },
+            {
+              text: "Try to recall more from the folklore",
+              next: "recallFolklore",
+            },
+          ],
+        },
+        reexamineChest: {
+          text: "You run your hands over the chest, searching for any hidden mechanisms or loose parts.",
+          options: [
+            {
+              text: "Try to pry the lid with your fingers",
+              next: "pryLidFingers",
+            },
+            { text: "Look for markings on the chest", next: "markingsChest" },
+          ],
+        },
+        windowWithKnife: {
+          text: "You try to pry the window open with the knife, hoping to create some leverage.",
+          options: [
+            { text: "Carefully try to wedge the knife in", next: "wedgeKnife" },
+            {
+              text: "Look for another weak point in the window",
+              next: "weakPointWindow",
+            },
+          ],
+        },
+        anotherWayOut: {
+          text: "You begin to examine the room for any other potential exits.",
+          options: [
+            { text: "Check the walls for secret doors", next: "secretDoors" },
+            { text: "Look for a trapdoor on the floor", next: "trapdoorFloor" },
+          ],
+        },
+        testKnife: {
+          text: "You carefully test the sharpness of the knife on a loose thread of your clothing. It's surprisingly sharp.",
+          options: [
+            { text: "Try to cut through the window latch", next: "cutLatch" },
+            {
+              text: "Keep the knife ready for defense",
+              next: "knifeReadyDefense",
+            },
+          ],
+        },
+        useKnifeEscape: {
+          text: "You consider using the knife to aid your escape. Perhaps you can pry something open or cut through something.",
+          options: [
+            {
+              text: "Try the knife on the window again",
+              next: "knifeWindowAgain",
+            },
+            {
+              text: "Look for something else to use it on",
+              next: "otherKnifeUse",
+            },
+          ],
+        },
+        breakWindow: {
+          text: "You search for something heavy to break the window. The candlestick seems like the best option.",
+          options: [
+            {
+              text: "Smash the window with the candlestick",
+              next: "smashWindow",
+            },
+            { text: "Reconsider breaking the window", next: "reconsiderBreak" },
+          ],
+        },
+        windowDeadEnd: {
+          text: "You accept that the window is not a viable escape route for now.",
+          options: [
+            {
+              text: "Focus on the locked chest again",
+              next: "focusChestAgain",
+            },
+            { text: "Re-examine the dusty book", next: "reexamineBook" },
+          ],
+        },
+        examineChestClose: {
+          text: "You kneel down and examine the chest closely, looking for any hidden mechanisms or markings.",
+          options: [
+            {
+              text: "Look for a keyhole you might have missed",
+              next: "anotherKeyhole",
+            },
+            { text: "Try to wiggle the lid", next: "wiggleLid" },
+          ],
+        },
+        bookAgainNow: {
+          text: "You pick up the dusty book again, hoping to find some new insight.",
+          options: [
+            {
+              text: "Look for any symbols or drawings",
+              next: "symbolsDrawings",
+            },
+            {
+              text: "Try to find a story about an escape",
+              next: "storyEscape",
+            },
+          ],
+        },
+        mapCompass: {
+          text: "With the map and compass in hand, you feel a surge of hope. Perhaps you can find your way out.",
+          options: [
+            { text: "Unfold the map and study it", next: "unfoldMap" },
+            { text: "Check the compass direction", next: "checkCompass" },
+          ],
+        },
+        studyMap: {
+          text: "You carefully examine the map, trying to orient yourself and identify any landmarks.",
+          options: [
+            { text: "Look for a marked path or trail", next: "markedPath" },
+            {
+              text: "Try to match the map to what you saw outside the window",
+              next: "matchMapWindow",
+            },
+          ],
+        },
+        lookLooseStones: {
+          text: "You run your hands along the walls, searching for any stones that feel loose or out of place.",
+          options: [
+            { text: "Press on any suspicious stones", next: "pressStones" },
+            {
+              text: "Look for patterns in the stonework",
+              next: "stonePatterns",
+            },
+          ],
+        },
+        checkBehindFurniture: {
+          text: "You move the few pieces of furniture in the room, checking the walls behind them for any openings.",
+          options: [
+            {
+              text: "Push harder on any sections of the wall",
+              next: "pushWallSections",
+            },
+            {
+              text: "Look for differences in the wall texture",
+              next: "wallTexture",
+            },
+          ],
+        },
+        pryCandlestick: {
+          text: "You wedge the candlestick into the seam of the chest and try to pry it open.",
+          options: [
+            { text: "Apply more force", next: "applyMoreForce" },
+            {
+              text: "Try a different spot on the chest",
+              next: "differentSpotChest",
+            },
+          ],
+        },
+        otherCandlestickUse: {
+          text: "You consider other uses for the heavy candlestick. It could be used as a weapon or to break something.",
+          options: [
+            { text: "Keep it as a weapon", next: "candlestickWeapon" },
+            {
+              text: "Try to break the window with it",
+              next: "breakWindowCandlestick",
+            },
+          ],
+        },
+        examineBookMore: {
+          text: "You sit down and go through the book page by page, hoping to find a hidden clue or message.",
+          options: [
+            { text: "Look for faded ink or markings", next: "fadedInk" },
+            {
+              text: "Pay close attention to any illustrations",
+              next: "illustrations",
+            },
+          ],
+        },
+        checkWindowAgain: {
+          text: "You go back to the window and examine it more closely, looking for any weaknesses you might have missed.",
+          options: [
+            { text: "Try to push the window harder", next: "pushWindowHarder" },
+            {
+              text: "Look at the hinges or locking mechanism",
+              next: "windowHinges",
+            },
+          ],
+        },
+      };
+
+      let currentStoryNode = "start";
+      let storyHistory = [];
+
+      const storyTextElement = document.getElementById("story-text");
+      const optionsContainer = document.querySelector(".options-container");
+      const storyHistoryList = document.getElementById("story-history");
+
+      function displayStoryNode(nodeId) {
+        const node = storyNodes[nodeId];
+        storyTextElement.textContent = node.text;
+        optionsContainer.innerHTML = "";
+
+        node.options.forEach((option) => {
+          const button = document.createElement("button");
+          button.textContent = option.text;
+          button.addEventListener("click", () => {
+            storyHistory.push(node.text);
+            currentStoryNode = option.next;
+            displayStoryNode(currentStoryNode);
+            updateStoryHistory();
+          });
+          optionsContainer.appendChild(button);
+        });
+      }
+
+      function updateStoryHistory() {
+        storyHistoryList.innerHTML = "";
+        storyHistory.forEach((item) => {
+          const listItem = document.createElement("li");
+          listItem.textContent = item;
+          storyHistoryList.appendChild(listItem);
+        });
+      }
+
+      displayStoryNode(currentStoryNode);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,39 @@
+In turn 1, the model understands and implements most of the requirements. Now each of the resource pages display the corresponding data (characters, locations, or episodes) and each data is stored in its store variable, controlled by its individual reducer as required.
+
+In turn 1, the characters, locations, and episodes states are handled properly with its own reducer.
+
+In turn 2, the model fully understands the user intent regarding the resource URLs, now the URL for each type of resource is passed as a parameter of the corresponding fetchData method, defined in each of the reducers.
+
+In turn 4, the model understands which part of the fetching logic must be extracted and so it does for all the required files.
+
+
+
+
+In turn 1, the model Doesn't understand user intent because the resources URLs are stored as plain
+variables while the intention is that the infomation is dynamically handled through the information
+gathered from the API_URL variable
+
+In turn 1, the model Adds information that was not asked for because it changes the App component to
+statically render each of the IndividualResourcePage routes, which is not required and impacts the
+dynamic nature of the implementation.
+
+
+In turn 2, the model Doesn't understand user intent because the store file is not modified and it is
+retured, while the prompt ask to return only the modified files.
+
+In turn 2, the model has a Readability issue because it defined individual fetch functions for each of
+the reducers while this logic could be simplified. The same fetch call is made in the apiSlice, characterSlice,
+locationSlice, and the episodeSlice. This could be reduced into a single fetch method.
+
+In turn 3, the model Doesn't understand user intent because it modifies the entire reducers logic which is not
+desired. The prompt meant that only the fetching resource logic should be extracted into a single method.
+
+In turn 3, the model has an Inefficient Code issue because each time a resource page is clicked, the app
+makes an HTTP request to retrieve the API information. This is suboptimal.
+
+In turn 4, the model extracts the fetch logic but does the same for every slice, which produces a
+Doesn't understand user intent error because the intention was to simplify the same extracted logic into
+a single method, imported in all the slices.
+
+In turn 2, the model has a Readability because the same method is defined in 4 different files. This must
+be avoided, a single method should be defined and then imported into the 4 different files.

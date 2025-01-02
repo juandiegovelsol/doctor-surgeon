@@ -1,0 +1,37 @@
+In turn 1, the model fully understands that the application has to be split into individual files
+for components, the slice, and the store.
+
+In turn 1, the model implementation is split and can be fully executed without any execution issue.
+
+In turn 2, the model understands the instructions and tries to implement a nav bar that displays all
+the available resources directly without a resources individual page as in the previous code.
+
+In turn 2, all the explanations are factually correct, ignoring that the actual implemetation does
+not work as required
+
+In turn 4, the desired behavior is achieved. Now the application renders the available resources pages
+in the navbar and each can be accessed from the home page and each of the resources individual pages.
+All the described issues are solved.
+
+In turn 5, the model fully understands the prompt requirements, removing the undesired parenthesis and
+back slash charaters that cause the issues and wrapping the variable in brakets to render the JS value
+inside the JSX syntax.
+
+
+
+In turn 1, the model Doesn't understand user intent because the prompt requires the navbar must be
+visible directly from the home component and each individual resources pages. The application keeps
+the original behavior and has not changes regarding that specific prompt instructions.
+
+In turn 1, the response has a Partial Fulfillment issue because only the code splitting instruction
+was correctly achieved, the other instruction was fully ignored.
+
+
+In turn 2, the model has an Incorrect Code issue, when the dynamic route is accessed the resource
+page can't be found making the entire application to be flawed.
+
+
+In turn 3, the model breaks more the code creating another Incorrect Code issue. Now the entire
+appliation can be rendered. The problem is caused due to the code tries to access the store
+information on a higher hierarchy level where the Provider component is not defined. This makes the
+information unaccessible and the entire application to fail.

@@ -1,0 +1,40 @@
+There are no issues till Turn 3. However, there is an accuracy issue in Turn 4.
+The number 3 has been removed, so it should be calculated as 0 on the sum. The blank face
+could be shown on the front when rolling the dice. So the model should calculate the
+total number of possible outcomes for each roll as 6x6x6=216, not 6x6x5=180.
+
+
+In turn 1, the model implements an interactive story that can be selected through an user
+interface, allowing the user to modify and see the dinamic story.
+
+In turn 1, the model implements coherent stories after selecting each posibility.
+
+In turn 2, the model understands the prompt requirements, removing the "lookForKeyAgain" key
+that is not linked with any previous branch.
+
+In turn 2, the model tries to add more branches to reach at least 5 branches depth without asking
+for that.
+
+In turn 3, with the generated branches it is sufficient to have at least 5 level depth, following
+teh required constraint.
+
+
+
+In turn 1 the model includes a "Corrected ID" comment in the code which is a minor inaccuracy.
+The object ID is not corrected because it is the first time that appears.
+
+In turn 1, the model has an assignment error, the "lookForKeyAgain" key is not chained to any
+of the possible branches so it does not makes sense to be included.
+
+In turns 1 and 2, the model has an "Doesn't follow non-formatting constraints" issue because not all
+the branches have 5 branches depth as required in the prompt
+
+In turn 3, the model generates incorrect code, because given the depth level in the story
+the model is not able to generate the entire code. This could be avoided just by providing the
+new story branches instead of the complete code.
+
+In turn 3, the model Can't answer, but doesn't punt because the code response seems too long for
+the model's capabilities.
+
+In turn 3, the model adds information that was not asked for. More than 5 level depht is included
+for some branches, making the entire code too long.

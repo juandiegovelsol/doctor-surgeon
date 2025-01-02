@@ -8,6 +8,17 @@ list using HTML and CSS.
 
 In turn 1, the model includes a bumping effect that increases and decreases the bullet point size.
 
+In turn 2, the model explores other alternatives as required in the prompt and provides the user 3
+possible solutions.
+
+In turn 2 and the second approach, the model generates the desired heart shape as requested in the
+first prompt. It has the bumping effect and it is achieved by using the unicode character.
+
+In turn 2 and the third approach, the model uses an svg image to implement the desired effect which
+is a valid approach. Having the correct svg file the bullet point can be a bumping heart.
+
+
+
 
 In turn 1, the model has an incomplete code issue because the generated figure is not a heart. It 
 is a rotated square.
@@ -18,4 +29,6 @@ shape is created is incorrect. The generated shape is not a heart
 In turn 1, the model has a verbosity issue because the explanation is too long, the code is simple
 and does not require such a long explanation, only to highlight the key points.
 
+In turn 2, the model has incomplete code issues because the first aproach does not generate a 
+bumping heart as required.
 

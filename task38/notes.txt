@@ -1,0 +1,51 @@
+There are no issues till Turn 3. However, there is an accuracy issue in Turn 4.
+The number 3 has been removed, so it should be calculated as 0 on the sum. The blank face
+could be shown on the front when rolling the dice. So the model should calculate the
+total number of possible outcomes for each roll as 6x6x6=216, not 6x6x5=180.
+
+
+
+In turn 1, the model understands that a flying plane must elevate with the spacebar and must start falling when the spacebar is released
+
+In turn 1, the model understands that the plane must have an integrated weapon that can shot bullets with the mouse click.
+
+In turn 1, the model understands and implements coming objects that can be destroyed with the bullets and that makes the game over when hit the plane.
+
+In turn 1, the model understands that the coming objects can't be bigger than the 5% of the window's height.
+
+In turn 1, the model explains correctly and precisely how the code works and produces the flying plane that can shot coming objects.
+
+In turn 2, the model restricts the plane's height to the 5% of the window's height.
+
+In turn 3, the model removes any minimum dimension restrictions, now each object has only the maximum dimension restriction.
+
+
+
+
+In turn 1, the model Doesn't follow formatting constraints because the prompt asked that all the
+objects in the window must not be bigger than the 5% of the window's height, the plane is bigger
+and is an object.
+
+In turn 1, the model has a visual code output error because the plane representation is only a
+red square while it should be plane. The image does not produce an useful visualization
+
+In turn 1, the mdoel has an incomplete code issue because the plane is bigger than the 5% of the
+window's height, causing the entire game to be visually unconformtable.
+
+In turn 1, the model adds inforamtion that is not requested, the coming objects can have a minimum
+dimensions that 10 pixels which does not satisfy the prompt requirements.
+
+In turn 2, the model does not understands the user intent because the prompt talks about dimension
+restrictions, which involves both width and height. Only the height is restricted.
+
+In turn 4, the model has an incorrect code issue because the generated shape is wierd and does not
+seems a plane. Also, the generated image is bigger thant the previous dimension restriction applied,
+
+In turn 4, the collision detection between the plane and the object is broken, making the game to
+detect a collision when the object has not reached the colored parts of the plane yet.
+
+
+
+- Then, 
+- 
+- 
