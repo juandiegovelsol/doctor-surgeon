@@ -1,0 +1,6 @@
+In turn 1, ".enter()" pattern is used, but ".exit().remove()" is missing. Without handling exiting elements, old data can remain in the DOM after updates.
+In turn 1, the code clears the entire SVG container with "svg.selectAll('*').remove()" and this is inefficient for updating charts and can cause flickering. We should update only the elements that need changes instead of removing all.
+In turn 1, the text labels may overlap if the bars are too short or the chart height is small.
+In turn 1, at the end of the response, there are unnecessary backticks.
+In turn 2, setting the tooltip state(tooltipvisible, tooltipContent, and tooltipPosition) inside the mouseover and mouseout events can cause flickering or rendering delays on rapid movements due to React's asynchronous state updates. This can be dealt with using a "requestAnimationFrame".
+In turn 2, the code resets "setTooltipVisible(false)" when "filteredData" is empty. This is unnecessary because tooltips are conditionally rendered based on "filteredData" and "tooltipVisible" already.

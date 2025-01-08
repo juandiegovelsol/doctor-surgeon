@@ -1,0 +1,18 @@
+latex error
+Ambiguity - First example should say rechart and not axios because both use axios
+Confusing structure - The response is not well organized, first provides code for rechart
+and then includes the example section for rechart
+Minor Visual Code Output Error, for the chart.js implementation the data can't be correctly
+read because the chart height is too narrow
+
+
+In turn 1, the pointed error that keys are missing is not correct, the app is not
+creating dinamyc elements so the key prop is not necessary. Also, the sort method is
+mandatory because the retrieved data from the API has first the newest records
+
+In turn 1 there are some missing errors that were not pointed by the CB
+
+The processing error pointed by the CB is not valid because the code processes historicalData
+as an object of arrays where each array position is other object.
+
+

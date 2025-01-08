@@ -1,0 +1,162 @@
+/* src/index.css */
+
+/* Global Styles */
+body {
+  font-family: sans-serif;
+  background-color: #fbfbfb; /* background color */
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  padding-top: 20px;
+}
+
+h2,
+h3 {
+  color: #ffddae; /* titles or highlighted content color */
+  text-align: center; /* Center main titles */
+}
+
+button {
+  background-color: #c6e7ff; /* main color */
+  color: black;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+button:hover {
+  background-color: #d4f6ff; /* secondary color */
+}
+
+/* Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: white;
+  padding: 30px;
+  border-radius: 15px;
+  width: 80%;
+  max-height: 80%;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.modal-content > * {
+  margin-bottom: 15px;
+}
+
+/* Form Container Styles */
+.form-container {
+  background-color: white;
+  border: 1px solid #c6e7ff; /* main color */
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.form-container h3 {
+  margin-top: 0;
+  text-align: center; /* Center form titles */
+}
+
+/* Form Layout Styles */
+.form-grid {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 10px;
+  align-items: start; /* Align items at the start */
+}
+
+.form-grid > div {
+  padding: 5px 0;
+}
+
+.form-grid label {
+  font-weight: bold;
+  text-align: right;
+  padding-right: 10px;
+}
+
+.form-grid input[type="text"],
+.form-grid input[type="number"],
+.form-grid input[type="tel"],
+.form-grid input[type="password"],
+.form-grid select {
+  border: none;
+  border-radius: 8px;
+  padding: 8px;
+  background-color: #f4f4f4; /* Light grey for input background */
+  width: calc(100% - 16px); /* Adjust width for padding */
+  box-sizing: border-box;
+}
+
+.form-grid button {
+  grid-column: 1 / span 2; /* Make buttons span both columns */
+  justify-self: center; /* Center buttons in forms */
+}
+
+/* Invitation List Styles */
+.invitation-group {
+  background-color: white;
+  border: 1px solid #c6e7ff; /* main color */
+  border-radius: 10px;
+  padding: 15px;
+  margin-bottom: 10px;
+}
+
+.invitation-group h4 {
+  color: #ffddae; /* titles or highlighted content color */
+  margin-top: 0;
+}
+
+.invitation-group p {
+  margin: 5px 0;
+}
+
+/* Admin Dashboard Styles */
+.admin-dashboard {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center content horizontally */
+  gap: 20px;
+  width: 90%;
+  max-width: 800px;
+  margin: 0 auto; /* Center the dashboard container */
+}
+
+.summary-container {
+  background-color: white;
+  border: 1px solid #c6e7ff; /* main color */
+  border-radius: 10px;
+  padding: 20px;
+  width: 100%; /* Make summary container take full width */
+}
+
+/* Guest Confirmation Form Styles */
+.guest-confirmation-form {
+  width: 90%;
+  max-width: 500px;
+}
+
+/* Highlighted Information Headers */
+.info-header {
+  color: #d4f6ff; /* secondary color */
+  font-weight: bold;
+}

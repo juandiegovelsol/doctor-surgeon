@@ -1,0 +1,48 @@
+// src/components/DragAndDrop.scss
+@import '../variables';
+
+.drag-and-drop-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 2px dashed $border-color;
+    background-color: $drag-area-bg;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    user-select: none;
+    padding: 20px;
+    text-align: center;
+    width: 50vw; // Desktop width
+    height: 100vh; // Desktop height
+
+    &:hover {
+        background-color: darken($drag-area-bg, 5%);
+    }
+
+    p {
+        margin: 5px 0;
+        color: $text-color-light;
+    }
+}
+
+.upload-button {
+    background-color: $primary-color;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+    display: inline-block;
+
+    &:hover {
+        background-color: darken($primary-color, 10%);
+    }
+}
+
+@media (max-width: $breakpoint-mobile) {
+    .drag-and-drop-container {
+        width: 100vw; // Mobile width
+        height: 50vh; // Mobile height
+    }
+}

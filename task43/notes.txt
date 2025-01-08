@@ -1,0 +1,29 @@
+In turn 1, the model generates the desired endpoints and performs correct input validation
+for the described cases.
+
+In turn 1, the model uses express and tries to use routes and controllers for building the application
+
+In turn 2, the model understands that the issue is caused because the code was provided in a single
+file, now it provides an invitations file and a server file. This fixes the issue and the application
+works as required
+
+In turn 3, the model creates separate files for controllers, routes, and the server, completly following
+the prompt instructions and understanding the user requirements.
+
+
+In turn 1, the model has a Incorrect Code issue because the code snippet can't be run as delivered
+in a single file. The issue is caused because the code can't be executed in a single file as provided
+since it imports the invitation routes as an external dependencie and it must be in other file.
+
+In turn 1, the model has a Readability issue because all the code is provided in a single file,
+making it hard to read and understand. It is a symple application but it would be better to provide
+separate files for each part of the application.
+
+In turn 1, the model has a formatting issue because it gives the invitation route an empty url "/"
+and then sets the "/invitations" route for each controller, it should give the route the "/invitations"
+route and each controller an empty route.
+
+
+
+
+generate an status endpoint that returns the processed information

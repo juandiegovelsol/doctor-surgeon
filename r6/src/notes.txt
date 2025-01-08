@@ -1,0 +1,3 @@
+Use case field was empty, this is mandatory to include.
+The annotation errors field is not accurate:
+The first pointed issue is incorrect, the model does not italizaces

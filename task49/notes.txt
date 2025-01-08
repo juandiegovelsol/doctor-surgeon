@@ -1,0 +1,27 @@
+In turn 1 the model understands all the requirements to create the application, it displays companies as
+graph nodes and its relationships as links between nodes.
+
+In turn 1, the model follows all the constraints and uses HTML, CSS, JavaScript and d3 to
+implement the solution.
+
+In turn 2, the model understands some of the prompt requirements and implements a form to add new
+unique companies with a single relationship. The implementation shows an informative message
+
+In turn 2, the model increments the node repulsion force between nodes to increment the space
+between them.
+
+In turn 3, the model understands which nodes have to be wiped so only the current graph representation
+remains visible. The response is almost perfect
+
+
+
+
+Turns 1 and 2 has a Minor Visual Code Output Error because the companies text overlaps and the
+nodes/labels can't be seen correctly
+
+Turns 1 and 2 has writing error because a character string seems to be in a foreign language or written with
+irrecognizible characters
+
+Turn 2 has an Incomplete code issue because the previous nodes are not removed when the graph
+is updated and includes the new node, resulting in duplicated nodes that have no relationships
+

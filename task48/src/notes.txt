@@ -1,0 +1,24 @@
+In turn 1, the model understands most of the prompt instructions, it implements a weather application with React and JavaScript that simulates 4 data entries with the required information each.
+
+In turn 1, the model shows all the available information for each card as the prompt requires and the cards are dinamically rendered through the weatherData mapping.
+
+In turn 2, the model understands all the prompt requirements, it modifies the code to display the corresponding images in the background. The images are semi transparent and the data is fully visible in front of the image
+
+In turn 3, the model implements the correct and accurate CSS animations for each of the weather conditions described. Now each background image is moved and repeated as the prompt requires.
+
+
+
+
+Turn 1 has a "Doesn't follow formatting constraints" issue because the prompt asks the weather shape
+(sun, water drop, or snowflake) must be positioned in the background. In the model implementation
+the icon is positioned in the same hierarchy level as the information.
+
+Turn 1 has an Inconsistent Reasoning issue because it first provides the entire App.jsx file
+directly to copy and paste and then it gives instructions to modify the App component and include
+a separate WeatherCards component that is not defined in the previous response. This is contradictory
+and can confuse the user.
+
+All turns have a "Formatting / Style Error" because the WeatherCards component is defined in the same
+App.jsx file which is not a common practice nor follow conventions for react components.
+Each component should be defined in its own jsx file and imported where needed.
+

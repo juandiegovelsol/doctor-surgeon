@@ -1,0 +1,30 @@
+
+In turn 1, the model fully understands the prompt requirements. It modified the create invitations
+ endpoint to accept an unique code parameter and makes the validations
+to ensure it is not repeated in any of the registers.
+
+In turn 1, the model implements the modify invitation endpoint as requested, now the enpoint can
+be accepted or rejected if the user provides the correct name and code value.
+
+In turn 1, the model implements appropiate error handling for the modifications made in the create
+invitations endpoint and for the new modify invitations endpoint.
+
+In turn 2, the model understands and implements the wedding summary endpoint as required in the prompt.
+It processes the invitations data and returs how many guests were invited,
+how many accepted, how many are adults and childrens, and all the separate names.
+
+In turn 2, the model modifies the create invitations endpoint to allow a phone number and performs
+some correct input validation as required in the prompt.
+
+
+
+
+
+In turn 2, the response has an Incomplete Code issue because the model does not performs the phone
+number validation properly, the number can have infinite positive integers which is not desired
+
+In turn 2, the response has a Doesn't follow non-formatting constraints issue because the model
+does not implement the phone number input validation as requested.
+
+Develop a whatsapp link to the stored phone that sends the invitation automatically including
+the unique code

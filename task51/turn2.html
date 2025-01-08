@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Shape Matching Game</title>
+    <style>
+      body {
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: #f0f0f0;
+        user-select: none;
+      }
+      .game-container {
+        display: flex;
+        width: 80%;
+        justify-content: space-around;
+      }
+      .shapes {
+        width: 40%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .shadows {
+        width: 40%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .draggable {
+        cursor: grab;
+        border: 2px solid #333;
+        margin: 10px;
+        text-align: center;
+        line-height: 50px;
+      }
+      .shadow {
+        border: 2px dashed #ccc;
+        margin: 10px;
+      }
+      .circle {
+        border-radius: 50%;
+      }
+      .square {
+      }
+    </style>
+  </head>
+  <body>
+    <div class="game-container">
+      <div class="shapes" id="draggable-shapes">
+        <!-- Draggable shapes will be added here -->
+      </div>
+      <div class="shadows" id="shadow-targets">
+        <!-- Shadow targets will be added here -->
+      </div>
+    </div>
+
+    <script>
+      const draggableShapesContainer =
+        document.getElementById("draggable-shapes");
+      const shadowTargetsContainer = document.getElementById("shadow-targets");
+      const colors = ["red", "blue", "green", "yellow"];
+      const sizes = ["50px", "60px", "70px"];
+      let currentShapes = [];
+
+      function getRandom(array) {
+        return array[Math.floor(Math.random() * array.length)];
+      }
+
+      function createShape(type, color, size, id) {
+        const shape = document.createElement("div");
+        shape.classList.add("draggable", type);
+        shape.style.backgroundColor = color;
+        shape.style.width = size;
+        shape.style.height = size;
+        shape.setAttribute("draggable", true);
+        shape.dataset.shapeType = type;
+        shape.dataset.shapeSize = size;
+        shape.dataset.shapeColor = color;
+        shape.id = id; // Assign an ID
+        return shape;
+      }
+
+      function createShadow(type, size) {
+        const shadow = document.createElement("div");
+        shadow.classList.add("shadow", type);
+        shadow.style.width = size;
+        shadow.style.height = size;
+        shadow.dataset.shapeType = type;
+        shadow.dataset.shapeSize = size;
+        return shadow;
+      }
+
+      function initializeRound() {
+        draggableShapesContainer.innerHTML = "";
+        shadowTargetsContainer.innerHTML = "";
+        currentShapes = [];
+
+        const shapeTypes = ["circle", "square"];
+        for (let i = 0; i < 2; i++) {
+          // Create 2 shapes per round
+          const type = getRandom(shapeTypes);
+          const color = getRandom(colors);
+          const size = getRandom(sizes);
+          const id = `draggable-${i}-${Date.now()}`; // Create a unique ID
+          const shape = createShape(type, color, size, id);
+          const shadow = createShadow(type, size);
+          draggableShapesContainer.appendChild(shape);
+          shadowTargetsContainer.appendChild(shadow);
+          currentShapes.push({ type: type, size: size, id: id }); // Store the ID
+        }
+
+        setupDragAndDrop();
+      }
+
+      function setupDragAndDrop() {
+        const draggables = document.querySelectorAll(".draggable");
+        const shadows = document.querySelectorAll(".shadow");
+
+        draggables.forEach((draggable) => {
+          draggable.addEventListener("dragstart", dragStart);
+        });
+
+        shadows.forEach((shadow) => {
+          shadow.addEventListener("dragover", dragOver);
+          shadow.addEventListener("drop", drop);
+        });
+      }
+
+      function dragStart(event) {
+        event.dataTransfer.setData("text/plain", event.target.id); // Set the ID as data
+      }
+
+      function dragOver(event) {
+        event.preventDefault();
+      }
+
+      function drop(event) {
+        const draggableId = event.dataTransfer.getData("text/plain");
+        const draggableElement = document.getElementById(draggableId);
+        const shadowElement = event.target;
+
+        if (
+          draggableElement && // Ensure draggableElement is not null
+          draggableElement.dataset.shapeType ===
+            shadowElement.dataset.shapeType &&
+          draggableElement.dataset.shapeSize === shadowElement.dataset.shapeSize
+        ) {
+          shadowElement.appendChild(draggableElement);
+          draggableElement.style.margin = "0"; // Adjust positioning after drop
+          checkRoundComplete();
+        }
+      }
+
+      function checkRoundComplete() {
+        const droppedShapes =
+          shadowTargetsContainer.querySelectorAll(".draggable");
+        if (droppedShapes.length === currentShapes.length) {
+          setTimeout(initializeRound, 1000); // Initialize next round after a delay
+        }
+      }
+
+      initializeRound(); // Start the first round
+    </script>
+  </body>
+</html>

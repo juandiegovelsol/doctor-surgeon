@@ -1,0 +1,76 @@
+/* Basic Reset and Body Styling */
+body,
+html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: sans-serif;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header Styling */
+header {
+  background-color: #f0f0f0;
+  padding: 20px;
+  text-align: center;
+}
+
+/* Main Content Styling */
+main {
+  flex-grow: 1; /* Allow main to take up remaining space */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+}
+
+.welcome-message {
+  flex: 1;
+  text-align: left;
+  font-size: 1.5em; /* Increased font size */
+}
+
+.heart {
+  font-size: 5em; /* Increased font size */
+  color: red;
+  animation: bump 1s infinite alternate;
+}
+
+@keyframes bump {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.2);
+  }
+}
+
+/* Footer Styling */
+footer {
+  background-color: #333;
+  color: white;
+  padding: 10px;
+  text-align: center;
+}
+
+/* Media Query for Mobile */
+@media (max-width: 768px) {
+  main {
+    flex-direction: column;
+    justify-content: center; /* Adjust vertical alignment in mobile */
+    text-align: center; /* Center text in mobile */
+  }
+
+  .heart {
+    margin-bottom: 20px; /* Add space below the heart */
+    order: 1; /* Position the heart first */
+  }
+
+  .welcome-message {
+    text-align: center; /* Center text in mobile */
+    margin-bottom: 20px; /* Add space below the welcome message */
+    order: 2; /* Position the welcome message second */
+    font-size: 2em; /* Further increase font size on mobile */
+  }
+}

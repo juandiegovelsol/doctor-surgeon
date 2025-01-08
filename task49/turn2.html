@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Company Relationship Graph</title>
+    <style>
+      /* Basic CSS for styling the graph */
+      .node {
+        fill: skyblue;
+        stroke: #fff;
+        stroke-width: 1.5px;
+      }
+      .link {
+        stroke: #999;
+        stroke-opacity: 0.6;
+        stroke-width: 2px;
+      }
+      .label {
+        font-size: 10px;
+        font-family: sans-serif;
+        pointer-events: none; /* To allow interaction with nodes underneath */
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Company Relationship Graph</h1>
+    <div id="graph"></div>
+
+    <div>
+      <h2>Add New Company</h2>
+      <label for="newCompanyName">New Company Name:</label>
+      <input
+        type="text"
+        id="newCompanyName"
+        name="newCompanyName"
+      /><br /><br />
+      <label for="connectToCompany">Connect to Company:</label>
+      <select id="connectToCompany" name="connectToCompany">
+        <!-- Options will be populated by JavaScript --></select
+      ><br /><br />
+      <button onclick="addCompany()">Add Company</button>
+      <p id="message"></p>
+    </div>
+
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script>
+      // Sample data representing companies and their relationships
+      const data = {
+        nodes: [
+          { id: "Company A", name: "Company A" },
+          { id: "Company B", name: "Company B" },
+          { id: "Company C", name: "Company C" },
+          { id: "Company D", name: "Company D" },
+        ],
+        links: [
+          { source: "Company A", target: "Company B" },
+          { source: "Company B", target: "Company C" },
+          { source: "Company C", target: "Company A" },
+          { source: "Company A", target: "Company D" },
+        ],
+      };
+
+      // Set the dimensions and margins of the graph
+      const width = 600;
+      const height = 400;
+
+      // Select the div where the graph will be placed
+      const svg = d3
+        .select("#graph")
+        .append("svg")
+        .attr("width", width)
+        .attr("height", height);
+
+      // Initialize the force simulation
+      const simulation = d3
+        .forceSimulation(data.nodes)
+        .force(
+          "link",
+          d3.forceLink(data.links).id((d) => d.id)
+        ) // Define links and how to access node id
+        .force("charge", d3.forceManyBody().strength(-1000)) // Node repulsion force (increased for more space)
+        .force("center", d3.forceCenter(width / 2, height / 2)); // Center the graph
+
+      // Create the links (lines)
+      let link = svg
+        .append("g")
+        .attr("stroke", "#999")
+        .attr("stroke-opacity", 0.6)
+        .selectAll("line")
+        .data(data.links)
+        .join("line")
+        .attr("class", "link");
+
+      // Create the nodes (circles)
+      let node = svg
+        .append("g")
+        .selectAll("circle")
+        .data(data.nodes)
+        .join("circle")
+        .attr("class", "node")
+        .attr("r", 10)
+        .call(
+          d3
+            .drag() // Enable dragging of nodes
+            .on("start", dragstarted)
+            .on("drag", dragged)
+            .on("end", dragended)
+        );
+
+      // Create labels for the nodes
+      let labels = svg
+        .selectAll(".label")
+        .data(data.nodes)
+        .enter()
+        .append("text")
+        .attr("class", "label")
+        .text((d) => d.name)
+        .attr("dx", 12) // Offset the label to the right of the node
+        .attr("dy", 4); // সামান্য নিচে নামানো
+
+      // Populate the select dropdown with existing companies
+      const connectToCompanySelect =
+        document.getElementById("connectToCompany");
+      data.nodes.forEach((company) => {
+        const option = document.createElement("option");
+        option.value = company.id;
+        option.text = company.name;
+        connectToCompanySelect.appendChild(option);
+      });
+
+      function addCompany() {
+        const newCompanyNameInput = document.getElementById("newCompanyName");
+        const connectToCompanySelect =
+          document.getElementById("connectToCompany");
+        const messageDiv = document.getElementById("message");
+
+        const newCompanyName = newCompanyNameInput.value.trim();
+        const connectToCompany = connectToCompanySelect.value;
+
+        if (!newCompanyName) {
+          messageDiv.textContent = "Please enter a company name.";
+          return;
+        }
+
+        if (data.nodes.some((node) => node.id === newCompanyName)) {
+          messageDiv.textContent =
+            "Company name already exists. Please use a unique name.";
+          return;
+        }
+
+        if (!connectToCompany) {
+          messageDiv.textContent = "Please select a company to connect to.";
+          return;
+        }
+
+        // Add the new node
+        data.nodes.push({ id: newCompanyName, name: newCompanyName });
+
+        // Add the new link
+        data.links.push({ source: newCompanyName, target: connectToCompany });
+
+        // Update the select dropdown with the new company
+        const option = document.createElement("option");
+        option.value = newCompanyName;
+        option.text = newCompanyName;
+        connectToCompanySelect.appendChild(option);
+
+        // Update the D3 graph
+        updateGraph();
+
+        // Clear the input field and message
+        newCompanyNameInput.value = "";
+        messageDiv.textContent = "Company added successfully!";
+      }
+
+      function updateGraph() {
+        // Update links
+        link = svg
+          .select("g")
+          .selectAll(".link")
+          .data(data.links)
+          .join("line")
+          .attr("class", "link");
+
+        // Update nodes
+        node = svg
+          .select("g")
+          .selectAll(".node")
+          .data(data.nodes, (d) => d.id) // Use a key function for data binding
+          .join("circle")
+          .attr("class", "node")
+          .attr("r", 10)
+          .call(
+            d3
+              .drag()
+              .on("start", dragstarted)
+              .on("drag", dragged)
+              .on("end", dragended)
+          );
+
+        // Update labels
+        labels = svg
+          .selectAll(".label")
+          .data(data.nodes, (d) => d.id) // Use a key function for data binding
+          .join("text")
+          .attr("class", "label")
+          .text((d) => d.name)
+          .attr("dx", 12)
+          .attr("dy", 4);
+
+        // Restart the simulation with updated data
+        simulation.nodes(data.nodes);
+        simulation.force("link").links(data.links);
+        simulation.alpha(1).restart();
+      }
+
+      // Define the drag event handlers
+      function dragstarted(event, d) {
+        if (!event.active) simulation.alphaTarget(0.3).restart();
+        d.fx = d.x;
+        d.fy = d.y;
+      }
+
+      function dragged(event, d) {
+        d.fx = event.x;
+        d.fy = event.y;
+      }
+
+      function dragended(event, d) {
+        if (!event.active) simulation.alphaTarget(0);
+        d.fx = null;
+        d.fy = null;
+      }
+
+      // This function is called on each tick of the simulation
+      simulation.on("tick", () => {
+        link
+          .attr("x1", (d) => d.source.x)
+          .attr("y1", (d) => d.source.y)
+          .attr("x2", (d) => d.target.x)
+          .attr("y2", (d) => d.target.y);
+
+        node.attr("cx", (d) => d.x).attr("cy", (d) => d.y);
+
+        labels.attr("x", (d) => d.x).attr("y", (d) => d.y);
+      });
+    </script>
+  </body>
+</html>

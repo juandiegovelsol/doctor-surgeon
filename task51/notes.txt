@@ -1,0 +1,37 @@
+The model understans the primary intention of the user because it generates shapes that intuitively
+have to be dragged to the corresponding dashed silhouettes.
+
+The model follows most of the prompt instructions because it generates random shapes with random
+colors and sizes. It first implements only squares and circles.
+
+Turn 2 understands the issue and fixes it. Now all the shapes can be dragged and dropped inside
+their corresponding silhouette.
+
+Turn 2 follows the length constraints for the textual explanations, it is only one paragraph length.
+
+Turn 2 provides an accurate explanation of the issue and how it was solved. It was accessing null
+object properties and modified the code to correctly capture the desired shape to read its properties
+and compare them in the conditional statement
+
+Turn 3 fully understands the instructions and now the dashed lines are colored matching their
+corresponding shape.
+
+
+
+
+Turn 1 has an Incomplete Code issue because the shapes can't be dropped inside the shadowElement
+and return to their original position, making the educational app to have considerable flaws.
+
+Turn 1 has an Undefined Method/Variable issue because the dataset property that tries to access the
+conditional statement does not exist, and causes an issue
+
+Turn 1 has a Doesn't follow formatting constraints becuase the prompt asks to provide very brief 
+explanations while the response is not very brief.
+
+Turn 4 has an Incomplete Code issue because the generated shape is not a triangle, it is a square.
+
+Turn 4 has a "Doesn't follow non-formatting constraints" issue because all the previous functionalities
+are not applied to the new shape (for instance, the silhouette is not dashed and it is filled with a color)
+
+Turn 4 has a "Major Visual Code Output Error" because the model tries to generate a triangle but
+the shape corresponds to a square

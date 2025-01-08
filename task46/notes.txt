@@ -1,0 +1,31 @@
+In turn 1, the model understands all the prompt requirements, it implements a classic Sudoku game that follows
+the described rules. The numbers must be filled without being repeated in rows, columns, and 3x3 
+smaller grids. 
+
+In turn 1, the game is won when all the numbers are positioned following the described rules.
+
+In turn 1, the game implements the difficulty level selectors that removes aproximately the 25%,
+50%, and 75% for each corresponding level.
+
+In turn 1, the explanation about how the game works is accurate and factually correct.
+
+In turn 3, the model fully understands how to avoid filling ordered numbers from 1 to 9 for the first
+3x3 grid and the first row. With the shuffled array now the implementation is completly sorted.
+
+
+
+
+In turn 1, the model has a minor incomplete code issue that impacts the UI visualization. The empty
+cells have different border properties that makes them to look different. Only the background should
+be different.
+
+In turn 2, the model Doesn't understand user intent and can't figure out how to fix the described
+issues, and produces the same visual result as before.
+
+In turn 2, the model has an Incorrect Assumption issue because it assumes that the prefilled class
+inherits CSS rules from the cell class, just becuase they are applied together.
+
+In turn 2, the model has an False Equivalency issue because it forces relationships between the cell
+and the prefilled CSS class to explain why the styles are not applied as required while there is no
+relation between the two classes. They can be applied independently.
+

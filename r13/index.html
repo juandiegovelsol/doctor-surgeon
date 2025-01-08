@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kaplay Test - Player Movement</title>
+    <script src="https://cdn.jsdelivr.net/npm/kaplay@latest"></script>
+    <!-- Include Kaplay -->
+    <style>
+      body {
+        margin: 0;
+        overflow: hidden;
+      }
+    </style>
+  </head>
+  <body>
+    <script>
+      // Initialize Kaplay (or use 'k' as the global object)
+      const k = Kaplay;
+
+      // Setup for the game canvas
+      k.init({
+        width: 640,
+        height: 480,
+      });
+
+      // Define a diagonal factor (for scaling diagonal speed)
+      const diagonalFactor = Math.SQRT1_2; // Diagonal scaling factor
+
+      // Player setup
+      function player() {
+        const playerObj = k.add([
+          k.pos(320, 240), // Initial position
+          k.sprite("player"), // Blank player sprite
+          k.body(), // Add physics body
+          k.area(), // Add collision area
+          "player", // Tag the object as "player"
+          {
+            speed: 300, // Player movement speed
+            state: "idle", // Initial state
+          },
+        ]);
+
+        // Handle movement and update state
+        playerObj.update(function () {
+          const dir = k.vec2(0, 0); // Initialize direction vector
+
+          // Handle key presses for movement
+          if (k.keyIsDown("left")) dir.x = -1;
+          if (k.keyIsDown("right")) dir.x = 1;
+          if (k.keyIsDown("up")) dir.y = -1;
+          if (k.keyIsDown("down")) dir.y = 1;
+
+          // Update state based on movement direction
+          if (dir.x !== 0 || dir.y !== 0) {
+            this.state = "moving";
+          } else {
+            this.state = "idle";
+          }
+
+          // Apply movement scaling for diagonal movement
+          if (dir.x && dir.y) {
+            this.move(dir.scale(diagonalFactor * this.speed));
+          } else {
+            this.move(dir.scale(this.speed));
+          }
+        });
+
+        // Log state to the console for debugging (Idle or Moving)
+        playerObj.update(() => {
+          if (playerObj.state === "idle") {
+            console.log("Player is idle");
+          } else if (playerObj.state === "moving") {
+            console.log("Player is moving");
+          }
+        });
+
+        return playerObj;
+      }
+
+      // Load a blank sprite for the player (or use any custom sprite)
+      k.loadSprite(
+        "player",
+        "https://kaboomjs.com/assets/sprites/blank.png"
+      ).then(() => {
+        // Create the player after the sprite is loaded
+        const playerObjInstance = player();
+      });
+    </script>
+  </body>
+</html>

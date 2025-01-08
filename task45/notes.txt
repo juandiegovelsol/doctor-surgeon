@@ -1,0 +1,31 @@
+In turn 1, the model seems to understand how to apply the styling modifications because the produced
+CSS rules are very close to the prompt requirements.
+
+In turn 2, the model fully understands that the generated CSS classes must be applied to the corresponding
+JSX elements, almost all the components were modified to apply the correct CSS selector
+
+In turn 3, the model understands the required modifications and applies the corresponding color
+to the all the described subtitles.
+
+In turn 3, the prompt does not require to apply the same changes to the Guest UI but it is OK
+to keep consistency across the UI.
+
+
+
+In turn 1, the model has an Incorrect Code issue because the CSS applies rules for unexisting
+classess such as modal-overlay, modal-content, form-container, form-grid, invitation-group,
+admin-dashboard, summary-container and guest-confirmation-form.
+
+In turn 1, the response has a "Doesn't understand user intent" issue because the model should have
+provided CSS styles to apply to the existing HTML elements or classes, but it apply styles to
+new classes while fulfilling the restriction of not modifying the react components.
+
+
+In turn 2, the response has an Incomplete Code issue because the form-container class should not
+be applied to the div container in the InvitationList component, it is not a form.
+
+In turn 2, the response also has an Incomplete Code issue because the input field on the modal
+to submit the admin code is not formatted as requested.
+
+In turn 2, the model Doesn't understand user intent because it returns the App component, which is
+not modified.

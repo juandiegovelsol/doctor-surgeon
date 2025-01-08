@@ -1,0 +1,31 @@
+Responsive Design, UI/UX Prototyping
+
+In turn 1, the model understands some of the prompt instructions and tries to implement a React with
+JavaScript, Vite, and SCSS application that has a section for uploading images and another section
+for visualizing them.
+
+In turn 2, the model fixes the described issue by adding the corresponding class to apply the media query styles, now the application is executable and functional.
+
+In turn 3, the model fully understands the new requirements, now both sections fills exactly the complete or half window's width/heigth according the conditions. Also, the model modifies the Code to display the full image inside the visualization container.
+
+
+
+
+Turn 1 has an Incorrect Code issue because the media query rules have incorrect syntax errors when
+using SCSS, this cause an execution error and the entire application can't be executed.
+
+Turn 1 has a Doesn't follow formatting constraints issue because for the desktop version the image
+preview section is positioned on the left and the drag and drop section on the right while the prompt
+requires them to be positioned in the opposite way.
+
+Turn 2 has an Incomplete Code issue because the visualization container adapts to the image dimensions
+causing that when the image is oversized, the drag and drop container is moved out of the window's
+boundaries and that all the content is not fully visible
+
+Turn 2 has a Formatting / Style Error because the applied styles doesn't allow appropiate visualization
+of the app's content.
+
+Turn 3 has a minor inaccuracy because the App.scss file was not updated as it claims
+
+Turn 3 has a verbosity issue because it is not necessary to include App.scss, it makes the response 
+more difficult to read and it is information already present in previous turns.
