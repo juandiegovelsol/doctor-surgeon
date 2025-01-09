@@ -1,0 +1,55 @@
+body {
+  font-family: sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 20px;
+  margin: 0;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+}
+
+.checklist-container {
+  width: 300px;
+}
+
+.progress-container {
+  position: relative;
+  width: 150px;
+  height: 150px;
+}
+
+.progress-circle {
+  width: 100%;
+  height: 100%;
+}
+
+.progress-ring-background {
+  stroke: #ddd;
+  stroke-width: 10px;
+  fill: none;
+}
+
+.progress-ring-fill {
+  stroke: steelblue;
+  stroke-width: 10px;
+  fill: none;
+  transition: stroke-dashoffset 0.3s ease-in-out;
+  stroke-linecap: round;
+}
+
+.progress-text {
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+.checklist-item {
+  margin-bottom: 8px;
+}

@@ -1,0 +1,28 @@
+Turn 1 translates the code from plain HTML and JS to a React application, it also
+implements components for the Checklist and for the progress bar as requested.
+
+Turn 2 fully understands the user intent and generates separate components,
+now the structure is modular and scalable. Both components are included in the same
+hierarchy level as the prompt requires.
+
+Turn 2 also fixes the previous aspect issue without asking to fix it.
+
+
+
+
+In turn 1 the model has a Doesn't follow formatting constraints issue because
+the visual aspect of the app does not remain as in the previous application.
+Now, the checklist is positioned above the progress bar which shold be the opposite.
+
+In turn 1 the model Partialy fulfills the prompt instructions becuase the components are
+not modular and scalable as required, one component is nested inside the other which
+impacts the scalability and modularity of the code.
+
+In turn 3, the model Punts because it refuses to do the requested changes while it can answer, but doesn't.
+
+In turn 4, the model has an incomplete code issue because the changes does not produce the desired
+behavior, now the first checked task fills aprox 50% of the progress bar and the next task fills 100%
+of the progress bar.
+
+Turn 4 also has a Major Visual Code Output Error issue because the progress bar does not produce an accurate
+visualization.

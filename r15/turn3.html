@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Boss AI Test</title>
+    <style>
+      body {
+        font-family: sans-serif;
+      }
+      .section {
+        border: 1px solid #ccc;
+        padding: 10px;
+        margin-bottom: 10px;
+      }
+      .field {
+        margin-bottom: 5px;
+      }
+      label {
+        display: inline-block;
+        width: 120px;
+        text-align: right;
+        margin-right: 10px;
+      }
+      input[type="number"] {
+        width: 80px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Boss AI Testing</h1>
+
+    <div class="section">
+      <h2>Boss Properties</h2>
+      <div class="field">
+        <label for="bossCurrentHealth">Current Health:</label>
+        <input type="number" id="bossCurrentHealth" value="80" />
+      </div>
+      <div class="field">
+        <label for="bossMaxHealth">Max Health:</label>
+        <input type="number" id="bossMaxHealth" value="100" />
+      </div>
+      <div class="field">
+        <label for="bossPositionX">Position X:</label>
+        <input type="number" id="bossPositionX" value="0" />
+      </div>
+      <div class="field">
+        <label for="bossPositionY">Position Y:</label>
+        <input type="number" id="bossPositionY" value="0" />
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Player Properties</h2>
+      <div class="field">
+        <label for="playerPositionX">Position X:</label>
+        <input type="number" id="playerPositionX" value="5" />
+      </div>
+      <div class="field">
+        <label for="playerPositionY">Position Y:</label>
+        <input type="number" id="playerPositionY" value="0" />
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Attack Ranges</h2>
+      <div class="field">
+        <label for="attack1Range">attack1:</label>
+        <input type="number" id="attack1Range" value="3" />
+      </div>
+      <div class="field">
+        <label for="attack2Range">attack2:</label>
+        <input type="number" id="attack2Range" value="6" />
+      </div>
+      <div class="field">
+        <label for="attack3Range">attack3:</label>
+        <input type="number" id="attack3Range" value="4" />
+      </div>
+      <div class="field">
+        <label for="attack4Range">attack4:</label>
+        <input type="number" id="attack4Range" value="8" />
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>AI State</h2>
+      <div class="field">
+        <strong>Health Level:</strong> <span id="healthLevel"></span>
+      </div>
+      <div class="field">
+        <strong>Player Distance:</strong> <span id="playerDistance"></span>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>AI Actions</h2>
+      <p id="aiOutput"></p>
+    </div>
+
+    <button id="recalculateButton">Resimulate</button>
+
+    <script>
+      /**
+       * Boss AI Script
+       */
+      class BossAI {
+        /**
+         * Constructor for the Boss AI.
+         * @param {object} boss - An object representing the boss with properties like currentHealth and access to attack functions.
+         * @param {object} player - An object representing the player with properties like currentPosition.
+         * @param {number} bossAttackRange - The base range for the boss to consider attacking.
+         */
+        constructor(boss, player, bossAttackRange = 5) {
+          this.boss = boss;
+          this.player = player;
+          this.bossAttackRange = bossAttackRange; // You might use this for general proximity checks
+          this.attackRanges = {
+            attack1: 3, // Range for attack 1
+            attack2: 6, // Range for attack 2
+            attack3: 4, // Range for attack 3
+            attack4: 8, // Range for attack 4
+          };
+        }
+
+        /**
+         * Determines the current health level of the boss.
+         * @returns {string} - The health level ('high', 'medium', 'low', 'critical').
+         */
+        getHealthLevel() {
+          const healthPercentage =
+            this.boss.currentHealth / this.boss.maxHealth;
+          if (healthPercentage > 0.75) {
+            return "high";
+          } else if (healthPercentage > 0.5) {
+            return "medium";
+          } else if (healthPercentage > 0.25) {
+            return "low";
+          } else {
+            return "critical";
+          }
+        }
+
+        /**
+         * Calculates the distance between the boss and the player.
+         * @returns {number} - The distance between the boss and the player.
+         */
+        getPlayerDistance() {
+          // Assuming boss and player have x and y coordinates for their position
+          const dx =
+            this.player.currentPosition.x - this.boss.currentPosition.x;
+          const dy =
+            this.player.currentPosition.y - this.boss.currentPosition.y;
+          return Math.sqrt(dx * dx + dy * dy);
+        }
+
+        /**
+         * Checks if the player is within the range of a specific attack.
+         * @param {string} attackName - The name of the attack.
+         * @returns {boolean} - True if the player is in range, false otherwise.
+         */
+        isPlayerInRange(attackName) {
+          const distance = this.getPlayerDistance();
+          return distance <= this.attackRanges[attackName];
+        }
+
+        /**
+         * Executes the boss's attack based on health level and player proximity.
+         */
+        performAttack() {
+          const healthLevel = this.getHealthLevel();
+          const distanceToPlayer = this.getPlayerDistance();
+          let actionMessage = "";
+
+          // Example attack functions - replace with your actual attack logic
+          const attack1 = () => (actionMessage = "Boss uses Attack 1!");
+          const attack2 = () => (actionMessage = "Boss uses Attack 2!");
+          const attack3 = () => (actionMessage = "Boss uses Attack 3!");
+          const attack4 = () => (actionMessage = "Boss uses Attack 4!");
+
+          switch (healthLevel) {
+            case "high":
+              // Prioritize attack1 or attack2
+              if (this.isPlayerInRange("attack1")) {
+                attack1();
+                break;
+              } else if (this.isPlayerInRange("attack2")) {
+                attack2();
+                break;
+              }
+              break;
+            case "medium":
+              // Use attack2 or attack3
+              if (this.isPlayerInRange("attack2")) {
+                attack2();
+                break;
+              } else if (this.isPlayerInRange("attack3")) {
+                attack3();
+                break;
+              }
+              break;
+            case "low":
+              // Use attack3 or attack4
+              if (this.isPlayerInRange("attack3")) {
+                attack3();
+                break;
+              } else if (this.isPlayerInRange("attack4")) {
+                attack4();
+                break;
+              }
+              break;
+            case "critical":
+              // Only use the most powerful attack (attack4) if in range
+              if (this.isPlayerInRange("attack4")) {
+                attack4();
+                break;
+              }
+              break;
+            default:
+              actionMessage = "Boss is idle.";
+              break;
+          }
+
+          if (!actionMessage) {
+            actionMessage = "Player is out of range for all available attacks.";
+          }
+          document.getElementById("aiOutput").innerText = actionMessage;
+        }
+
+        /**
+         * Updates the boss's AI. This function should be called in your game loop.
+         */
+        update() {
+          this.performAttack();
+        }
+      }
+
+      function updateDisplay(bossAI) {
+        document.getElementById("healthLevel").innerText =
+          bossAI.getHealthLevel();
+        document.getElementById("playerDistance").innerText = bossAI
+          .getPlayerDistance()
+          .toFixed(2);
+      }
+
+      function gameLoop() {
+        // Get values from input fields
+        const bossCurrentHealth = parseInt(
+          document.getElementById("bossCurrentHealth").value
+        );
+        const bossMaxHealth = parseInt(
+          document.getElementById("bossMaxHealth").value
+        );
+        const bossPositionX = parseInt(
+          document.getElementById("bossPositionX").value
+        );
+        const bossPositionY = parseInt(
+          document.getElementById("bossPositionY").value
+        );
+        const playerPositionX = parseInt(
+          document.getElementById("playerPositionX").value
+        );
+        const playerPositionY = parseInt(
+          document.getElementById("playerPositionY").value
+        );
+        const attack1Range = parseInt(
+          document.getElementById("attack1Range").value
+        );
+        const attack2Range = parseInt(
+          document.getElementById("attack2Range").value
+        );
+        const attack3Range = parseInt(
+          document.getElementById("attack3Range").value
+        );
+        const attack4Range = parseInt(
+          document.getElementById("attack4Range").value
+        );
+
+        // Update boss and player objects
+        boss.currentHealth = bossCurrentHealth;
+        boss.maxHealth = bossMaxHealth;
+        boss.currentPosition = { x: bossPositionX, y: bossPositionY };
+        player.currentPosition = { x: playerPositionX, y: playerPositionY };
+
+        // Update attack ranges in the AI
+        bossAI.attackRanges.attack1 = attack1Range;
+        bossAI.attackRanges.attack2 = attack2Range;
+        bossAI.attackRanges.attack3 = attack3Range;
+        bossAI.attackRanges.attack4 = attack4Range;
+
+        // Update the AI
+        bossAI.update();
+
+        // Update the display
+        updateDisplay(bossAI);
+      }
+
+      // Initialize boss and player objects
+      const boss = {
+        currentHealth: parseInt(
+          document.getElementById("bossCurrentHealth").value
+        ),
+        maxHealth: parseInt(document.getElementById("bossMaxHealth").value),
+        currentPosition: {
+          x: parseInt(document.getElementById("bossPositionX").value),
+          y: parseInt(document.getElementById("bossPositionY").value),
+        },
+        // ... other boss properties and methods
+      };
+
+      const player = {
+        currentPosition: {
+          x: parseInt(document.getElementById("playerPositionX").value),
+          y: parseInt(document.getElementById("playerPositionY").value),
+        },
+        // ... other player properties and methods
+      };
+
+      // Initialize the Boss AI
+      const bossAI = new BossAI(boss, player);
+
+      // Initial display
+      updateDisplay(bossAI);
+
+      // Add event listener to the recalculate button
+      document
+        .getElementById("recalculateButton")
+        .addEventListener("click", gameLoop);
+    </script>
+  </body>
+</html>

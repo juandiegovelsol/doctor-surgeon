@@ -1,0 +1,5 @@
+I would like to build an educative application (with HTML, CSS, and JavaScript) to teach children to count from 1 to 10 and identify which number corresponds to the scratched element. At the top left corner, a random number from 1 to 10 must appear, it should be huge and bold. Then, centered in the window the same quantity of corresponding objects must appear. Let's implement this for now.
+
+
+Now I want to implement an scrathing feature, where the scrathing order must be respected from the first to the last element. Any following object can be marked if all the previous are.
+When each object is scratched, a red dash must be positioned over the object and the corresponding number must be presented on top of the object for 2 seconds.
