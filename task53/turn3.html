@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Counting Fun!</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        margin: 0;
+      }
+
+      #target-number {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        font-size: 60px;
+        font-weight: bold;
+        color: #333;
+      }
+
+      #objects-container {
+        display: flex;
+        flex-wrap: wrap; /* Allow objects to wrap to the next line */
+        justify-content: center;
+        align-items: center;
+        width: 80%; /* Adjust as needed */
+        max-width: 800px; /* Maximum width of the container */
+      }
+
+      .object {
+        width: 50px;
+        height: 50px;
+        margin: 15px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer; /* Indicate clickable */
+        position: relative; /* For absolute positioning of overlays */
+      }
+
+      .object.scratched {
+        opacity: 0.7; /* Slightly fade out scratched objects */
+      }
+
+      .circle {
+        border-radius: 50%;
+        background-color: #e74c3c; /* Red */
+      }
+
+      .square {
+        background-color: #3498db; /* Blue */
+      }
+
+      .triangle {
+        width: 0;
+        height: 0;
+        border-left: 25px solid transparent;
+        border-right: 25px solid transparent;
+        border-bottom: 50px solid #2ecc71; /* Green */
+      }
+
+      .star {
+        font-size: 50px;
+        color: #f1c40f; /* Yellow */
+        line-height: 50px; /* Vertically center the star */
+        text-align: center; /* Horizontally center the star */
+      }
+
+      .dash {
+        position: absolute;
+        top: 50%;
+        left: 0;
+        width: 100%;
+        height: 5px;
+        background-color: red;
+        transform: translateY(-50%) rotate(-45deg); /* Diagonal dash */
+        z-index: 1; /* Ensure dash is above the object */
+      }
+
+      .number-overlay {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 24px;
+        font-weight: bold;
+        color: black;
+        z-index: 2; /* Ensure number is above dash and object */
+      }
+    </style>
+  </head>
+  <body>
+    <div id="target-number"></div>
+    <div id="objects-container"></div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const targetNumberDiv = document.getElementById("target-number");
+        const objectsContainer = document.getElementById("objects-container");
+        const shapes = ["circle", "square", "triangle", "star"];
+
+        function getRandomNumber(min, max) {
+          return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        function getRandomShape() {
+          return shapes[Math.floor(Math.random() * shapes.length)];
+        }
+
+        function createObject(shapeClass, index) {
+          const objectDiv = document.createElement("div");
+          objectDiv.classList.add("object", shapeClass);
+          if (shapeClass === "star") {
+            objectDiv.textContent = "★"; // Use a star character
+          }
+          objectDiv.dataset.index = index; // Store the index of the object
+
+          objectDiv.addEventListener("click", handleObjectClick);
+
+          return objectDiv;
+        }
+
+        let currentObjectIndex = 0; // Track the index of the next object to scratch
+        let objects = []; // Array to store object elements in order
+
+        function handleObjectClick(event) {
+          const clickedObject = event.currentTarget;
+          const objectIndex = parseInt(clickedObject.dataset.index);
+
+          if (objectIndex === currentObjectIndex) {
+            scratchObject(clickedObject, objectIndex + 1);
+            currentObjectIndex++;
+          } else if (objectIndex < currentObjectIndex) {
+            // Object already scratched, ignore click (optional: add visual feedback if needed)
+          } else {
+            // Wrong object clicked, do nothing (optional: add visual feedback if needed)
+            alert("Scratch the objects in order!"); // Simple feedback - can be improved
+          }
+        }
+
+        function scratchObject(object, number) {
+          object.classList.add("scratched");
+
+          // Create and add dash
+          const dash = document.createElement("div");
+          dash.classList.add("dash");
+          object.appendChild(dash);
+
+          // Create and add number overlay
+          const numberOverlay = document.createElement("div");
+          numberOverlay.classList.add("number-overlay");
+          numberOverlay.textContent = number;
+          object.appendChild(numberOverlay);
+
+          // Remove number overlay after 2 seconds
+          setTimeout(() => {
+            numberOverlay.remove();
+          }, 2000);
+        }
+
+        const randomNumber = getRandomNumber(1, 10);
+        targetNumberDiv.textContent = randomNumber;
+
+        const selectedShape = getRandomShape();
+
+        for (let i = 0; i < randomNumber; i++) {
+          const object = createObject(selectedShape, i); // Pass index to createObject
+          objects.push(object); // Store object in array
+          objectsContainer.appendChild(object);
+        }
+      });
+    </script>
+  </body>
+</html>

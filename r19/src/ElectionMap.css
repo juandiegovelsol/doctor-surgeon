@@ -1,0 +1,30 @@
+.map-container {
+  position: relative; /* Ensure relative positioning for absolute tooltip */
+}
+
+.tooltip {
+  position: absolute;
+  background: white;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 5px;
+  pointer-events: none; /* Allow mouse events to pass through tooltip */
+  opacity: 0; /* Initially hidden */
+  transition: opacity 0.2s ease-in-out;
+  z-index: 10; /* Ensure it's on top */
+  font-size: 0.9em;
+}
+
+.tooltip.visible {
+  opacity: 1; /* Make visible when 'visible' class is added */
+}
+
+.tooltip h3 {
+  margin-top: 0;
+  margin-bottom: 5px;
+}
+
+.tooltip p {
+  margin: 0;
+  line-height: 1.4;
+}

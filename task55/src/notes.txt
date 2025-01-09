@@ -1,0 +1,48 @@
+- I want to create an adaptative online store for displaying products that adapt to user preferences with React and JavaScript.
+
+I want the products to be displayed through a card component and the product information to have at least 10 different products. Each product must store a title, description, placeholder image, price, and an add-to-cart button (this button must not have any functionality).
+
+As the cursor hovers over the products, the cards must be scaled and a counter for hovering the specific card must be increased. Once the App is unmounted, the hover information must be stored in local storage to allow ordering the same products in order (the most hovered product must be placed first and the least product at the end).
+
+Provide the complete code and one explanatory paragraph.
+
+- I want to make some modifications.
+
+First, the local storage is being wiped every time the page is reloaded. Take additional considerations to ensure the data is only updated when the component is unmounted and that it persists when the page is reloaded or the window is closed.
+
+Also, the products are being reordered as the hover data is updated, this should only happen when the page is loaded and considering only the local storage data.
+
+The styles are not being applied.
+
+Provide the complete code with the modifications.
+
+
+
+
+
+The model implements an application with React to display 10 different products and to show first
+the most visited products for each person.
+
+
+Turn 1 has an import error because the styles file is not imported in the app component.
+
+Turn 1 has a Improper LaTex Formatting issue because the model adds latex syntax to display the
+price.
+
+Turn 1 has an Assignment error because the data is stored in local storage but it is wiped every time
+the page is reloaded, it does not persists.
+
+Turn 1 has an incomplete code issue because the model orders the products inmediatly as they are
+hovered, this is not desired because impacts the user experience. Alos, The place holder image
+get trough the link is not visualized correctly
+
+
+Turn 2 does not understands the user intent because it updates the product order as they are hovered.
+This is produced because the isInitialLoad flag is not handled correctly
+
+Turn 2 has an incorrect condition issue because it is negating the isInitialLoad flag, making that
+when the flag is set to false, the condition is always met and the products are ordered.
+
+
+Turn 2 has an incomplete code issue because the local storage values does not persist after each page
+reload.

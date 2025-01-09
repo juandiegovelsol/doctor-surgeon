@@ -1,0 +1,6 @@
+One of the provided links where the json file is suggested to download is not working, it is not updated
+
+The tooltip has minor visualization errors because when the mouse hovers over some states, the tooltip is positioned outside the windows limits.
+
+The turn 2 has organization issues because it suggest to update the ElectionMap code in two different code snippets, it would be better a single
+snipet for the same file with all the modifications
