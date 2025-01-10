@@ -1,0 +1,15 @@
+/* index.css or StackedAreaChart.css */
+.chart-container {
+  width: 100%;
+  max-width: 600px; /* Adjust as needed */
+  margin: 20px auto; /* Center the chart */
+}
+
+.area {
+  stroke: none; /* Remove area border if you want */
+}
+
+.tooltip {
+  font-size: 12px;
+  pointer-events: none; /* Allow mouse events to pass through tooltip */
+}

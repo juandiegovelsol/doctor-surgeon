@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Terrain Movement</title>
+    <style>
+      body {
+        margin: 0;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: #f0f0f0;
+      }
+
+      #gameCanvas {
+        border: 1px solid black;
+        background-color: #e0e0e0; /* Default terrain color (normal speed) */
+      }
+
+      #instructions {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        background-color: rgba(255, 255, 255, 0.7);
+        padding: 10px;
+        border-radius: 5px;
+        font-family: sans-serif;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="gameCanvas" width="1000" height="1000"></canvas>
+
+    <div id="instructions">Use WASD to move. Green: Slow. Light Blue: Ice.</div>
+
+    <script>
+      const canvas = document.getElementById("gameCanvas");
+      const ctx = canvas.getContext("2d");
+
+      // Canvas dimensions (use variables for consistency)
+      const canvasWidth = canvas.width; // 1000
+      const canvasHeight = canvas.height; // 1000
+
+      // Player properties
+      const playerSize = 20;
+      let playerX = canvasWidth / 2 - playerSize / 2;
+      let playerY = canvasHeight / 2 - playerSize / 2;
+      let playerSpeed = 5; // Base speed
+      let currentTerrain = "normal"; // Track current terrain
+
+      // Movement flags
+      let moveUp = false;
+      let moveDown = false;
+      let moveLeft = false;
+      let moveRight = false;
+
+      // Velocity for ice terrain
+      let velocityX = 0;
+      let velocityY = 0;
+      const friction = 0.5; // Friction for ice (0 to 1, closer to 1 = less friction)
+      const iceSpeedMultiplier = 10; // Speed multiplier on ice
+
+      // Terrain colors
+      const terrainColors = {
+        normal: "#e0e0e0", // Light grey (default)
+        dense: "green", // Green (slow)
+        ice: "lightblue", // Light blue (ice)
+      };
+
+      // Function to draw terrain
+      function drawTerrain() {
+        // Dense terrain area (green rectangle at top-left)
+        ctx.fillStyle = terrainColors.dense;
+        ctx.fillRect(0, 0, 300, 300);
+
+        // Ice terrain area (light blue rectangle at bottom-right)
+        ctx.fillStyle = terrainColors.ice;
+        ctx.fillRect(700, 700, 300, 300);
+      }
+
+      // Function to get terrain type at a position (pixel color check)
+      function getTerrainType(x, y) {
+        const pixelData = ctx.getImageData(x, y, 1, 1).data; // Get pixel data at (x, y)
+        const pixelColor = `rgb(${pixelData[0]}, ${pixelData[1]}, ${pixelData[2]})`; // Convert to RGB string
+
+        if (pixelColor === "rgb(0, 128, 0)") {
+          // Green (Dense) - RGB of green in terrainColors.dense
+          return "dense";
+        } else if (pixelColor === "rgb(173, 216, 230)") {
+          // Light Blue (Ice) - RGB of lightblue in terrainColors.ice
+          return "ice";
+        } else {
+          return "normal"; // Default to normal terrain
+        }
+      }
+
+      document.addEventListener("keydown", function (event) {
+        switch (event.key) {
+          case "w":
+          case "W":
+            moveUp = true;
+            break;
+          case "s":
+          case "S":
+            moveDown = true;
+            break;
+          case "a":
+          case "A":
+            moveLeft = true;
+            break;
+          case "d":
+          case "D":
+            moveRight = true;
+            break;
+        }
+      });
+
+      document.addEventListener("keyup", function (event) {
+        switch (event.key) {
+          case "w":
+          case "W":
+            moveUp = false;
+            break;
+          case "s":
+          case "S":
+            moveDown = false;
+            break;
+          case "a":
+          case "A":
+            moveLeft = false;
+            break;
+          case "d":
+          case "D":
+            moveRight = false;
+            break;
+        }
+      });
+
+      function gameLoop() {
+        update();
+        draw();
+        requestAnimationFrame(gameLoop);
+      }
+
+      function update() {
+        // Get terrain type at player position (center of player)
+        currentTerrain = getTerrainType(
+          Math.floor(playerX + playerSize / 2),
+          Math.floor(playerY + playerSize / 2)
+        );
+
+        let currentSpeed = playerSpeed; // Start with base speed
+
+        if (currentTerrain === "dense") {
+          currentSpeed = playerSpeed / 2; // Slow down in dense terrain
+        } else if (currentTerrain === "ice") {
+          currentSpeed = playerSpeed * iceSpeedMultiplier; // Faster on ice
+        }
+
+        // Movement logic (modified for ice inertia)
+        if (currentTerrain !== "ice") {
+          // Normal movement for non-ice terrain
+          velocityX = 0; // Reset velocity when not on ice to stop instantly
+          velocityY = 0;
+          if (moveUp) velocityY = -currentSpeed;
+          if (moveDown) velocityY = currentSpeed;
+          if (moveLeft) velocityX = -currentSpeed;
+          if (moveRight) velocityX = currentSpeed;
+        } else {
+          // Ice terrain - apply velocity and friction
+          if (moveUp) velocityY -= currentSpeed / 4; // Reduced input force on ice
+          if (moveDown) velocityY += currentSpeed / 4;
+          if (moveLeft) velocityX -= currentSpeed / 4;
+          if (moveRight) velocityX += currentSpeed / 4;
+
+          velocityX *= friction; // Apply friction to slow down over time
+          velocityY *= friction;
+        }
+
+        playerX += velocityX;
+        playerY += velocityY;
+
+        // Keep player within canvas bounds
+        playerX = Math.max(0, Math.min(canvasWidth - playerSize, playerX));
+        playerY = Math.max(0, Math.min(canvasHeight - playerSize, playerY));
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+
+        // Draw terrain first, before the player
+        drawTerrain();
+
+        // Draw player
+        ctx.fillStyle = "blue";
+        ctx.fillRect(playerX, playerY, playerSize, playerSize);
+      }
+
+      gameLoop();
+    </script>
+  </body>
+</html>

@@ -26,11 +26,11 @@
 
       #objects-container {
         display: flex;
-        flex-wrap: wrap; /* Allow objects to wrap to the next line */
+        flex-wrap: wrap;
         justify-content: center;
         align-items: center;
-        width: 80%; /* Adjust as needed */
-        max-width: 800px; /* Maximum width of the container */
+        width: 80%;
+        max-width: 800px;
       }
 
       .object {
@@ -40,21 +40,22 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        cursor: pointer; /* Indicate clickable */
-        position: relative; /* For absolute positioning of overlays */
+        cursor: pointer;
+        position: relative;
+        transition: transform 0.3s ease; /* Smooth transition for other transforms */
       }
 
       .object.scratched {
-        opacity: 0.7; /* Slightly fade out scratched objects */
+        opacity: 0.7;
       }
 
       .circle {
         border-radius: 50%;
-        background-color: #e74c3c; /* Red */
+        background-color: #e74c3c;
       }
 
       .square {
-        background-color: #3498db; /* Blue */
+        background-color: #3498db;
       }
 
       .triangle {
@@ -62,15 +63,15 @@
         height: 0;
         border-left: 25px solid transparent;
         border-right: 25px solid transparent;
-        border-bottom: 50px solid #2ecc71; /* Green */
+        border-bottom: 50px solid #2ecc71;
         z-index: 0;
       }
 
       .star {
         font-size: 50px;
-        color: #f1c40f; /* Yellow */
-        line-height: 50px; /* Vertically center the star */
-        text-align: center; /* Horizontally center the star */
+        color: #f1c40f;
+        line-height: 50px;
+        text-align: center;
       }
 
       .dash {
@@ -80,27 +81,48 @@
         width: 100%;
         height: 5px;
         background-color: red;
-        transform: translateY(-50%) rotate(-45deg); /* Diagonal dash */
-        z-index: 1; /* Ensure dash is above the object */
+        transform: translateY(-50%) rotate(-45deg);
+        z-index: 1;
       }
 
-      /* Modified to position number ABOVE the object */
       .number-overlay {
         position: absolute;
-        top: -30px; /* Position above the object */
+        top: -30px;
         left: 50%;
-        transform: translateX(-50%); /* Center horizontally */
+        transform: translateX(-50%);
         font-size: 24px;
         font-weight: bold;
         color: black;
-        z-index: 2; /* Ensure number is above dash and object */
+        z-index: 2;
       }
 
-      /* Fix for triangle dash */
       .object.triangle .dash {
-        top: 30px; /* Adjust top position for triangles */
+        top: 30px;
         left: -30px;
         width: 50px;
+      }
+
+      .object.highlight-animation {
+        animation: highlight 2s ease-in-out; /* Animation duration is 2 seconds */
+      }
+
+      @keyframes highlight {
+        0%,
+        100% {
+          transform: translateY(0);
+        } /* Start and end at original position */
+        20% {
+          transform: translateY(-15px);
+        }
+        40% {
+          transform: translateY(0);
+        }
+        60% {
+          transform: translateY(-15px);
+        }
+        80% {
+          transform: translateY(0);
+        }
       }
     </style>
   </head>
@@ -126,17 +148,17 @@
           const objectDiv = document.createElement("div");
           objectDiv.classList.add("object", shapeClass);
           if (shapeClass === "star") {
-            objectDiv.textContent = "★"; // Use a star character
+            objectDiv.textContent = "★";
           }
-          objectDiv.dataset.index = index; // Store the index of the object
+          objectDiv.dataset.index = index;
 
           objectDiv.addEventListener("click", handleObjectClick);
 
           return objectDiv;
         }
 
-        let currentObjectIndex = 0; // Track the index of the next object to scratch
-        let objects = []; // Array to store object elements in order
+        let currentObjectIndex = 0;
+        let objects = [];
 
         function handleObjectClick(event) {
           const clickedObject = event.currentTarget;
@@ -146,31 +168,59 @@
             scratchObject(clickedObject, objectIndex + 1);
             currentObjectIndex++;
           } else if (objectIndex < currentObjectIndex) {
-            // Object already scratched, ignore click (optional: add visual feedback if needed)
+            // Do nothing if clicking on already scratched object
           } else {
-            // Wrong object clicked, do nothing (optional: add visual feedback if needed)
-            alert("Scratch the objects in order!"); // Simple feedback - can be improved
+            const message = "Scratch the objects in order!";
+            if ("speechSynthesis" in window) {
+              const utterance = new SpeechSynthesisUtterance(message);
+              speechSynthesis.speak(utterance);
+            } else {
+              console.warn(
+                "Speech synthesis is not supported in this browser."
+              );
+            }
+            alert(message);
+
+            // Highlight the next object
+            highlightNextObject();
           }
         }
 
         function scratchObject(object, number) {
           object.classList.add("scratched");
 
-          // Create and add dash
           const dash = document.createElement("div");
           dash.classList.add("dash");
           object.appendChild(dash);
-
-          // Create and add number overlay
           const numberOverlay = document.createElement("div");
           numberOverlay.classList.add("number-overlay");
           numberOverlay.textContent = number;
           object.appendChild(numberOverlay);
 
-          // Remove number overlay after 2 seconds
+          // Screen Reader functionality for numbers
+          if ("speechSynthesis" in window) {
+            const utterance = new SpeechSynthesisUtterance(number.toString());
+            speechSynthesis.speak(utterance);
+          } else {
+            console.warn("Speech synthesis is not supported in this browser.");
+          }
+
           setTimeout(() => {
             numberOverlay.remove();
           }, 2000);
+        }
+
+        function highlightNextObject() {
+          const nextObjectIndex = currentObjectIndex;
+          const nextObject = document.querySelector(
+            `.object[data-index='${nextObjectIndex}']`
+          );
+          if (nextObject) {
+            nextObject.classList.add("highlight-animation");
+            setTimeout(() => {
+              nextObject.classList.remove("highlight-animation");
+            }, 2000); // Duration of the animation
+          }
         }
 
         const randomNumber = getRandomNumber(1, 10);
@@ -179,8 +229,8 @@
         const selectedShape = getRandomShape();
 
         for (let i = 0; i < randomNumber; i++) {
-          const object = createObject(selectedShape, i); // Pass index to createObject
-          objects.push(object); // Store object in array
+          const object = createObject(selectedShape, i);
+          objects.push(object);
           objectsContainer.appendChild(object);
         }
       });

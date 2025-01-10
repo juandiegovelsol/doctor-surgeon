@@ -1,0 +1,43 @@
+.difficulty-container {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.difficulty-radio {
+  margin: 0 10px;
+}
+
+.upload-container {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.puzzle-container {
+  display: grid;
+  width: 500px;
+  height: 500px;
+  border: 2px solid black;
+  margin: 20px auto;
+  cursor: grab;
+}
+
+.puzzle-piece {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  border: 1px solid lightgray;
+  background-repeat: no-repeat;
+  background-size: 500px 500px;
+  cursor: grab;
+  user-select: none;
+}
+
+.puzzle-piece.dragging {
+  /* Dynamic styles will be applied inline for dragging */
+}
+
+#message {
+  text-align: center;
+  margin-top: 20px;
+  font-weight: bold;
+}
