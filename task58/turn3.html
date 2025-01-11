@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Accessible Webpage</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+        background-color: #f4f4f4;
+        color: #333;
+      }
+      header,
+      main,
+      footer,
+      #services-section {
+        padding: 20px;
+        border: 1px solid #ccc;
+        margin-bottom: 30px;
+        background-color: #fff;
+        border-radius: 5px;
+      }
+      #services-section ul {
+        list-style: none;
+        padding-left: 0;
+      }
+      #services-section li {
+        margin-bottom: 10px;
+        padding: 10px;
+        background-color: #eee;
+        border-radius: 3px;
+      }
+      #services-section:focus {
+        outline: 2px solid blue;
+      }
+      header:focus,
+      footer:focus {
+        outline: 2px solid blue;
+      }
+      a {
+        color: #007bff;
+      }
+      #sound-toggle {
+        margin-top: 10px; /* Add some space above the button */
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        background-color: #007bff;
+        color: white;
+        cursor: pointer;
+        font-size: 1em;
+      }
+      #sound-toggle:focus {
+        outline: 2px solid black;
+      }
+    </style>
+  </head>
+  <body>
+    <header role="banner" tabindex="0" aria-label="Header Section">
+      <h1>Welcome to Our Services</h1>
+      <button id="sound-toggle" aria-pressed="true">Deactivate Sound</button>
+    </header>
+    <main role="main">
+      <section
+        id="services-section"
+        tabindex="0"
+        aria-label="Services Section"
+        aria-describedby="services-heading"
+      >
+        <h2 id="services-heading">Our Services</h2>
+        <ul>
+          <li>Web Design</li>
+          <li>Mobile App Development</li>
+          <li>Digital Marketing</li>
+          <li>SEO Optimization</li>
+          <li>Content Creation</li>
+        </ul>
+      </section>
+    </main>
+    <footer role="contentinfo" tabindex="0" aria-label="Footer Section">
+      <p>Contact us at: <a href="tel:+15559876543">555-987-6543</a></p>
+    </footer>
+
+    <script>
+      const synth = window.speechSynthesis;
+      let soundEnabled = true; // Initially sound is enabled
+      const soundToggleButton = document.getElementById("sound-toggle");
+
+      function speak(text) {
+        if (!soundEnabled || synth.speaking) {
+          // Check if sound is enabled
+          return;
+        }
+        const utterance = new SpeechSynthesisUtterance(text);
+        synth.speak(utterance);
+      }
+
+      document.querySelector("header").addEventListener("focus", () => {
+        speak("Entering header section");
+      });
+
+      document
+        .querySelector("#services-section")
+        .addEventListener("focus", () => {
+          speak("Entering services section");
+        });
+
+      document.querySelector("footer").addEventListener("focus", () => {
+        speak("Entering footer section");
+      });
+
+      document.querySelectorAll("h1, h2, p, li, a").forEach((element) => {
+        element.addEventListener("mouseover", () => {
+          speak(element.textContent);
+        });
+      });
+
+      soundToggleButton.addEventListener("click", () => {
+        soundEnabled = !soundEnabled; // Toggle soundEnabled
+        soundToggleButton.setAttribute(
+          "aria-pressed",
+          !soundEnabled ? "false" : "true"
+        ); // Update aria-pressed attribute
+        soundToggleButton.textContent = soundEnabled
+          ? "Deactivate Sound"
+          : "Activate Sound"; // Update button text
+      });
+    </script>
+  </body>
+</html>

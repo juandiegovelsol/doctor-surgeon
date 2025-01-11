@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Accessible Webpage</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+      }
+      header,
+      main,
+      footer {
+        padding: 20px;
+        border: 1px solid #ccc;
+        margin-bottom: 20px;
+      }
+      #services-section {
+        outline: none; /* Removes default focus outline for better accessibility control */
+      }
+    </style>
+  </head>
+  <body>
+    <header role="banner" tabindex="0" aria-label="Header Section">
+      <h1>Welcome to Our Services</h1>
+    </header>
+    <main role="main">
+      <section
+        id="services-section"
+        tabindex="0"
+        aria-label="Services Section"
+        aria-describedby="services-heading"
+      >
+        <h2 id="services-heading">Our Services</h2>
+        <ul>
+          <li>Web Design</li>
+          <li>Mobile App Development</li>
+          <li>Digital Marketing</li>
+          <li>SEO Optimization</li>
+          <li>Content Creation</li>
+        </ul>
+      </section>
+    </main>
+    <footer role="contentinfo" tabindex="0" aria-label="Footer Section">
+      <p>Contact us at: <a href="tel:+15559876543">555-987-6543</a></p>
+    </footer>
+
+    <script>
+      const synth = window.speechSynthesis;
+
+      function speak(text) {
+        if (synth.speaking) {
+          return;
+        }
+        const utterance = new SpeechSynthesisUtterance(text);
+        synth.speak(utterance);
+      }
+
+      document.querySelector("header").addEventListener("focus", () => {
+        speak("Entering header section");
+      });
+
+      document
+        .querySelector("#services-section")
+        .addEventListener("focus", () => {
+          speak("Entering services section");
+        });
+
+      document.querySelector("footer").addEventListener("focus", () => {
+        speak("Entering footer section");
+      });
+
+      document.querySelectorAll("h1, h2, p, li, a").forEach((element) => {
+        element.addEventListener("mouseover", () => {
+          speak(element.textContent);
+        });
+      });
+    </script>
+  </body>
+</html>

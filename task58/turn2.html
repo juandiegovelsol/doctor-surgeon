@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Accessible Webpage</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+        background-color: #f4f4f4; /* Light background for better contrast */
+        color: #333; /* Darker text for readability */
+      }
+      header,
+      main,
+      footer,
+      #services-section {
+        /* Apply consistent styling to sections */
+        padding: 20px;
+        border: 1px solid #ccc;
+        margin-bottom: 30px; /* Increased margin for more space between sections */
+        background-color: #fff; /* White background for sections */
+        border-radius: 5px; /* Rounded corners for visual appeal */
+      }
+      #services-section ul {
+        list-style: none; /* Remove default list bullets */
+        padding-left: 0; /* Reset default padding */
+      }
+      #services-section li {
+        margin-bottom: 10px; /* Increased margin between list items */
+        padding: 10px; /* Add padding to list items for better hover area */
+        background-color: #eee; /* Light grey background for list items */
+        border-radius: 3px; /* Rounded corners for list items */
+      }
+      #services-section:focus {
+        outline: 2px solid blue; /* Add a clear focus outline */
+      }
+      header:focus,
+      footer:focus {
+        outline: 2px solid blue; /* Add a clear focus outline */
+      }
+      a {
+        color: #007bff; /* Standard link color */
+      }
+    </style>
+  </head>
+  <body>
+    <header role="banner" tabindex="0" aria-label="Header Section">
+      <h1>Welcome to Our Services</h1>
+    </header>
+    <main role="main">
+      <section
+        id="services-section"
+        tabindex="0"
+        aria-label="Services Section"
+        aria-describedby="services-heading"
+      >
+        <h2 id="services-heading">Our Services</h2>
+        <ul>
+          <li>Web Design</li>
+          <li>Mobile App Development</li>
+          <li>Digital Marketing</li>
+          <li>SEO Optimization</li>
+          <li>Content Creation</li>
+        </ul>
+      </section>
+    </main>
+    <footer role="contentinfo" tabindex="0" aria-label="Footer Section">
+      <p>Contact us at: <a href="tel:+15559876543">555-987-6543</a></p>
+    </footer>
+
+    <script>
+      const synth = window.speechSynthesis;
+
+      function speak(text) {
+        if (synth.speaking) {
+          return;
+        }
+        const utterance = new SpeechSynthesisUtterance(text);
+        synth.speak(utterance);
+      }
+
+      document.querySelector("header").addEventListener("focus", () => {
+        speak("Entering header section");
+      });
+
+      document
+        .querySelector("#services-section")
+        .addEventListener("focus", () => {
+          speak("Entering services section");
+        });
+
+      document.querySelector("footer").addEventListener("focus", () => {
+        speak("Entering footer section");
+      });
+
+      document.querySelectorAll("h1, h2, p, li, a").forEach((element) => {
+        element.addEventListener("mouseover", () => {
+          speak(element.textContent);
+        });
+      });
+    </script>
+  </body>
+</html>

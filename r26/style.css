@@ -1,0 +1,62 @@
+body {
+  font-family: sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  background-color: #f0f0f0; /* Light grey page background */
+}
+
+.game-container {
+  display: grid;
+  grid-template-columns: repeat(4, 100px);
+  grid-gap: 10px;
+}
+
+.card {
+  width: 100px;
+  height: 150px;
+  /* Make the back of the card visually distinct - let's use a slightly darker grey with a pattern */
+  background-color: #c0c0c0; /* Slightly darker grey for the back */
+  background-image: repeating-linear-gradient(
+    45deg,
+    #b8b8b8,
+    #b8b8b8 10px,
+    #c0c0c0 10px,
+    #c0c0c0 20px
+  ); /* Subtle diagonal pattern */
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2em;
+  cursor: pointer;
+  user-select: none;
+  color: transparent; /* Symbols are initially hidden */
+  border: 2px solid #ccc;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+  transition: transform 0.6s; /* Smooth flip animation */
+  transform-style: preserve-3d; /* Required for 3D flip */
+}
+
+.card.flipped {
+  transform: rotateY(180deg); /* Rotate card to show the other side */
+  background-color: #fff; /* White background for the front of the card */
+  background-image: none; /* Remove pattern on the front */
+  color: black; /* Symbols are visible when flipped */
+}
+
+.card.flipped::after {
+  content: attr(
+    data-card-symbol
+  ); /* Display the symbol from the data attribute */
+  transform: rotateY(180deg); /* Counter rotate the symbol to be upright */
+  display: block; /* Ensure it takes space */
+}
+
+.card.matched {
+  opacity: 0.5;
+  cursor: default;
+  pointer-events: none;
+}
