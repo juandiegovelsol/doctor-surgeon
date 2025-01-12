@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Energy Company Logo</title>
+    <style>
+      .lightbulb-logo {
+        position: relative;
+        width: 60px;
+        height: 120px;
+        cursor: pointer; /* Indicate it's interactive */
+      }
+
+      .bulb-top {
+        position: relative;
+        width: 60px;
+        height: 60px;
+        border: 6px solid #333; /* Border for silhouette */
+        background-color: transparent; /* Make it transparent */
+        border-radius: 50% 50% 0 0; /* Rounded top */
+        box-sizing: border-box; /* Include border in width and height */
+      }
+
+      .bulb-base {
+        position: relative;
+        width: 24px;
+        height: 60px;
+        border-left: 6px solid #333; /* Left border for silhouette */
+        border-right: 6px solid #333; /* Right border for silhouette */
+        border-bottom: 6px solid #333; /* Bottom border for silhouette */
+        background-color: transparent; /* Make it transparent */
+        margin: 0 auto; /* Center the base under the top */
+        box-sizing: border-box; /* Include border in width and height */
+      }
+
+      .bulb-inner {
+        position: absolute;
+        top: 6px; /* Align with the border */
+        left: 6px; /* Align with the border */
+        right: 6px; /* Align with the border */
+        bottom: 6px; /* Align with the border */
+        background-color: transparent; /* Transparent when off */
+        border-radius: inherit; /* Inherit border-radius from parent */
+      }
+
+      .bulb-top .bulb-inner {
+        border-radius: 44% 44% 0 0; /* Slightly smaller curve for inner top */
+      }
+
+      .lightbulb-logo:hover .bulb-inner {
+        background-color: #ffffcc; /* Light yellow for 'on' state */
+      }
+    </style>
+  </head>
+  <body>
+    <div class="lightbulb-logo">
+      <div class="bulb-top">
+        <div class="bulb-inner"></div>
+      </div>
+      <div class="bulb-base">
+        <div class="bulb-inner"></div>
+      </div>
+    </div>
+  </body>
+</html>

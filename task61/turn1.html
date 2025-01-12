@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Energy Company Logo</title>
+    <style>
+      .lightbulb-logo {
+        position: relative;
+        width: 60px;
+        height: 120px;
+        cursor: pointer; /* Indicate it's interactive */
+      }
+
+      .bulb-top {
+        position: relative;
+        width: 60px;
+        height: 60px;
+        background-color: #333; /* Dark grey for silhouette */
+        border-radius: 50% 50% 0 0; /* Rounded top */
+      }
+
+      .bulb-base {
+        position: relative;
+        width: 24px;
+        height: 60px;
+        background-color: #333; /* Dark grey for silhouette */
+        margin: 0 auto; /* Center the base under the top */
+      }
+
+      .bulb-inner {
+        position: absolute;
+        top: 6px;
+        left: 6px;
+        right: 6px;
+        bottom: 6px;
+        background-color: #333; /* Initially same as silhouette color to be invisible */
+        border-radius: inherit; /* Inherit border-radius from parent */
+      }
+
+      .bulb-top .bulb-inner {
+        border-radius: 44% 44% 0 0; /* Slightly smaller curve for inner top */
+      }
+
+      .lightbulb-logo:hover .bulb-inner {
+        background-color: #ffffcc; /* Light yellow for 'on' state */
+      }
+    </style>
+  </head>
+  <body>
+    <div class="lightbulb-logo">
+      <div class="bulb-top">
+        <div class="bulb-inner"></div>
+      </div>
+      <div class="bulb-base">
+        <div class="bulb-inner"></div>
+      </div>
+    </div>
+  </body>
+</html>

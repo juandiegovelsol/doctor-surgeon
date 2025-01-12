@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kanban Board</title>
+    <style>
+      kanban-board {
+        display: flex;
+        gap: 20px;
+      }
+      .drop-zone {
+        border: 2px dashed #ccc;
+        min-height: 100px;
+        width: 200px;
+        padding: 10px;
+      }
+      .draggable {
+        background-color: #f0f0f0;
+        border: 1px solid #ccc;
+        padding: 10px;
+        margin-bottom: 10px;
+        cursor: grab;
+      }
+      .draggable:active {
+        cursor: grabbing;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="kanban-board">
+      <div class="drop-zone" id="column-todo">
+        <h3>To Do</h3>
+        <div class="draggable" id="item-1">Task 1</div>
+        <div class="draggable" id="item-2">Task 2</div>
+      </div>
+      <div class="drop-zone" id="column-inprogress">
+        <h3>In Progress</h3>
+        <div class="draggable" id="item-3">Task 3</div>
+      </div>
+      <div class="drop-zone" id="column-done">
+        <h3>Done</h3>
+        <div class="draggable" id="item-4">Task 4</div>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const websocket = new WebSocket("ws://localhost:8080");
+
+        websocket.onopen = () => {
+          console.log("Connected to WebSocket server");
+        };
+
+        websocket.onclose = () => {
+          console.log("Disconnected from WebSocket server");
+        };
+
+        websocket.onmessage = (event) => {
+          const message = JSON.parse(event.data);
+          if (message.type === "initialState") {
+            const initialState = message.payload;
+            Object.entries(initialState).forEach(([itemId, zoneId]) => {
+              const item = document.getElementById(itemId);
+              const container = document.getElementById(zoneId);
+              if (item && container) {
+                container.appendChild(item);
+              }
+            });
+          } else if (message.type === "itemMoved") {
+            const { itemId, newZoneId } = message.payload;
+            const item = document.getElementById(itemId);
+            const newContainer = document.getElementById(newZoneId);
+            if (item && newContainer) {
+              newContainer.appendChild(item);
+            }
+          }
+        };
+
+        const handleDragStart = (event) => {
+          event.dataTransfer.setData("text/plain", event.target.id);
+        };
+
+        const handleDragOver = (event) => {
+          event.preventDefault();
+        };
+
+        const handleDrop = (event) => {
+          event.preventDefault();
+          const itemId = event.dataTransfer.getData("text/plain");
+          const draggableElement = document.getElementById(itemId);
+          const dropZone = event.target.closest(".drop-zone");
+
+          if (draggableElement && dropZone) {
+            dropZone.appendChild(draggableElement);
+            // Send the move event to the server
+            websocket.send(
+              JSON.stringify({
+                type: "moveItem",
+                payload: { itemId: itemId, newZoneId: dropZone.id },
+              })
+            );
+          }
+        };
+
+        document.querySelectorAll(".draggable").forEach((item) => {
+          item.setAttribute("draggable", true); // Ensure draggable attribute is set
+          item.addEventListener("dragstart", handleDragStart);
+        });
+
+        document.querySelectorAll(".drop-zone").forEach((zone) => {
+          zone.addEventListener("dragover", handleDragOver);
+          zone.addEventListener("drop", handleDrop);
+        });
+      });
+    </script>
+  </body>
+</html>

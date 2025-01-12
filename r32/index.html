@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kanban Board</title>
+    <style>
+      .kanban-board {
+        display: flex;
+        gap: 20px;
+      }
+      .drop-zone {
+        border: 2px dashed #ccc;
+        min-height: 100px;
+        width: 200px;
+        padding: 10px;
+      }
+      .draggable {
+        background-color: #f0f0f0;
+        border: 1px solid #ccc;
+        padding: 10px;
+        margin-bottom: 10px;
+        cursor: grab;
+      }
+      .draggable:active {
+        cursor: grabbing;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="kanban-board">
+      <div class="drop-zone" id="column-todo">
+        <h3>To Do</h3>
+        <div class="draggable" id="item-1" draggable="true">Task 1</div>
+        <div class="draggable" id="item-2" draggable="true">Task 2</div>
+      </div>
+      <div class="drop-zone" id="column-inprogress">
+        <h3>In Progress</h3>
+        <div class="draggable" id="item-3" draggable="true">Task 3</div>
+      </div>
+      <div class="drop-zone" id="column-done">
+        <h3>Done</h3>
+        <div class="draggable" id="item-4" draggable="true">Task 4</div>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const loadPositions = () => {
+          const savedPositions =
+            JSON.parse(localStorage.getItem("positions")) || {};
+          Object.keys(savedPositions).forEach((itemId) => {
+            const zoneId = savedPositions[itemId];
+            const item = document.getElementById(itemId);
+            const container = document.getElementById(zoneId);
+            if (item && container) {
+              container.appendChild(item);
+            } else if (item) {
+              console.warn(
+                `Drop zone with ID '${zoneId}' not found for item '${itemId}'.`
+              );
+            } else if (container) {
+              console.warn(`Draggable item with ID '${itemId}' not found.`);
+            }
+          });
+        };
+
+        loadPositions(); // Load positions on page load
+
+        document.querySelectorAll(".draggable").forEach((item) => {
+          item.addEventListener("dragstart", (event) => {
+            event.dataTransfer.setData("text/plain", event.target.id);
+          });
+
+          item.addEventListener("dragend", (event) => {
+            const itemId = event.target.id;
+            const container = event.target.closest(".drop-zone");
+            if (container) {
+              const containerId = container.id;
+              const positions =
+                JSON.parse(localStorage.getItem("positions")) || {};
+              positions[itemId] = containerId;
+              localStorage.setItem("positions", JSON.stringify(positions));
+            } else {
+              console.warn(
+                `Draggable item '${itemId}' was not dropped into a valid drop zone.`
+              );
+              // Optionally revert the item to its original position or handle differently.
+            }
+          });
+        });
+
+        document.querySelectorAll(".drop-zone").forEach((zone) => {
+          zone.addEventListener("dragover", (event) => {
+            event.preventDefault(); // Allow dropping
+          });
+
+          zone.addEventListener("drop", (event) => {
+            event.preventDefault();
+            const itemId = event.dataTransfer.getData("text/plain");
+            const draggableElement = document.getElementById(itemId);
+            if (draggableElement) {
+              zone.appendChild(draggableElement);
+            }
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

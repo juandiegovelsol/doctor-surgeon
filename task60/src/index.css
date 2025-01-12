@@ -1,0 +1,15 @@
+/* index.css */
+body {
+  font-family: sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+  background-color: #f4f4f4;
+}
+
+#root {
+  width: 300px; /* Adjust container width as needed */
+  padding: 20px;
+}

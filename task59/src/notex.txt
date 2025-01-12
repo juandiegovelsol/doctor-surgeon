@@ -1,0 +1,49 @@
+
+- I want to develop a react component using JavaScript for my webpage consisting of a welcome message that alternates the person who is saying welcome to.
+
+I mean, there should be a fixed part of the message "We are happy to have you here " and a dynamic part of the message that should change between 5 different persons (it could be something like "men", "women", and so on).
+
+It is important that names and welcome messages are passed as props, and that dynamic text moves as an alternating slot machine where the words are moved up and down and only the currently displayed text is visible, while other texts have to move up or down and disappear.
+
+Implement the React component and simulate the usage passing the desired props. Provide complete code
+
+
+- The first name is displayed correctly, but then all the others are passed to the top and anything is displayed, please fix the provided code and return only the complete file that needs to be modified. Also, I want to show the names randomly. Ensure the application is displayed in all the window.
+
+- What I meant by asking to display a random name is that the names must be positioned in the original order but first, the 4th name should be displayed, then returned to the first (moving up the names), and so on randomly. Implement this change and return only the complete modified file.
+
+
+
+
+The model understands most of the prompt requirements, it implements an alternating welcome message
+to display an static and a dynamic parts.
+
+The explanation section in turn 1 is accurate and explains how the application is structured.
+
+Turn 2 fixes the pointed issue regarding the names movement.
+
+
+
+Turn 1 has an Incomplete code error because the slot effect is achieved but only the first name 
+is visible, the others then are moved up and can't be read
+
+Turn 1 has an Aritmetic Error because the translateY inline style property is not correctly calculated
+to reflect the moved percentage the slot has to be moved.
+
+Turn 2 has a "Doesn't follow formatting constraints" because provides the App.js file that has not any
+code modification, while the prompt asked to provide only files with modifications.
+
+Turn 2 has a Redundant Information Generation because the App component is not necessary to include,
+as it was provided in previous turns.
+
+Turn 2 generates a hardcoded solution because the movement is calculated with a "em" dimension measure
+
+Turn 2 adds information that was not requested for, adding a useRef hook to store the name id, adding
+unnecessary complexity.
+
+Turn 2 has an incomplete code error because the application is not displayed in the entire width as
+requested.
+
+
+Turn 3 doesn't understand the user intent because it returns to the original order but does not implements
+any random movement.

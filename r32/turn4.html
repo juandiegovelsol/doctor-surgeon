@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kanban Board</title>
+    <style>
+      /* ... (same styles as before) ... */
+    </style>
+  </head>
+  <body>
+    <div class="kanban-board">
+      <div class="drop-zone" id="column-todo">
+        <h3>To Do</h3>
+        <div class="draggable" id="item-1" draggable="true">Task 1</div>
+        <div class="draggable" draggable="true">Task 2 - Missing ID</div>
+      </div>
+      <div class="drop-zone" id="column-inprogress">
+        <h3>In Progress</h3>
+        <div class="draggable" id="item-1" draggable="true">
+          Task 3 - Duplicate ID
+        </div>
+      </div>
+      <div class="drop-zone" id="column-done">
+        <h3>Done</h3>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const generateUniqueId = () => {
+          return `item-${Math.random().toString(36).substring(2, 15)}`;
+        };
+
+        const resolveMissingAndDuplicateIds = () => {
+          const draggableElements = document.querySelectorAll(".draggable");
+          const existingIds = new Set();
+
+          draggableElements.forEach((item) => {
+            if (!item.id) {
+              let newId;
+              do {
+                newId = generateUniqueId();
+              } while (existingIds.has(newId));
+              item.id = newId;
+              console.warn(`Draggable item assigned a new ID: ${newId}`);
+            }
+
+            if (existingIds.has(item.id)) {
+              const oldId = item.id;
+              let newId;
+              do {
+                newId = generateUniqueId();
+              } while (existingIds.has(newId));
+              item.id = newId;
+              console.warn(
+                `Duplicate ID '${oldId}' found. Item ID updated to: ${newId}`
+              );
+              // Update stored positions if using localStorage or IndexedDB immediately
+              updateStoredPositions(oldId, newId);
+            }
+            existingIds.add(item.id);
+          });
+        };
+
+        const updateStoredPositions = (oldId, newId) => {
+          const storedPositions =
+            JSON.parse(localStorage.getItem("positions")) || {};
+          if (storedPositions[oldId]) {
+            storedPositions[newId] = storedPositions[oldId];
+            delete storedPositions[oldId];
+            localStorage.setItem("positions", JSON.stringify(storedPositions));
+            console.log(
+              `Updated stored position for ID change from ${oldId} to ${newId}`
+            );
+          }
+        };
+
+        resolveMissingAndDuplicateIds();
+
+        const loadPositions = () => {
+          const savedPositions =
+            JSON.parse(localStorage.getItem("positions")) || {};
+          Object.entries(savedPositions).forEach(([itemId, zoneId]) => {
+            const item = document.getElementById(itemId);
+            const container = document.getElementById(zoneId);
+            if (item && container) {
+              container.appendChild(item);
+            } else {
+              console.warn(
+                `Could not restore position for item '${itemId}' in zone '${zoneId}'.`
+              );
+            }
+          });
+        };
+
+        loadPositions();
+
+        // --- Differential Updates with localStorage ---
+        let originalPositions = {};
+        const recordOriginalPositions = () => {
+          document.querySelectorAll(".draggable").forEach((item) => {
+            originalPositions[item.id] = item.closest(".drop-zone")?.id;
+          });
+        };
+        recordOriginalPositions();
+
+        document.querySelectorAll(".draggable").forEach((item) => {
+          item.addEventListener("dragstart", (event) => {
+            event.dataTransfer.setData("text/plain", event.target.id);
+          });
+
+          item.addEventListener("dragend", (event) => {
+            const itemId = event.target.id;
+            const newContainer = event.target.closest(".drop-zone");
+            const newContainerId = newContainer?.id;
+
+            if (
+              itemId &&
+              newContainerId &&
+              originalPositions[itemId] !== newContainerId
+            ) {
+              const diffUpdate = {
+                itemId: itemId,
+                from: originalPositions[itemId],
+                to: newContainerId,
+              };
+              console.log("Differential Update:", diffUpdate);
+              localStorage.setItem(
+                `drag_update_${itemId}`,
+                JSON.stringify(diffUpdate)
+              );
+            }
+            // Update originalPositions for the next drag
+            originalPositions[itemId] = newContainerId;
+          });
+        });
+
+        // Load Differential Updates (Conceptual - would need more robust handling)
+        const applyDifferentialUpdates = () => {
+          for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if (key.startsWith("drag_update_")) {
+              const update = JSON.parse(localStorage.getItem(key));
+              const item = document.getElementById(update.itemId);
+              const toContainer = document.getElementById(update.to);
+              if (item && toContainer) {
+                toContainer.appendChild(item);
+                console.log("Applied Differential Update:", update);
+              } else {
+                console.warn("Could not apply differential update:", update);
+              }
+            }
+          }
+          // Clear the differential updates after applying (or handle them differently)
+          for (let i = localStorage.length - 1; i >= 0; i--) {
+            const key = localStorage.key(i);
+            if (key.startsWith("drag_update_")) {
+              localStorage.removeItem(key);
+            }
+          }
+          // Re-save the full positions for consistency, or manage differential updates persistently
+          saveFullPositions();
+        };
+
+        const saveFullPositions = () => {
+          const positions = {};
+          document.querySelectorAll(".draggable").forEach((item) => {
+            positions[item.id] = item.closest(".drop-zone")?.id;
+          });
+          localStorage.setItem("positions", JSON.stringify(positions));
+        };
+
+        document.querySelectorAll(".drop-zone").forEach((zone) => {
+          zone.addEventListener("dragover", (event) => {
+            event.preventDefault();
+          });
+          zone.addEventListener("drop", (event) => {
+            event.preventDefault();
+            const itemId = event.dataTransfer.getData("text/plain");
+            const draggableElement = document.getElementById(itemId);
+            if (draggableElement) {
+              zone.appendChild(draggableElement);
+            }
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
