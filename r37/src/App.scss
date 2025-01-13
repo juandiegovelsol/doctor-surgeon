@@ -1,0 +1,13 @@
+// src/App.scss
+@import './variables';
+
+.app-container {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    overflow: hidden;
+
+    @media (max-width: $breakpoint-mobile) {
+        flex-direction: column;
+    }
+}

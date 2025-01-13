@@ -1,0 +1,32 @@
+Turn 1:
+
+'Coding - Semantic - Incorrect Reference Error - Wrong Method/Variable'
+- The code does not utilize kaplay’s built in state function. It uses the stored object inside of `playerObj`. This limits stateful coding and requires much more boilerplate since `playerObj`
+won’t be able to utilize the `onState` functions.
+
+'Coding - Semantic - Garbage Code - Wrong (Logical) Direction'
+- The model overcorrects by adding a return statement to the `player` function. `playerObj` does not need to be returned as it is not meant to be accessible to the rest of the project. 
+
+Turn 2:
+'Coding - Semantic - Undefined Dependency Error'
+- `isCurrentState` is not a real function. Therefore the code in between lines 75 and 94 are incorrect. 
+
+'Coding - Semantic - Environment Assumption Error'
+- While there are many ways to change states and run code for each frame, this implementation is not a good example of how to structure the code. 
+
+'Coding - Semantic - Incomplete Code'
+- the logic for when to switch states should be within the state itself. For example, line 86 defines an if statement that when the player is not currently rolling and they press the spacebar,
+the state should be switched to rolling. Instead, inside of idle and moving there should be code to set the state to “rolling”. Instead of putting the updating code inside of `onUpdate`, it should be inside of
+`onStateUpdate(“rolling”, () => {…})`, which works anytime the state has been updated to “rolling”. Finally there should be code to reset the state to idle once the roll has been complete.
+- The code correctly uses the `onStateEnter` and `state` functions.
+
+Turn 3:
+- prompted the model to look for a valid function in kaplay to update the state, but still was unable to find one
+- `player.state.is(…)` is not a valid function.
+- The if statement from lines 85 to 98 can be rewritten much better than how it is currently. The statement does not need to check if the player is moving to set the state. 
+
+'Coding - Semantic - Condition Error - Incorrect Condition'
+- The if statement logical criticism from turn 2 applies here as well
+
+'Coding - Syntactic - Incorrect Scope Placement'
+- The console log indicating when the player is rolling should exist inside a `onStateUpdate`, not a random if statement inside of `onUpdate`
