@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Markdown Renderer</title>
+    <style>
+      /* Basic CSS for layout, appearance, and scrollbar control */
+      body {
+        margin: 0;
+        font-family: sans-serif;
+        height: 100vh; /* Body takes full viewport height */
+        overflow: hidden; /* Prevent body scrollbar */
+      }
+
+      .container {
+        display: flex; /* Flexbox for split layout */
+        height: 100%; /* Container takes full height */
+        overflow: hidden; /* Prevent container scrollbar */
+      }
+
+      .editor-pane,
+      .preview-pane {
+        flex: 1; /* Equal width panes */
+        padding: 20px;
+        box-sizing: border-box; /* Padding within width/height */
+        border: 1px solid #ccc; /* Pane separator */
+        overflow-y: auto; /* Vertical scroll when content overflows */
+        overflow-x: hidden; /* Hide horizontal scroll */
+      }
+
+      .editor-pane {
+        border-right: none; /* Remove right border of editor pane */
+      }
+
+      .preview-pane {
+        border-left: none; /* Remove left border of preview pane */
+        background-color: #f9f9f9; /* Light preview background */
+      }
+
+      textarea {
+        width: 100%;
+        height: 100%;
+        border: none;
+        padding: 10px;
+        box-sizing: border-box;
+        font-family: monospace; /* Monospace font for editor */
+        resize: none; /* Disable textarea resize */
+        outline: none; /* Remove focus outline */
+        overflow: hidden; /* Hide textarea scrollbars, pane scrollbars will be used */
+      }
+
+      .preview-pane pre {
+        background-color: #eee;
+        padding: 10px;
+        border-radius: 5px;
+        overflow-x: auto; /* Horizontal scroll for code blocks */
+        overflow-y: auto; /* Vertical scroll for tall code blocks */
+        white-space: pre-wrap; /* Wrap long lines in <pre> */
+        word-wrap: break-word; /* Break words if necessary */
+      }
+
+      .preview-pane code {
+        font-family: monospace;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="editor-pane">
+        <textarea
+          id="markdown-input"
+          placeholder="Type Markdown here..."
+        ></textarea>
+      </div>
+      <div class="preview-pane" id="markdown-output">
+        <!-- Markdown output will be rendered here -->
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script>
+      const markdownInput = document.getElementById("markdown-input");
+      const markdownOutput = document.getElementById("markdown-output");
+
+      function renderMarkdown() {
+        const markdownText = markdownInput.value;
+        const html = marked.parse(markdownText);
+        markdownOutput.innerHTML = html;
+      }
+
+      markdownInput.addEventListener("input", renderMarkdown);
+      renderMarkdown();
+    </script>
+  </body>
+</html>

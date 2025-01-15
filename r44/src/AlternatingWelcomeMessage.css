@@ -1,0 +1,29 @@
+/* AlternatingWelcomeMessage.css */
+.welcome-message-container {
+  display: flex;
+  align-items: center;
+  font-size: 2em; /* Increased font size for better visibility */
+}
+
+.base-message {
+  margin-right: 10px; /* Increased margin for better spacing */
+}
+
+.dynamic-text-container {
+  overflow: hidden;
+  height: 1.2em; /* Height of one line of text, adjust as needed based on font-size and line-height */
+}
+
+.dynamic-text-slot {
+  height: 100%;
+}
+
+.dynamic-text {
+  transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Smooth transition */
+}
+
+.dynamic-text-item {
+  height: 1.2em; /* Must match dynamic-text-container height */
+  line-height: 1.2em; /* Vertically center text */
+  white-space: nowrap; /* Prevent text from wrapping */
+}

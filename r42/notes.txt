@@ -1,0 +1,49 @@
+Instruction Following Errors:
+- Turn 1: The model provided both Grid and Flexbox implementations without clarifying which to use.
+   While both approaches were valid, the lack of clear guidance or prioritization left the user to decide, which could cause confusion.
+
+   'Coding - Semantic - Incomplete Code'
+
+- Turn 2: Instead of consolidating functionality into a single toggle button for the navigation menu and sidebar,
+   the model implemented two separate buttons. This approach was unnecessary and inefficient, deviating from the prompt's intent.
+
+   'Instruction Following Errors - Constraint Following - Adds Information That Was Not Asked For'
+
+- Turn 3: The categories dropdown was incorrectly retained in the navigation on larger screens,
+   violating the user’s explicit instruction to only include the dropdown on smaller screens.
+
+   'Instruction Following Errors - Constraint Following - Doesn'T Follow Non-Formatting Constraints'
+
+- Turn 6: Although the dropdown was removed from larger screens, the model failed to ensure that the sidebar became
+   the sole visible component for categories on desktop. Redundant styles and logic for the dropdown remained, complicating the code unnecessarily.
+
+   'Instruction Following Errors - Doesn'T Understand User Intent', 'Reasoning Errors - Feasibility Errors - Overly Complex'
+
+Feasibility Errors:
+- Turn 3: The categories dropdown menu appeared misaligned, positioned under the footer instead of directly beneath
+   the Categories button. This was caused by the absence of position: relative on the parent container, which is necessary
+   for proper alignment of absolutely positioned elements like the dropdown.
+
+   'Coding - Semantic - Incomplete Code'
+
+
+- Turn 7: The reliance on position: absolute for the dropdown menu introduced potential alignment issues in dynamic scenarios,
+   such as resizing or varying content sizes. The model did not test or verify the robustness of this approach.
+
+   'Coding - Semantic - Minor Visual Code Output Error '
+
+Incomplete Code:
+- Turn 2: The model did not include functionality to close the sidebar or dropdown when clicking outside of these elements.
+   This is standard behavior for dropdowns and sidebars in modern UI design and its absence made the solution less user-friendly.
+- Turn 7: No logic was added to dynamically reset dropdown and sidebar states during resizing. This could result in overlapping
+   or redundant elements when transitioning between smaller and larger screens.
+- Turn 7: The desktop sidebar (#desktop-sidebar) lacked ARIA attributes or focus management to ensure accessibility compliance.
+   For example, role="complementary" and aria-labelledby attributes were not used to associate the sidebar with its heading, leaving accessibility incomplete.
+
+Ambiguity:
+- Turn 5: The model vaguely addressed the dropdown misalignment issue, suggesting CSS adjustments without clearly identifying
+   the root cause (missing position: relative on the parent container).
+- Turn 6: The model retained redundant dropdown styles and logic (e.g., display: none !important;) on larger screens without
+   justifying their necessity. This introduced unnecessary complexity and could confuse developers maintaining the codebase.
+
+   'Knowledge Errors - Representativeness - Ambiguity'

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Markdown Renderer</title>
+    <style>
+      /* Basic CSS for layout and appearance */
+      body {
+        margin: 0;
+        font-family: sans-serif;
+        height: 100vh; /* Ensure body takes full viewport height */
+      }
+
+      .container {
+        display: flex; /* Use flexbox for split layout */
+        height: 100%; /* Container takes full height */
+      }
+
+      .editor-pane,
+      .preview-pane {
+        flex: 1; /* Each pane takes equal width */
+        padding: 20px;
+        box-sizing: border-box; /* Padding included in width/height */
+        border: 1px solid #ccc; /* Separator for panes */
+        overflow: auto; /* Enable scroll if content overflows */
+      }
+
+      .editor-pane {
+        border-right: none; /* Remove right border of editor pane */
+      }
+
+      .preview-pane {
+        border-left: none; /* Remove left border of preview pane */
+        background-color: #f9f9f9; /* Light background for preview */
+      }
+
+      textarea {
+        width: 100%;
+        height: 100%;
+        border: none;
+        padding: 10px;
+        box-sizing: border-box;
+        font-family: monospace; /* Monospace font for editor */
+        resize: none; /* Disable textarea resizing */
+        outline: none; /* Remove default focus outline */
+      }
+
+      .preview-pane pre {
+        background-color: #eee;
+        padding: 10px;
+        border-radius: 5px;
+        overflow-x: auto; /* Enable horizontal scroll for code blocks */
+      }
+
+      .preview-pane code {
+        font-family: monospace;
+      }
+
+      /* Styling for lists, headings, etc. can be added here to enhance preview appearance */
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="editor-pane">
+        <textarea
+          id="markdown-input"
+          placeholder="Type Markdown here..."
+        ></textarea>
+      </div>
+      <div class="preview-pane" id="markdown-output">
+        <!-- Markdown output will be rendered here -->
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script>
+      // Get references to the input textarea and output div
+      const markdownInput = document.getElementById("markdown-input");
+      const markdownOutput = document.getElementById("markdown-output");
+
+      // Function to render markdown text
+      function renderMarkdown() {
+        const markdownText = markdownInput.value;
+        const html = marked.parse(markdownText); // Use marked.parse to convert markdown to HTML
+        markdownOutput.innerHTML = html; // Set the HTML content of the output div
+      }
+
+      // Add event listener to the input textarea to update preview on input
+      markdownInput.addEventListener("input", renderMarkdown);
+
+      // Initial render on page load (optional, if you want to display initial content)
+      renderMarkdown(); // Call it once to process initial content if needed. You can put default text in textarea if you want to show something initially.
+    </script>
+  </body>
+</html>

@@ -1,0 +1,34 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+.react-calendar__tile--now {
+  background: #e6e6fa; /* Light purple for 'today' */
+}
+
+.react-calendar__tile--active {
+  background: #0078d4; /* Blue when a date is actively selected */
+  color: white;
+}
+
+/* Make the active-date style VERY obvious */
+.active-date .react-calendar__tile {
+  background-color: lightgreen !important; /* Bright light green for active dates */
+  color: black;
+  font-weight: bold; /* Make text bold too */
+}
+
+.active-date .react-calendar__tile:hover,
+.active-date .react-calendar__tile:focus {
+  background-color: green !important; /* Darker green on hover/focus */
+}

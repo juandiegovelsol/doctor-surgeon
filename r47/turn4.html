@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>My 2D RPG Game</title>
+    <link rel="stylesheet" href="main-game.css" />
+  </head>
+  <body>
+    <div id="main-game-scene">
+      <h1>Welcome to My RPG!</h1>
+      <p>Currency: <span id="main-game-currency">...</span></p>
+      <button id="enter-tavern-button">Enter Tavern</button>
+    </div>
+
+    <div id="tavern-scene" style="display: none">
+      <!-- Initially hidden -->
+      <h1>Tavern - Dragon's Breath</h1>
+      <div id="game-messages">...</div>
+      <div class="hand" id="dealer-hand">...</div>
+      <div class="hand" id="player-hand">...</div>
+      <div class="controls">
+        <div class="currency">
+          Tavern Currency: <span id="player-currency">...</span>
+        </div>
+        <!-- Note: different ID for tavern currency display -->
+        <div class="betting">Bet: ...</div>
+        <button id="deal-button">Deal</button>
+        <button id="hit-button" disabled>Hit</button>
+        <button id="stand-button" disabled>Stand</button>
+      </div>
+      <button id="exit-tavern-button">Exit Tavern</button>
+      <!-- Button to return to main game -->
+    </div>
+
+    <script type="module" src="main-game.js"></script>
+    <!-- Main game logic -->
+    <script type="module" src="dragon-breath-game.js"></script>
+    <!-- Dragon's Breath logic (as a module) -->
+  </body>
+</html>

@@ -1,0 +1,350 @@
+/* style.css */
+
+/* Basic Reset and Body Styles */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  font-family: sans-serif;
+  margin: 0;
+  padding: 0;
+  color: #333;
+  background-color: #f4f4f4;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Skip Link */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background-color: #f4f4f4;
+  color: #333;
+  padding: 0.5rem 1rem;
+  border-radius: 0 0 5px 5px;
+  transition: top 0.3s ease;
+  z-index: 9999;
+}
+
+.skip-link:focus {
+  top: 0;
+  outline: none;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Site Header & Navigation */
+.site-header {
+  background-color: #fff;
+  padding: 1rem 0;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.main-navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.nav-toggle {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  margin-right: 0.5rem;
+}
+
+.nav-toggle:focus,
+.nav-toggle:hover {
+  outline: none;
+  opacity: 0.7;
+}
+
+.icon-bar {
+  display: block;
+  width: 25px;
+  height: 3px;
+  background-color: #333;
+  margin: 5px auto;
+  transition: background-color 0.3s ease;
+}
+
+/* Hide nav toggle on desktop */
+@media (min-width: 769px) {
+  .nav-toggle {
+    display: none;
+  }
+}
+
+.nav-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+}
+
+.nav-item {
+  margin: 0 1rem;
+}
+
+.nav-item:first-child {
+  margin-left: 0;
+}
+
+.nav-item:last-child {
+  margin-right: 0;
+}
+
+.nav-item a {
+  text-decoration: none;
+  color: #333;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+  display: block; /* Make nav links block level for mobile */
+}
+
+.nav-item a:hover {
+  background-color: #eee;
+}
+
+/* Navigation Dropdown Styles */
+.nav-dropdown {
+  position: static; /* Or relative if needed for more complex dropdown positioning */
+}
+
+.nav-dropdown-toggle {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #333;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+  font-size: inherit;
+  font-family: inherit;
+  display: block; /* Block level for mobile */
+  text-align: left;
+  white-space: nowrap;
+}
+
+.nav-dropdown-toggle:hover,
+.nav-dropdown-toggle:focus {
+  background-color: #eee;
+  outline: none;
+}
+
+.nav-dropdown-menu {
+  display: none; /* Hidden by default on mobile */
+  position: absolute; /* Absolute positioning for dropdown */
+  top: 100%; /* Position below the toggle */
+  left: 0;
+  background-color: #fff;
+  border: 1px solid #eee;
+  border-top: none;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  width: auto; /* Adjust width to content */
+  min-width: 200px; /* Minimum width for dropdown */
+}
+
+/* Category List in Dropdown */
+.category-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.category-list li {
+  margin-bottom: 0; /* Remove bottom margin for dropdown list items */
+}
+
+.category-list li a {
+  display: block;
+  padding: 0.75rem 1.5rem; /* Increased padding for dropdown links */
+  text-decoration: none;
+  color: #333;
+  transition: background-color 0.3s ease;
+  white-space: nowrap; /* Prevent wrapping in dropdown */
+}
+
+.category-list li a:hover {
+  background-color: #eee;
+}
+
+/* Site Main - Content Area */
+.site-main {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+  flex-grow: 1;
+}
+
+.content-area {
+  background-color: #fff;
+  padding: 2rem; /* Increased padding for better readability */
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  max-width: 800px; /* Max width for content area for readability */
+  margin: 0 auto; /* Center content area on larger screens */
+}
+
+.content-area h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.content-area p {
+  font-size: 1.1rem; /* Increased font size for readability */
+  line-height: 1.7; /* Improved line height for readability */
+  margin-bottom: 1.5rem;
+}
+
+/* Site Footer */
+.site-footer {
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  padding: 1rem 0;
+  margin-top: auto;
+}
+
+/* --- Media Query for Mobile Screens (example: 768px and below) --- */
+@media (max-width: 768px) {
+  .main-navigation {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .nav-list {
+    display: none; /* Hide nav items by default on smaller screens */
+    flex-direction: column;
+    width: 100%;
+    margin-top: 1rem;
+  }
+
+  .nav-list.open {
+    display: flex; /* Show nav list when .open class is added */
+  }
+
+  .nav-item {
+    margin: 0;
+    border-bottom: 1px solid #eee;
+  }
+
+  .nav-item:last-child {
+    border-bottom: none;
+  }
+
+  .nav-item a {
+    display: block;
+  }
+
+  .site-main {
+    padding: 1rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    display: block; /* Remove grid layout on mobile */
+  }
+
+  #desktop-sidebar {
+    /* Target desktop sidebar by ID */
+    display: none; /* Hide desktop sidebar on mobile */
+  }
+
+  .content-area {
+    max-width: 100%; /* Content area takes full width on mobile */
+    padding: 1.5rem; /* Slightly reduced padding on mobile */
+    margin: 0; /* Reset centering on mobile */
+  }
+
+  .nav-dropdown {
+    position: relative; /* Make nav-dropdown relative for absolute positioning of menu */
+    display: list-item; /* Ensure dropdown list item is visible on mobile */
+  }
+
+  .nav-dropdown-menu {
+    display: none; /* Initially hidden on mobile - managed by JS */
+    position: absolute; /* Use absolute positioning for mobile dropdown */
+    top: 100%;
+    left: 0;
+    width: 100%; /* Full width dropdown */
+    border-top: 1px solid #eee; /* Add top border to separate from toggle */
+    box-shadow: none; /* Remove shadow for mobile dropdown - adjust as desired */
+    border-radius: 0; /* No border radius on mobile dropdown */
+    min-width: 100%; /* Full width */
+  }
+
+  .nav-dropdown-menu.open {
+    display: block; /* Show dropdown when open */
+  }
+
+  .nav-dropdown-toggle {
+    display: block; /* Block level toggle button on mobile */
+    width: 100%; /* Full width toggle button */
+    text-align: left; /* Left align text in button */
+  }
+}
+
+/* Desktop Styles (769px and above) */
+@media (min-width: 769px) {
+  .nav-toggle {
+    display: none; /* Hide nav toggle on desktop */
+  }
+
+  .nav-list {
+    display: flex !important; /* Show nav list on desktop */
+  }
+
+  .site-main {
+    display: grid; /* Grid for desktop layout */
+    grid-template-columns: 250px 1fr;
+    grid-template-rows: auto;
+    grid-template-areas: "sidebar content";
+  }
+
+  #desktop-sidebar {
+    /* Target desktop sidebar by ID */
+    display: block; /* Show desktop sidebar on desktop */
+    grid-area: sidebar;
+    background-color: #fff;
+    padding: 1.5rem;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    position: static; /* Reset positioning */
+    transform: none; /* Reset transform */
+    height: auto; /* Reset height */
+    overflow-y: visible; /* Reset overflow */
+  }
+
+  #nav-categories-dropdown {
+    /* Hide the entire dropdown list item from nav on desktop */
+    display: none; /* Hide nav dropdown on desktop */
+  }
+
+  .nav-dropdown-menu {
+    /* Ensure dropdown menu styles are not affecting anything on desktop */
+    display: none !important; /* Hide dropdown menu on desktop (redundant but safe) */
+  }
+
+  .nav-dropdown-toggle {
+    /* Style dropdown toggle on desktop - style as a regular link */
+    display: none; /* Hide dropdown toggle button on desktop as well, just in case */
+  }
+
+  .nav-item.nav-dropdown {
+    position: static; /* Reset positioning for desktop */
+  }
+}

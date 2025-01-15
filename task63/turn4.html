@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Markdown Renderer</title>
+    <style>
+      /* Basic CSS for layout and appearance, scrollbar adjustments */
+      body {
+        margin: 0;
+        font-family: sans-serif;
+        height: 100vh; /* Ensure body takes full viewport height */
+      }
+
+      .container {
+        display: flex; /* Use flexbox for split layout */
+        height: 100%; /* Container takes full height */
+      }
+
+      .editor-pane,
+      .preview-pane {
+        flex: 1; /* Each pane takes equal width */
+        padding: 20px;
+        box-sizing: border-box; /* Padding included in width/height */
+        border: 1px solid #ccc; /* Separator for panes */
+        overflow-y: auto; /* Enable vertical scroll if content overflows */
+        overflow-x: hidden; /* Prevent horizontal scrollbars on panes */
+      }
+
+      .editor-pane {
+        border-right: none; /* Remove right border of editor pane */
+      }
+
+      .preview-pane {
+        border-left: none; /* Remove left border of preview pane */
+        background-color: #f9f9f9; /* Light background for preview */
+      }
+
+      textarea {
+        width: 100%;
+        height: 100%;
+        border: none;
+        padding: 10px;
+        box-sizing: border-box;
+        font-family: monospace; /* Monospace font for editor */
+        resize: none; /* Disable textarea resizing */
+        outline: none; /* Remove default focus outline */
+        overflow-y: auto; /* Ensure textarea also scrolls vertically if needed within pane */
+        overflow-x: hidden; /* Prevent horizontal scrollbars in textarea */
+      }
+
+      .preview-pane pre {
+        background-color: #eee;
+        padding: 10px;
+        border-radius: 5px;
+        overflow-x: auto; /* Enable horizontal scroll for code blocks */
+        overflow-y: auto; /* Ensure pre elements also scroll vertically if needed within pane */
+      }
+
+      .preview-pane code {
+        font-family: monospace;
+      }
+
+      .selected-markdown {
+        background-color: lightyellow; /* Highlight color for selected markdown in preview */
+      }
+
+      /* Styling for lists, headings, etc. can be added here to enhance preview appearance */
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="editor-pane">
+        <textarea
+          id="markdown-input"
+          placeholder="Type Markdown here..."
+        ></textarea>
+      </div>
+      <div class="preview-pane" id="markdown-output">
+        <!-- Markdown output will be rendered here -->
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script>
+      const markdownInput = document.getElementById("markdown-input");
+      const markdownOutput = document.getElementById("markdown-output");
+
+      function renderMarkdown() {
+        const markdownText = markdownInput.value;
+        const html = marked.parse(markdownText);
+        markdownOutput.innerHTML = html;
+        highlightSelectedText(); // Call highlight function after rendering
+      }
+
+      function highlightSelectedText() {
+        const selectionStart = markdownInput.selectionStart;
+        const selectionEnd = markdownInput.selectionEnd;
+        const selectedText = markdownInput.value.substring(
+          selectionStart,
+          selectionEnd
+        );
+
+        // Remove previous highlights
+        markdownOutput
+          .querySelectorAll(".selected-markdown")
+          .forEach((el) => el.classList.remove("selected-markdown"));
+
+        if (selectedText) {
+          // Basic and very imperfect selection highlight - selects all elements in preview.
+          // More accurate selection is significantly more complex and requires mapping markdown to HTML structure.
+          markdownOutput.querySelectorAll("*").forEach((el) => {
+            if (el.textContent.includes(selectedText)) {
+              // Very basic text content check.
+              el.classList.add("selected-markdown");
+            }
+          });
+
+          // Basic scroll to selection - scroll preview to top on selection change.
+          markdownOutput.scrollTop = 0; // Simple scroll to top, more precise scroll requires element position calculation.
+        }
+      }
+
+      markdownInput.addEventListener("input", renderMarkdown);
+      markdownInput.addEventListener("select", highlightSelectedText); // Listen for selection changes
+
+      renderMarkdown();
+    </script>
+  </body>
+</html>

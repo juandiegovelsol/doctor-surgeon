@@ -1,0 +1,47 @@
+.container {
+  font-family: sans-serif;
+  text-align: center;
+  padding: 20px;
+}
+
+.hand {
+  margin-bottom: 20px;
+}
+
+.cards {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.card {
+  border: 1px solid black;
+  padding: 10px;
+  width: 50px;
+  height: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  border-radius: 5px;
+}
+
+.hand-value {
+  font-weight: bold;
+}
+
+.controls {
+  margin-top: 20px;
+}
+
+button {
+  padding: 10px 20px;
+  margin: 5px;
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: default;
+  opacity: 0.5;
+}

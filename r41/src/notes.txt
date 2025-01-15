@@ -1,0 +1,15 @@
+Instruction Following Errors - Constraint Following - Doesn'T Follow Formatting Constraints
+Coding - Semantic - Incomplete Code
+
+Adds a code snippet that seems part of the chain of tought
+Instruction Following Errors - Constraint Following - Adds Information That Was Not Asked For
+
+Because doesn't understand the required changes
+Instruction Following Errors - Doesn'T Understand User Intent
+
+Tries to modify the CSS instead of the JSX
+Coding - Semantic - Garbage Code - Wrong (Logical) Direction
+
+Dates with logs are not accurately displayed in the calendar, each day is marked in the calendar
+1 day after.
+Coding - Semantic - Major Visual Code Output Error

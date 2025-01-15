@@ -1,0 +1,12 @@
+In turn 1, the model Doesn't follow formatting constraints because the prompt asked that all the objects in the window must not be bigger than 5% of the window's height, the plane is bigger and is an object.
+
+
+
+
+
+
+
+
+'Coding - Semantic - Description-Only Visual Code Output',
+'Coding - Semantic - Environment Assumption Error',
+'Coding - Semantic - Mismatched Code Execution Result'

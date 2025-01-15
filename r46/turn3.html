@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Responsive Navigation Menu</title>
+    <style>
+      /* Basic Reset & Base Styles */
+      body {
+        margin: 0;
+        font-family: sans-serif;
+      }
+
+      .main-nav {
+        background-color: #333;
+        color: white;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1em;
+        position: relative; /* For positioning mobile menu absolutely */
+      }
+
+      .nav-links {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        gap: 1.5em;
+      }
+
+      .nav-links li a {
+        display: block;
+        padding: 0.5em 1em;
+        color: white;
+        text-decoration: none;
+      }
+
+      .nav-links li a:hover,
+      .nav-links li a:focus {
+        /* Added focus style for keyboard navigation */
+        background-color: #555;
+      }
+
+      .hamburger-menu {
+        background: none;
+        border: none;
+        color: white;
+        cursor: pointer;
+        padding: 0.5em;
+        display: none; /* Hidden by default on larger screens */
+      }
+
+      .hamburger-icon,
+      .hamburger-icon::before,
+      .hamburger-icon::after {
+        display: block;
+        background-color: white;
+        height: 2px;
+        width: 25px;
+        transition: transform 0.3s ease, opacity 0.3s ease;
+      }
+
+      .hamburger-icon::before,
+      .hamburger-icon::after {
+        content: "";
+        position: relative;
+        top: -8px;
+      }
+
+      .hamburger-icon::after {
+        top: 8px;
+      }
+
+      /* Mobile Menu Styles (Hidden by default on mobile) */
+      .nav-links.mobile-menu {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 100%; /* Positioned below the nav bar */
+        left: 0;
+        width: 100%;
+        background-color: #333;
+        text-align: left;
+        z-index: 100;
+        max-height: 0; /* Initially hidden - important for animation and dynamic height */
+        overflow: hidden;
+        transition: max-height 0.3s ease-out; /* Animation for height */
+        padding-top: 0; /* Reset padding for dynamic calculation */
+        padding-bottom: 0; /* Reset padding for dynamic calculation */
+      }
+
+      .nav-links.mobile-menu.open {
+        max-height: var(
+          --menu-height,
+          2000px
+        ); /* Fallback value, dynamically set by JS */
+        overflow: visible; /* Allow content to be visible */
+        transition: max-height 0.3s ease-in; /* Animation when opening */
+        padding-top: 1em; /* Apply padding when menu is open */
+        padding-bottom: 1em; /* Apply padding when menu is open */
+      }
+
+      .nav-links.mobile-menu li a {
+        padding: 1em 1.5em;
+        border-bottom: 1px solid #555;
+        display: block;
+      }
+      .nav-links.mobile-menu li:last-child a {
+        border-bottom: none;
+      }
+
+      /* Hamburger Icon Animation for Open State */
+      .hamburger-menu.active .hamburger-icon {
+        background-color: transparent; /* Hide middle bar */
+      }
+
+      .hamburger-menu.active .hamburger-icon::before {
+        transform: translateY(8px) rotate(45deg);
+      }
+
+      .hamburger-menu.active .hamburger-icon::after {
+        transform: translateY(-8px) rotate(-45deg);
+      }
+
+      /* Media Query for Mobile Viewports (Corrected - up to 767px) */
+      @media (max-width: 767px) {
+        .nav-links {
+          display: none;
+        }
+        .hamburger-menu {
+          display: block;
+        }
+        .nav-links.mobile-menu {
+          text-align: left;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="main-nav">
+      <button
+        class="hamburger-menu"
+        aria-label="Toggle navigation"
+        aria-expanded="false"
+      >
+        <span class="hamburger-icon"></span>
+      </button>
+      <ul class="nav-links">
+        <li><a href="#">Home</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Services</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </nav>
+
+    <main style="padding: 20px">
+      <h1>Main Content Area</h1>
+      <p>
+        This is the main content. The navigation menu on mobile will appear
+        above this content when opened.
+      </p>
+    </main>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const hamburgerMenu = document.querySelector(".hamburger-menu");
+        const navLinks = document.querySelector(".nav-links");
+
+        function closeMobileMenu() {
+          navLinks.classList.remove("open");
+          hamburgerMenu.classList.remove("active");
+          hamburgerMenu.setAttribute("aria-expanded", "false");
+        }
+
+        hamburgerMenu.addEventListener("click", () => {
+          const expanded =
+            hamburgerMenu.getAttribute("aria-expanded") === "true" || false;
+          hamburgerMenu.classList.toggle("active");
+          navLinks.classList.toggle("mobile-menu");
+
+          if (!expanded) {
+            // Opening menu
+            navLinks.style.maxHeight = null; // Reset max-height to 'auto' for measurement
+            const menuHeight = navLinks.scrollHeight; // Get natural height
+            navLinks.style.maxHeight = "0px"; // Prepare for animation
+            // Force reflow to make sure max-height: 0 is applied before setting to menuHeight
+            navLinks.offsetHeight;
+            navLinks.style.maxHeight = menuHeight + "px"; // Animate to calculated height
+            navLinks.classList.add("open");
+          } else {
+            // Closing menu
+            navLinks.classList.remove("open");
+            navLinks.style.maxHeight = "0px"; // Animate closed
+            // After animation completes, reset max-height to auto in CSS if needed for desktop view (not needed here as mobile-menu class is removed on desktop)
+          }
+          hamburgerMenu.setAttribute("aria-expanded", !expanded);
+        });
+
+        document.addEventListener("click", (event) => {
+          const isClickInsideMenu =
+            navLinks.contains(event.target) ||
+            hamburgerMenu.contains(event.target);
+          const isMenuOpen = navLinks.classList.contains("open");
+
+          if (!isClickInsideMenu && isMenuOpen) {
+            closeMobileMenu();
+          }
+        });
+
+        window.addEventListener("resize", () => {
+          if (window.innerWidth >= 768 && navLinks.classList.contains("open")) {
+            closeMobileMenu();
+          } else if (
+            window.innerWidth < 768 &&
+            !navLinks.classList.contains("mobile-menu")
+          ) {
+            // Ensure mobile menu classes are applied if resizing back to mobile
+            navLinks.classList.add("mobile-menu");
+            navLinks.classList.remove("open"); // Ensure it's closed by default on mobile view load/resize
+            navLinks.style.maxHeight = "0px"; // Reset max-height in case it was set dynamically
+            hamburgerMenu.classList.remove("active"); // Reset hamburger icon state
+            hamburgerMenu.setAttribute("aria-expanded", "false");
+          }
+        });
+
+        hamburgerMenu.addEventListener("click", () => {
+          if (navLinks.classList.contains("open")) {
+            const firstLink = navLinks.querySelector("a");
+            if (firstLink) {
+              setTimeout(() => firstLink.focus(), 0);
+            }
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

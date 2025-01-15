@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Responsive Blog Layout</title>
+    <style>
+      /* style.css */
+
+      /* Basic Reset and Body Styles */
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: sans-serif;
+        margin: 0;
+        padding: 0;
+        color: #333;
+        background-color: #f4f4f4;
+      }
+
+      /* Site Header & Navigation */
+      .site-header {
+        background-color: #fff;
+        padding: 1rem 0;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      .main-navigation {
+        display: flex;
+        justify-content: space-between; /* Or space-around, space-evenly */
+        align-items: center;
+        padding: 0 1rem;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .nav-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex; /* For horizontal navigation on larger screens */
+      }
+
+      .nav-item {
+        margin: 0 1rem;
+      }
+
+      .nav-item:first-child {
+        margin-left: 0;
+      }
+
+      .nav-item:last-child {
+        margin-right: 0;
+      }
+
+      .nav-item a {
+        text-decoration: none;
+        color: #333;
+        padding: 0.5rem 1rem;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+      }
+
+      .nav-item a:hover {
+        background-color: #eee;
+      }
+
+      /* Mobile Navigation Toggle */
+      .nav-toggle {
+        display: none; /* Hidden by default on larger screens */
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        padding: 0.5rem;
+        margin-right: 1rem; /* Spacing from nav items when visible */
+      }
+
+      .nav-toggle:focus,
+      .nav-toggle:hover {
+        outline: none;
+        opacity: 0.7;
+      }
+
+      .icon-bar {
+        display: block;
+        width: 25px;
+        height: 3px;
+        background-color: #333;
+        margin: 5px auto;
+        transition: background-color 0.3s ease;
+      }
+
+      /* Site Main - Grid Layout (Desktop) */
+      .site-main {
+        display: grid;
+        grid-template-columns: 250px 1fr; /* Sidebar width and remaining space for content */
+        grid-template-rows: auto; /* Adjust row height to content */
+        grid-template-areas: "sidebar content"; /* Named areas for clarity */
+        max-width: 1200px;
+        margin: 2rem auto;
+        padding: 0 1rem;
+        gap: 2rem; /* Spacing between sidebar and content */
+      }
+
+      .sidebar {
+        grid-area: sidebar;
+        background-color: #fff;
+        padding: 1.5rem;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+      }
+
+      .content-area {
+        grid-area: content;
+        background-color: #fff;
+        padding: 1.5rem;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+      }
+
+      .category-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      .category-list li {
+        margin-bottom: 0.5rem;
+      }
+
+      .category-list li:last-child {
+        margin-bottom: 0;
+      }
+
+      .category-list li a {
+        display: block;
+        padding: 0.5rem 1rem;
+        text-decoration: none;
+        color: #333;
+        border-radius: 3px;
+        transition: background-color 0.3s ease;
+      }
+
+      .category-list li a:hover {
+        background-color: #eee;
+      }
+
+      /* Site Footer */
+      .site-footer {
+        background-color: #333;
+        color: #fff;
+        text-align: center;
+        padding: 1rem 0;
+        margin-top: 2rem;
+      }
+
+      /* --- Media Query for Mobile Screens (example: 768px and below) --- */
+      @media (max-width: 768px) {
+        .main-navigation {
+          flex-direction: column; /* Stack nav items and toggle button */
+          align-items: flex-start; /* Align items to the start on mobile */
+        }
+
+        .nav-toggle {
+          display: block; /* Show toggle button on smaller screens */
+        }
+
+        .nav-list {
+          display: none; /* Hide nav list by default on smaller screens */
+          flex-direction: column; /* Stack nav items vertically when visible */
+          width: 100%; /* Take full width within the navigation */
+          margin-top: 1rem; /* Spacing below the toggle button */
+        }
+
+        .nav-item {
+          margin: 0; /* Remove horizontal margin */
+          border-bottom: 1px solid #eee; /* Separator between nav items */
+        }
+
+        .nav-item:last-child {
+          border-bottom: none; /* Remove border on last item */
+        }
+
+        .nav-item a {
+          display: block; /* Make links fill the width */
+        }
+
+        .nav-list.open {
+          display: flex; /* Show nav list when .open class is added (by JS) */
+        }
+
+        .site-main {
+          grid-template-columns: 1fr; /* Single column layout on mobile */
+          grid-template-areas: "content"; /* Only content area visible by default */
+          padding: 1rem; /* Reduce padding on smaller screens */
+          gap: 1rem;
+        }
+
+        .sidebar {
+          /* Initially hidden on mobile - toggled by JS */
+          display: none;
+          grid-area: sidebar; /* Still in the grid for when it is shown */
+          position: fixed; /* Fixed sidebar for mobile menu */
+          top: 0;
+          left: 0;
+          width: 80%; /* Or full width, adjust as needed */
+          height: 100%;
+          background-color: #fff;
+          z-index: 1000; /* Ensure it's on top of other content */
+          padding-top: 4rem; /* Space for header if needed or adjust */
+          overflow-y: auto; /* Scroll if content is too long */
+          box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2); /* Shadow to separate from content */
+          transform: translateX(-100%); /* Initially off-screen */
+          transition: transform 0.3s ease;
+        }
+
+        .sidebar.open {
+          display: block; /* Make sidebar visible when .open class is added (by JS) */
+          transform: translateX(0); /* Slide in from left */
+        }
+
+        .content-area {
+          grid-area: content; /* Content takes full width */
+        }
+      }
+
+      /* --- Flexbox Alternative for Site Main Layout (Desktop) --- */
+      /* Uncomment below to use Flexbox instead of Grid for main layout */
+      /*
+.site-main {
+    display: flex;
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+    gap: 2rem;
+}
+
+.sidebar {
+    flex-basis: 250px; !* Fixed width sidebar *!
+    flex-shrink: 0; !* Prevent sidebar from shrinking *!
+    background-color: #fff;
+    padding: 1.5rem;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.content-area {
+    flex-grow: 1; !* Content takes remaining space *!
+    background-color: #fff;
+    padding: 1.5rem;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+@media (max-width: 768px) {
+    .site-main {
+        flex-direction: column; !* Stack sidebar and content on mobile *!
+        padding: 1rem;
+        gap: 1rem;
+    }
+
+    .sidebar {
+        display: none; !* Hidden by default on mobile - same as Grid version *!
+        width: 80%; !* Or full width *!
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100%;
+        background-color: #fff;
+        z-index: 1000;
+        padding-top: 4rem;
+        overflow-y: auto;
+        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+    }
+
+    .sidebar.open {
+        display: block;
+        transform: translateX(0);
+    }
+
+    .content-area {
+        flex-grow: 1; !* Still takes available space *!
+    }
+}
+*/
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <nav class="main-navigation">
+        <button
+          class="nav-toggle"
+          aria-label="Toggle navigation"
+          aria-expanded="false"
+          aria-controls="sidebar-nav"
+        >
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <ul class="nav-list">
+          <li class="nav-item"><a href="#">Home</a></li>
+          <li class="nav-item"><a href="#">Blog</a></li>
+          <li class="nav-item"><a href="#">About</a></li>
+          <li class="nav-item"><a href="#">Contact</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main class="site-main">
+      <aside class="sidebar" id="sidebar-nav">
+        <h2>Categories</h2>
+        <ul class="category-list">
+          <li><a href="#">Technology</a></li>
+          <li><a href="#">Travel</a></li>
+          <li><a href="#">Food</a></li>
+          <li><a href="#">Lifestyle</a></li>
+          <li><a href="#">Personal</a></li>
+        </ul>
+      </aside>
+      <article class="content-area">
+        <h1>Welcome to My Blog</h1>
+        <p>
+          This is the main content area of your blog. You can add your blog
+          posts here. Let's start with some dummy content.
+        </p>
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
+          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+          aliquip ex ea commodo consequat. Duis aute irure dolor in
+          reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+          pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
+          culpa qui officia deserunt mollit anim id est laborum.
+        </p>
+        <p>More content here...</p>
+      </article>
+    </main>
+
+    <footer class="site-footer">
+      <p>&copy; 2023 My Blog. All rights reserved.</p>
+    </footer>
+
+    <script>
+      /* script.js */
+      document.addEventListener("DOMContentLoaded", function () {
+        const navToggle = document.querySelector(".nav-toggle");
+        const sidebar = document.querySelector(".sidebar");
+        const navList = document.querySelector(".nav-list");
+
+        if (navToggle) {
+          navToggle.addEventListener("click", function () {
+            const expanded =
+              this.getAttribute("aria-expanded") === "true" || false;
+            this.setAttribute("aria-expanded", !expanded);
+            sidebar.classList.toggle("open");
+            navList.classList.toggle("open"); // Optional: toggle navigation menu if needed
+          });
+        }
+      });
+    </script>
+  </body>
+</html>

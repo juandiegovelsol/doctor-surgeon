@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Blog Layout</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <header class="site-header">
+        <nav class="main-navigation">
+            <button class="nav-toggle nav-menu-toggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="main-nav-list">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <ul class="nav-list" id="main-nav-list">
+                <li class="nav-item"><a href="#">Home</a></li>
+                <li class="nav-item"><a href="#">Blog</a></li>
+                <li class="nav-item"><a href="#">About</a></li>
+                <li class="nav-item"><a href="#">Contact</a></li>
+                <li class="nav-item nav-dropdown" id="nav-categories-dropdown"> <!-- Added ID for easier CSS targeting on desktop -->
+                    <button class="nav-dropdown-toggle" aria-haspopup="true" aria-expanded="false" aria-controls="category-dropdown-menu">
+                        Categories
+                    </button>
+                    <div class="nav-dropdown-menu" id="category-dropdown-menu">
+                        <ul class="category-list">
+                            <li><a href="#">Technology</a></li>
+                            <li><a href="#">Travel</a></li>
+                            <li><a href="#">Food</a></li>
+                            <li><a href="#">Lifestyle</a></li>
+                            <li><a href="#">Personal</a></li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="site-main" id="main-content">
+        <aside class="sidebar" id="desktop-sidebar">
+            <h2>Categories</h2>
+            <ul class="category-list">
+                <li><a href="#">Technology</a></li>
+                <li><a href="#">Travel</a></li>
+                <li><a href="#">Food</a></li>
+                <li><a href="#">Lifestyle</a></li>
+                <li><a href="#">Personal</a></li>
+            </ul>
+        </aside>
+        <article class="content-area">
+            <h1>Welcome to My Blog</h1>
+            <p>This is the main content area of your blog. You can add your blog posts here. Let's start with some dummy content.</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            <p>More content here...  <mark>**Remember to replace "More content here..." with your actual blog post content.**</mark> This text is just a placeholder to show where your blog content goes within the `<article>` section.</p>
+        </article>
+    </main>
+
+    <footer class="site-footer">
+        <p>&copy; 2023 My Blog. All rights reserved.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

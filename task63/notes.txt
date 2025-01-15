@@ -1,0 +1,25 @@
+Turn 1 implements a fully working application of a markdown rendering, it uses marked to convert text into
+HTML and inserts the HTML content into the container
+
+Turn 4 tries to implement a selected text visualization feature as required but 
+
+
+
+Turn 1 has a very minor issue because a vertical scrolling bar that should not be there is displayed.
+
+Turn 2 doesn't understand the user intent because the undesired scrollbar is still being rendered.
+
+Turns 1 and 2 have an incomplete code because the overflow hidden css property is not set in the
+required editor-pane class
+
+Turn 3 has a Major Visual Code Output Error because the raw text is not correctly visible.
+
+Turn 3 doesn't understand the user intention because in the conversation context the user requires
+to leave only scrolling bars that allows the users to see both raw and rendered texts.
+
+Turn 4 has a Partial fulfillment issue because it tries to select the desired text slection
+functionality but it is not achieved satisfactorly.
+
+Turn 4 doesn't follow non-formatting constraints becuase the user asks to return to the previous
+implementation while it is not achieved
+

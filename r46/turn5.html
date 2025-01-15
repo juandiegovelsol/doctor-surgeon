@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Responsive Navigation Menu</title>
+    <style>
+      /* Basic Reset & Base Styles */
+      body {
+        margin: 0;
+        font-family: sans-serif;
+        transition: background-color 0.3s ease; /* Example - body transition */
+      }
+
+      .main-nav {
+        background-color: #333;
+        color: white;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1em;
+        position: relative; /* For mobile menu positioning */
+      }
+
+      .nav-links {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex; /* Default to flex for desktop */
+        gap: 1.5em;
+      }
+
+      .nav-links li a {
+        display: block;
+        padding: 0.5em 1em;
+        color: white;
+        text-decoration: none;
+      }
+
+      .nav-links li a:hover,
+      .nav-links li a:focus {
+        background-color: #555;
+      }
+
+      .hamburger-menu {
+        background: none;
+        border: none;
+        color: white;
+        cursor: pointer;
+        padding: 0.5em;
+        display: none; /* Hidden by default on desktop */
+      }
+
+      .hamburger-icon,
+      .hamburger-icon::before,
+      .hamburger-icon::after {
+        display: block;
+        background-color: white;
+        height: 2px;
+        width: 25px;
+        transition: transform 0.3s ease, opacity 0.3s ease;
+      }
+
+      .hamburger-icon::before,
+      .hamburger-icon::after {
+        content: "";
+        position: relative;
+        top: -8px;
+      }
+
+      .hamburger-icon::after {
+        top: 8px;
+      }
+
+      /* Mobile Menu Styles */
+      .nav-links.mobile-menu {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background-color: #333;
+        text-align: left;
+        z-index: 100;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease-out;
+        padding-top: 0;
+        padding-bottom: 0;
+      }
+
+      .nav-links.mobile-menu.open {
+        max-height: var(--menu-height, 2000px);
+        overflow: visible;
+        transition: max-height 0.3s ease-in;
+        padding-top: 1em;
+        padding-bottom: 1em;
+      }
+
+      .nav-links.mobile-menu li a {
+        padding: 1em 1.5em;
+        border-bottom: 1px solid #555;
+        display: block;
+      }
+      .nav-links.mobile-menu li:last-child a {
+        border-bottom: none;
+      }
+
+      /* Hamburger Icon Animation */
+      .hamburger-menu.active .hamburger-icon {
+        background-color: transparent;
+      }
+
+      .hamburger-menu.active .hamburger-icon::before {
+        transform: translateY(8px) rotate(45deg);
+      }
+
+      .hamburger-menu.active .hamburger-icon::after {
+        transform: translateY(-8px) rotate(-45deg);
+      }
+
+      /* Media Query for Mobile Viewports (up to 767px) */
+      @media (max-width: 767px) {
+        .nav-links {
+          display: none; /* Initially hidden in mobile */
+        }
+        .hamburger-menu {
+          display: block; /* Shown in mobile */
+        }
+        .nav-links.mobile-menu {
+          text-align: left;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="main-nav">
+      <button
+        class="hamburger-menu"
+        aria-label="Toggle navigation"
+        aria-expanded="false"
+      >
+        <span class="hamburger-icon"></span>
+      </button>
+      <ul class="nav-links">
+        <li><a href="#">Home</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Services</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </nav>
+
+    <main style="padding: 20px">
+      <h1>Main Content Area</h1>
+      <p>
+        This is the main content. The navigation menu on mobile will appear
+        above this content when opened.
+      </p>
+    </main>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const hamburgerMenu = document.querySelector(".hamburger-menu");
+        const navLinks = document.querySelector(".nav-links");
+        let isAnimating = false; // Flag to prevent animation conflicts
+
+        /**
+         * Closes the mobile navigation menu.
+         */
+        function closeMobileMenu() {
+          if (isAnimating) return; // Prevent closing if already animating
+          isAnimating = true;
+          navLinks.classList.remove("open");
+          navLinks.style.maxHeight = "0px"; // Animate closed
+          hamburgerMenu.classList.remove("active");
+          hamburgerMenu.setAttribute("aria-expanded", "false");
+
+          // Listener for transition end to reset animation flag
+          const resetAnimationFlag = () => {
+            isAnimating = false;
+            navLinks.removeEventListener("transitionend", resetAnimationFlag);
+          };
+          navLinks.addEventListener("transitionend", resetAnimationFlag, {
+            once: true,
+          });
+        }
+
+        /**
+         * Opens the mobile navigation menu, dynamically calculating its height.
+         */
+        function openMobileMenu() {
+          if (isAnimating) return; // Prevent opening if already animating
+          isAnimating = true;
+          navLinks.classList.add("mobile-menu"); // Ensure mobile-menu class is present
+
+          navLinks.style.maxHeight = null; // Temporarily allow natural height for calculation
+          const menuHeight = navLinks.scrollHeight;
+          navLinks.style.maxHeight = "0px"; // Prepare for animation
+          navLinks.offsetHeight; // Force reflow to apply max-height: 0
+          navLinks.style.maxHeight = menuHeight + "px"; // Animate to calculated height
+
+          navLinks.classList.add("open");
+          hamburgerMenu.classList.add("active");
+          hamburgerMenu.setAttribute("aria-expanded", "true");
+
+          // Listener for transition end to reset animation flag
+          const resetAnimationFlag = () => {
+            isAnimating = false;
+            navLinks.removeEventListener("transitionend", resetAnimationFlag);
+          };
+          navLinks.addEventListener("transitionend", resetAnimationFlag, {
+            once: true,
+          });
+        }
+
+        // Hamburger menu click handler
+        hamburgerMenu.addEventListener("click", () => {
+          if (window.innerWidth >= 768) return; // Do nothing in desktop view
+
+          const expanded =
+            hamburgerMenu.getAttribute("aria-expanded") === "true" || false;
+          if (expanded) {
+            closeMobileMenu();
+          } else {
+            openMobileMenu();
+          }
+        });
+
+        // Click outside menu handler
+        document.addEventListener("click", (event) => {
+          if (window.innerWidth >= 768) return; // Do nothing in desktop view
+          const isClickInsideMenu =
+            navLinks.contains(event.target) ||
+            hamburgerMenu.contains(event.target);
+          const isMenuOpen = navLinks.classList.contains("open");
+
+          if (!isClickInsideMenu && isMenuOpen) {
+            closeMobileMenu();
+          }
+        });
+
+        // Window resize handler
+        window.addEventListener("resize", () => {
+          if (window.innerWidth >= 768) {
+            // Desktop View: Restore desktop navigation
+            navLinks.classList.remove("mobile-menu", "open");
+            navLinks.style.maxHeight = null; // Reset max-height
+            navLinks.style.display = ""; // Restore default display (flex)
+            hamburgerMenu.classList.remove("active");
+            hamburgerMenu.setAttribute("aria-expanded", "false");
+            hamburgerMenu.style.display = "none"; // Hide hamburger in desktop
+          } else {
+            // Mobile View: Ensure mobile menu is active and closed on resize to mobile
+            navLinks.classList.add("mobile-menu");
+            navLinks.style.display = ""; // Allow CSS to manage display (initially none)
+            closeMobileMenu(); // Always close menu on resize to mobile for consistent behavior
+            hamburgerMenu.style.display = "block"; // Show hamburger in mobile
+          }
+        });
+
+        // Keyboard navigation: Focus on first link when menu opens
+        hamburgerMenu.addEventListener("click", () => {
+          if (navLinks.classList.contains("open")) {
+            const firstLink = navLinks.querySelector("a");
+            if (firstLink) {
+              setTimeout(() => firstLink.focus(), 0);
+            }
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,51 @@
+Question 3: Add notes for any issues you encountered with what the assistant/model generated
+Instruction Following Errors:
+VALID
+'Coding - Semantic - Condition Error - Incorrect Condition',
+- Turn 1: The media query used (@media (max-width: 768px)) did not meet the user’s request for "below 768px," as it included 768px, contrary to the explicit instruction.
+
+- Turn 2: The dropdown menu functionality was inconsistent after resizing from desktop (>768px) to mobile (<768px), indicating incomplete reset logic.
+
+VALID
+'Coding - Semantic - Incomplete Code',
+- Turn 4: The dropdown menu stopped working after resizing from desktop (>768px) to mobile (<768px) due to missing re-initialization of mobile-specific styles or event handlers.
+VALID
+'Instruction Following Errors - Doesn'T Understand User Intent',
+- Turn 5: Dropdown behavior was inconsistent after resizing from desktop to mobile. The model failed to implement the required reset of mobile-specific styles and logic during resizing.
+
+
+'Coding - Error Handling', 
+Error Handling (Coding-Semantic):
+- Turn 2: Resizing from desktop to mobile and back left the dropdown menu in a broken state due to incomplete reset logic and event re-initialization.
+- Turn 3: The isAnimating flag was introduced to handle rapid toggles but lacked robustness for edge cases like interrupted animations or resizing during animations.
+
+VALID
+- Turn 5: Resizing from desktop to mobile and back left the dropdown menu non-functional, reflecting incomplete logic for resetting and re-initializing mobile-specific styles or behaviors.
+
+Accessibility Errors:
+VALID
+'Instruction Following Errors - Constraint Following - Doesn'T Follow Non-Formatting Constraints', 
+- Turn 1: Focus trapping for the dropdown menu was not implemented, making it inaccessible for keyboard users who could tab out of the menu while it was open.
+VALID
+- Turn 5: Focus trapping was still missing, violating accessibility standards.
+
+Feasibility Errors:
+'Reasoning Errors - Feasibility Errors - Overly Complex',
+- Turn 3: The forced reflow (offsetHeight) approach for dynamic height calculation introduced potential performance issues, as it could lead to layout thrashing and inconsistent behavior across browsers.
+
+Incomplete Code:
+VALID
+- Turn 2: The desktop layout was not fully restored during resizing, leaving the navigation menu in a broken state after transitioning from mobile to desktop.
+VALID
+- Turn 4: The dropdown menu was incomplete after resizing from desktop to mobile due to missing resets for mobile-specific event handlers and styles.
+
+Inefficient Code:
+'Coding - Semantic - Inefficient Code'
+- Turn 3: The CSS fallback max-height: var(--menu-height, 2000px); was redundant and potentially inconsistent with dynamically calculated height values from JavaScript.
+
+
+
+
+
+ADDITIONAL
+In TURN 1, the dropdown menu is positioned incorrectly on the bottom of the page while it should be positioned on top, for simulated mobile devices the menu is not visible
