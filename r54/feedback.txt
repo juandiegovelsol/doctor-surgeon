@@ -1,0 +1,24 @@
+This is my respectful feedback
+
+For 66e57573b7a5223856ca3c21 I would: (Based on 2 reviews)
+
+- Suggest CB to do a more detailed code review to annotate all the issues in the task.
+- Suggest CB to focus on coding prompts that involves reasoning, for instance he/she asked
+the model to change plain text inside an application but this doesn't involve complex
+reasoning, just text replacing or reasoning not related to coding.
+
+For 66faae2631b8ee110efd769b I would suggest: (CB has only 1 task on web domain)
+
+- Providing self contained code and ask the model to generate self contained code,
+in the reviewed task, the initial prompt asked a very complex CSS file to be fixed but 
+the HTML code was not provided, making the task impossible to demonstrate.
+
+
+For 664568f4083deddbea097169 I would suggest: (Based on multiple reviews)
+
+- Carefully annotate the tasks issues because some of them were not included.
+
+
+Alessa reviewed 66dc37879ee54facb24768e0
+
+For 670fedc4c778b89e8d3004d3 I haven't seen any contributions yet.

@@ -1,0 +1,3 @@
+The claim made for turn 4 by the CB is false, the model implements the feature
+for subtracting 1 point when spheres are not catched
+

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>House Layout</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+      }
+
+      #house-layout {
+        display: grid;
+        grid-template-columns: 1.5fr 1.5fr; /* Equal columns for square Kitchen/Living Room */
+        grid-template-rows: auto auto auto;
+        gap: 15px;
+        width: 80vw;
+        max-width: 800px; /* Limit max width for better square shape on wider screens */
+        height: auto; /* Height adjusts based on content, to help with square */
+        aspect-ratio: 1 / 1; /* Ensure house layout itself is roughly square */
+        background-color: #e0e0e0;
+        padding: 20px;
+        box-sizing: border-box;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .room-area {
+        background-color: #fff;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        font-weight: bold;
+        color: #333;
+        padding: 10px;
+        box-sizing: border-box;
+        cursor: pointer; /* Indicate clickable areas */
+        transition: background-color 0.3s ease, box-shadow 0.3s ease,
+          transform 0.3s ease-in-out; /* Smooth transitions */
+      }
+
+      #main-room {
+        grid-column: 1;
+        grid-row: 1;
+      }
+
+      #hall {
+        grid-column: 1;
+        grid-row: 2;
+      }
+
+      #guest-rooms {
+        grid-column: 1;
+        grid-row: 3;
+        display: flex;
+        gap: 15px;
+      }
+
+      #guest-room-1,
+      #guest-room-2 {
+        flex: 1;
+      }
+
+      #kitchen-living-room {
+        grid-column: 2;
+        grid-row: 1 / span 3;
+      }
+
+      #hall {
+        padding-top: 5px;
+        padding-bottom: 5px;
+      }
+
+      .room-area:hover {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        transform: scale(1.02);
+      }
+
+      .lights-on {
+        background-color: yellow; /* Yellow when lights are on */
+      }
+
+      #action-message {
+        margin-top: 20px;
+        text-align: center;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="house-layout">
+      <div id="main-room" class="room-area" data-lights="off">Main Room</div>
+      <div id="hall" class="room-area" data-lights="off">Central Hall</div>
+      <div id="guest-rooms">
+        <div id="guest-room-1" class="room-area" data-lights="off">
+          Guest Room 1
+        </div>
+        <div id="guest-room-2" class="room-area" data-lights="off">
+          Guest Room 2
+        </div>
+      </div>
+      <div id="kitchen-living-room" class="room-area" data-lights="off">
+        Kitchen & Living Room
+      </div>
+    </div>
+    <p id="action-message"></p>
+
+    <script>
+      const houseLayout = document.getElementById("house-layout");
+      const actionMessage = document.getElementById("action-message");
+
+      houseLayout.addEventListener("click", function (event) {
+        if (event.target.classList.contains("room-area")) {
+          const room = event.target;
+          const roomName = room.textContent;
+          let lightsStatus = room.getAttribute("data-lights");
+
+          if (lightsStatus === "off") {
+            room.classList.add("lights-on");
+            room.setAttribute("data-lights", "on");
+            actionMessage.textContent = `Lights turned ON on ${roomName}`;
+          } else {
+            room.classList.remove("lights-on");
+            room.setAttribute("data-lights", "off");
+            actionMessage.textContent = `Lights turned OFF on ${roomName}`;
+          }
+        }
+      });
+    </script>
+  </body>
+</html>

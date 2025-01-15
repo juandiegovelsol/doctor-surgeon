@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Three.js Game with Scoring</title>
+    <style>
+      body {
+        margin: 0;
+        overflow: hidden;
+        font-family: Arial, sans-serif;
+      }
+      #score {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        color: white;
+        font-size: 20px;
+        z-index: 1; /* Ensure score is above color selector if they overlap */
+      }
+      #color-selector {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: rgba(0, 0, 0, 0.8);
+        color: white;
+        padding: 20px;
+        border-radius: 10px;
+        text-align: center;
+        z-index: 10; /* Ensure color selector is on top */
+      }
+      #color-selector input[type="color"] {
+        margin-bottom: 10px;
+      }
+      #color-selector button {
+        padding: 10px 20px;
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="score">Score: 10</div>
+    <div id="color-selector">
+      <h2>Choose your cube color</h2>
+      <input type="color" id="player-color" value="#00ff00" />
+      <button id="start-button">Start Game</button>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+      // Scene setup (same as before)
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(
+        75,
+        window.innerWidth / window.innerHeight,
+        0.1,
+        1000
+      );
+      const renderer = new THREE.WebGLRenderer();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      document.body.appendChild(renderer.domElement);
+
+      // Lighting (same as before)
+      const light = new THREE.DirectionalLight(0xffffff, 1);
+      light.position.set(0, 5, 5).normalize();
+      scene.add(light);
+
+      // Player (Cube) - Geometry created here, material and mesh created later (same as before)
+      const playerGeometry = new THREE.BoxGeometry(1, 1, 1);
+      let player; // Declare player variable, mesh will be created later
+
+      // Falling Objects (Spheres and Cubes) (same as before)
+      const sphereGeometry = new THREE.SphereGeometry(0.5, 32, 32);
+      const sphereMaterial = new THREE.MeshStandardMaterial({
+        color: 0xff0000,
+      });
+      const cubeGeometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
+      const cubeMaterial = new THREE.MeshStandardMaterial({ color: 0x0000ff });
+      const objects = []; // objects array is initialized empty
+
+      // Score (same as before)
+      let score = 10;
+      const scoreElement = document.getElementById("score");
+      let gameRunning = false; // Game starts paused
+
+      // Color selector and Start Button (same as before)
+      const colorSelector = document.getElementById("color-selector");
+      const startButton = document.getElementById("start-button");
+      const colorInput = document.getElementById("player-color");
+
+      let spawnInterval; // Variable to hold the interval ID
+
+      startButton.addEventListener("click", () => {
+        const selectedColor = colorInput.value;
+        const playerMaterial = new THREE.MeshStandardMaterial({
+          color: selectedColor,
+        });
+        player = new THREE.Mesh(playerGeometry, playerMaterial);
+        player.position.y = -3;
+        scene.add(player);
+
+        colorSelector.style.display = "none"; // Hide color selector
+        gameRunning = true; // Start the game
+        animate(); // Begin the animation loop
+
+        // Start spawning objects only AFTER "Start Game" is clicked
+        spawnInterval = setInterval(spawnObject, 800); // Assign interval ID to variable
+      });
+
+      // Keyboard controls (same as before)
+      const keys = { left: false, right: false };
+      window.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowLeft") keys.left = true;
+        if (e.key === "ArrowRight") keys.right = true;
+      });
+      window.addEventListener("keyup", (e) => {
+        if (e.key === "ArrowLeft") keys.left = false;
+        if (e.key === "ArrowRight") keys.right = false;
+      });
+
+      // Spawn random objects (same as before)
+      function spawnObject() {
+        const isSphere = Math.random() > 0.5;
+        const object = isSphere
+          ? new THREE.Mesh(sphereGeometry, sphereMaterial)
+          : new THREE.Mesh(cubeGeometry, cubeMaterial);
+        object.position.x = (Math.random() - 0.5) * 10;
+        object.position.y = 5;
+        object.isSphere = isSphere;
+        objects.push(object);
+        scene.add(object);
+      }
+
+      // End game (modified to clear interval)
+      function endGame(message) {
+        gameRunning = false;
+        clearInterval(spawnInterval); // Clear the spawn interval when game ends
+        alert(message);
+        location.reload();
+      }
+
+      // Game loop (same as before)
+      function animate() {
+        if (!gameRunning) return;
+
+        requestAnimationFrame(animate);
+
+        // Move player (same as before)
+        if (keys.left && player.position.x > -5) player.position.x -= 0.1;
+        if (keys.right && player.position.x < 5) player.position.x += 0.1;
+
+        // Update objects (same as before)
+        objects.forEach((object, index) => {
+          object.position.y -= 0.05;
+
+          // Collision detection - Improved (same as before)
+          const distanceX = Math.abs(object.position.x - player.position.x);
+          const distanceY = Math.abs(object.position.y - player.position.y);
+
+          if (distanceX < 1 && distanceY < 1) {
+            if (object.isSphere) {
+              score += 1;
+            } else {
+              score -= 2;
+              if (score < 0) score = 0;
+            }
+            scoreElement.textContent = `Score: ${score}`;
+            scene.remove(object);
+            objects.splice(index, 1);
+          }
+
+          // Remove off-screen objects (same as before)
+          if (object.position.y < -5) {
+            if (object.isSphere) {
+              score -= 1;
+              if (score < 0) score = 0;
+              scoreElement.textContent = `Score: ${score}`;
+            }
+            scene.remove(object);
+            objects.splice(index, 1);
+          }
+        });
+
+        // Check win/lose conditions (same as before)
+        if (score >= 100) endGame("You win!");
+        if (score <= 0) endGame("Game over!");
+
+        renderer.render(scene, camera);
+      }
+
+      camera.position.z = 8;
+      // animate() is NOT called here initially (same as before)
+      // setInterval is NOT called here initially - moved to startButton click
+    </script>
+  </body>
+</html>

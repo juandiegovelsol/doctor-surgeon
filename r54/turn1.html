@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Interactive Space Adventure</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        background-color: #f4f4f4;
+        color: #333;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        margin: 0;
+      }
+
+      .game-container {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        width: 80%;
+        max-width: 600px;
+      }
+
+      #story-text {
+        margin-bottom: 20px;
+        line-height: 1.6;
+      }
+
+      .choices-container,
+      .quiz-container {
+        margin-top: 20px;
+      }
+
+      .choice-button,
+      .quiz-option {
+        padding: 10px 15px;
+        margin: 5px;
+        border: none;
+        border-radius: 5px;
+        background-color: #007bff;
+        color: white;
+        cursor: pointer;
+        font-size: 1em;
+      }
+
+      .choice-button:hover,
+      .quiz-option:hover {
+        background-color: #0056b3;
+      }
+
+      .quiz-container {
+        display: none; /* Initially hidden */
+      }
+
+      .quiz-options-container {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .quiz-question {
+        margin-bottom: 10px;
+        font-weight: bold;
+      }
+
+      #feedback-text {
+        margin-top: 10px;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="game-container">
+      <div id="story-text"></div>
+      <div class="choices-container" id="choices-container"></div>
+      <div class="quiz-container" id="quiz-container">
+        <div class="quiz-question" id="quiz-question"></div>
+        <div class="quiz-options-container" id="quiz-options-container"></div>
+        <div id="feedback-text"></div>
+      </div>
+    </div>
+
+    <script>
+      const storyTextElement = document.getElementById("story-text");
+      const choicesContainer = document.getElementById("choices-container");
+      const quizContainer = document.getElementById("quiz-container");
+      const quizQuestionElement = document.getElementById("quiz-question");
+      const quizOptionsContainer = document.getElementById(
+        "quiz-options-container"
+      );
+      const feedbackTextElement = document.getElementById("feedback-text");
+
+      let currentStage = "start";
+      let storyStages = {
+        start: {
+          narrative:
+            "You are an astronaut aboard a spaceship exploring the galaxy. Suddenly, you receive a distress signal from a nearby planet. Do you...",
+          choices: [
+            { text: "Investigate the signal", nextStage: "investigateSignal" },
+            {
+              text: "Continue your current mission",
+              nextStage: "continueMission",
+            },
+          ],
+        },
+        investigateSignal: {
+          narrative:
+            "You decide to investigate the signal and land on the planet. As you explore, you encounter an alien who asks for your help in solving a puzzle.",
+          quiz: {
+            question: "What is the largest planet in our solar system?",
+            options: ["Earth", "Mars", "Jupiter", "Saturn"],
+            correctAnswer: "Jupiter",
+          },
+          outcomeOnCorrect:
+            "The alien is impressed with your knowledge and shares valuable information about the planet's resources.",
+          nextStageCorrect: "alienInfo",
+        },
+        continueMission: {
+          narrative:
+            "You choose to continue your mission and encounter a meteor shower. To navigate safely, you must solve a mathematical problem.",
+          quiz: {
+            question:
+              "If a spaceship travels at 20,000 km/h, how long will it take to travel 100,000 km?",
+            options: ["2 hours", "4 hours", "5 hours", "6 hours"],
+            correctAnswer: "5 hours",
+          },
+          outcomeOnCorrect:
+            "You successfully navigate through the meteor shower and discover a new star system.",
+          nextStageCorrect: "newStarSystem",
+        },
+        alienInfo: {
+          narrative:
+            "With the alien's information, you discover a hidden cave filled with rare minerals. You collect samples for further study.",
+          choices: [], // End of path for this branch
+        },
+        newStarSystem: {
+          narrative:
+            "In the new star system, you find a habitable planet and establish a base for future exploration.",
+          choices: [], // End of path for this branch
+        },
+      };
+
+      function displayStoryStage(stageName) {
+        const stage = storyStages[stageName];
+        storyTextElement.textContent = stage.narrative;
+        choicesContainer.innerHTML = ""; // Clear previous choices
+        quizContainer.style.display = "none"; // Hide quiz initially
+        feedbackTextElement.textContent = ""; // Clear feedback
+
+        if (stage.choices && stage.choices.length > 0) {
+          choicesContainer.style.display = "block";
+          stage.choices.forEach((choice) => {
+            const button = document.createElement("button");
+            button.classList.add("choice-button");
+            button.textContent = choice.text;
+            button.onclick = () => {
+              currentStage = choice.nextStage;
+              displayStoryStage(currentStage);
+            };
+            choicesContainer.appendChild(button);
+          });
+        } else if (stage.quiz) {
+          choicesContainer.style.display = "none";
+          quizContainer.style.display = "block";
+          displayQuiz(
+            stage.quiz,
+            stage.outcomeOnCorrect,
+            stage.nextStageCorrect
+          );
+        } else {
+          choicesContainer.style.display = "none"; // No choices, no quiz, end of path for now
+        }
+      }
+
+      function displayQuiz(quizData, outcomeOnCorrect, nextStageCorrect) {
+        quizQuestionElement.textContent = quizData.question;
+        quizOptionsContainer.innerHTML = ""; // Clear previous options
+
+        quizData.options.forEach((option) => {
+          const button = document.createElement("button");
+          button.classList.add("quiz-option");
+          button.textContent = option;
+          button.onclick = () =>
+            checkAnswer(
+              option,
+              quizData.correctAnswer,
+              outcomeOnCorrect,
+              nextStageCorrect
+            );
+          quizOptionsContainer.appendChild(button);
+        });
+      }
+
+      function checkAnswer(
+        selectedAnswer,
+        correctAnswer,
+        outcomeOnCorrect,
+        nextStageCorrect
+      ) {
+        if (selectedAnswer === correctAnswer) {
+          feedbackTextElement.textContent = "Correct! " + outcomeOnCorrect;
+          feedbackTextElement.style.color = "green";
+          // Proceed to the next stage after a delay to show feedback
+          setTimeout(() => {
+            currentStage = nextStageCorrect;
+            displayStoryStage(currentStage);
+          }, 1500); // Delay for 1.5 seconds
+        } else {
+          feedbackTextElement.textContent = "Incorrect. Please try again.";
+          feedbackTextElement.style.color = "red";
+          // For incorrect answer, quiz stays visible and user can try again.
+        }
+      }
+
+      // Start the story
+      displayStoryStage(currentStage);
+    </script>
+  </body>
+</html>

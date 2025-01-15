@@ -1,0 +1,33 @@
+- I want to design a 2d layout to represent my house with HTML, CSS, and JavaScript. The house consists of a central hall (large and thin rectangle) that connects all the rooms, at the end of the hall there is a big integrated area for the kitchen and living room (big square that extends the entire main room, hall, and guest rooms height), on one side of the hall there is the main room (rectangle that extends through all the hall length), on the other side there are two smaller contiguous guests rooms (smaller rectangles, together they cover the hall length). I want each area to be represented as a square or rectangle, please ensure that the design is clean and visually appealing. Provide the complete code.
+
+- I want the kitchen and living room area to be a perfect square. I want to implement a lighting control system that colors the clicked area yellow to show lights are turned on, and returns to the original color when lights are turned off. A message should be displayed showing the actions that were made in the format "Lights turned ON/OFF on <house area>"
+
+- Now I want to implement a voice control system to allow turning ON/OFF each of the house's lights. The system must continuously check for a message in the format "Turn area lights ON/OFF". It should also accept the command "Turn all lights off" to turn off all the house's lights. Return only the code.
+
+
+The model understands most of the prompt instructions and provides an accurate layout to indntify the
+house's areas, there is a thin and large hall that connects all the other rooms, a big kitchen and
+living room area, a main room and guest rooms that extends the hall lenght as requested.
+
+The model implements the lighting control system as desired, the areas are colored yellow when clicked
+and the messages are correctly displayed.
+
+
+
+In turn 1 the kitchen and living room area is not a square as requested in the prompt so the model has a 
+Doesn't follow formatting constraints issue.
+
+In turn 1 the model returns an Overly simple response because any textual explanation is provided.
+
+
+In turn 2 the model changes the areas disposition undesiredly, all the rooms are modified (Wrong logical
+direction issue)
+
+In turn 2 the model does not understand the user intent because the living room area is not a square while
+the prompt was explicit requiring that shape.
+
+In turn 3 the model does not understand the user intent and returns a solution that allows entering
+typed commands, while the prompt requires.
+
+In turn 3 the model has a Major Incorrect Code Output becuase the solution does not works as expected,
+it can't recognize voice commands.

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Three.js Game with Scoring</title>
+    <style>
+      body {
+        margin: 0;
+        overflow: hidden;
+        font-family: Arial, sans-serif;
+      }
+      #score {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        color: white;
+        font-size: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="score">Score: 10</div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+      // Scene setup
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(
+        75,
+        window.innerWidth / window.innerHeight,
+        0.1,
+        1000
+      );
+      const renderer = new THREE.WebGLRenderer();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      document.body.appendChild(renderer.domElement);
+
+      // Lighting
+      const light = new THREE.DirectionalLight(0xffffff, 1);
+      light.position.set(0, 5, 5).normalize();
+      scene.add(light);
+
+      // Player (Cube)
+      const playerGeometry = new THREE.BoxGeometry(1, 1, 1);
+      const playerMaterial = new THREE.MeshStandardMaterial({
+        color: 0x00ff00,
+      });
+      const player = new THREE.Mesh(playerGeometry, playerMaterial);
+      player.position.y = -3;
+      scene.add(player);
+
+      // Falling Objects (Spheres and Cubes)
+      const sphereGeometry = new THREE.SphereGeometry(0.5, 32, 32);
+      const sphereMaterial = new THREE.MeshStandardMaterial({
+        color: 0xff0000,
+      });
+      const cubeGeometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
+      const cubeMaterial = new THREE.MeshStandardMaterial({ color: 0x0000ff });
+      const objects = [];
+
+      // Score
+      let score = 10;
+      const scoreElement = document.getElementById("score");
+      let gameRunning = true; // Added game state flag
+
+      // Keyboard controls
+      const keys = { left: false, right: false };
+      window.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowLeft") keys.left = true;
+        if (e.key === "ArrowRight") keys.right = true;
+      });
+      window.addEventListener("keyup", (e) => {
+        if (e.key === "ArrowLeft") keys.left = false;
+        if (e.key === "ArrowRight") keys.right = false;
+      });
+
+      // Spawn random objects
+      function spawnObject() {
+        const isSphere = Math.random() > 0.5;
+        const object = isSphere
+          ? new THREE.Mesh(sphereGeometry, sphereMaterial)
+          : new THREE.Mesh(cubeGeometry, cubeMaterial);
+        object.position.x = (Math.random() - 0.5) * 10;
+        object.position.y = 5;
+        object.isSphere = isSphere;
+        objects.push(object);
+        scene.add(object);
+      }
+      setInterval(spawnObject, 800);
+
+      // End game
+      function endGame(message) {
+        gameRunning = false; // Set game state to false
+        alert(message);
+        location.reload();
+      }
+
+      // Game loop
+      function animate() {
+        if (!gameRunning) return; // Check game state at the start of animate
+
+        requestAnimationFrame(animate);
+
+        // Move player
+        if (keys.left && player.position.x > -5) player.position.x -= 0.1;
+        if (keys.right && player.position.x < 5) player.position.x += 0.1;
+
+        // Update objects
+        objects.forEach((object, index) => {
+          object.position.y -= 0.05;
+
+          // Collision detection - Improved
+          const distanceX = Math.abs(object.position.x - player.position.x);
+          const distanceY = Math.abs(object.position.y - player.position.y);
+
+          if (distanceX < 1 && distanceY < 1) {
+            if (object.isSphere) {
+              score += 1;
+            } else {
+              score -= 2;
+              if (score < 0) score = 0;
+            }
+            scoreElement.textContent = `Score: ${score}`;
+            scene.remove(object);
+            objects.splice(index, 1);
+          }
+
+          // Remove off-screen objects
+          if (object.position.y < -5) {
+            scene.remove(object);
+            objects.splice(index, 1);
+          }
+        });
+
+        // Check win/lose conditions
+        if (score >= 100) endGame("You win!");
+        if (score <= 0) endGame("Game over!");
+
+        renderer.render(scene, camera);
+      }
+
+      camera.position.z = 8;
+      animate();
+    </script>
+  </body>
+</html>

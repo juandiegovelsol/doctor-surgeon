@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>House Layout</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+        display: flex;
+        flex-direction: column; /* Arrange layout and voice control vertically */
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+      }
+
+      #house-layout {
+        display: grid;
+        grid-template-columns: 1.5fr 1.5fr;
+        grid-template-rows: auto auto auto;
+        gap: 15px;
+        width: 80vw;
+        max-width: 800px;
+        height: auto;
+        aspect-ratio: 1 / 1;
+        background-color: #e0e0e0;
+        padding: 20px;
+        box-sizing: border-box;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px; /* Space between layout and voice control */
+      }
+
+      .room-area {
+        background-color: #fff;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        font-weight: bold;
+        color: #333;
+        padding: 10px;
+        box-sizing: border-box;
+        cursor: pointer;
+        transition: background-color 0.3s ease, box-shadow 0.3s ease,
+          transform 0.3s ease-in-out;
+      }
+
+      #main-room {
+        grid-column: 1;
+        grid-row: 1;
+      }
+
+      #hall {
+        grid-column: 1;
+        grid-row: 2;
+      }
+
+      #guest-rooms {
+        grid-column: 1;
+        grid-row: 3;
+        display: flex;
+        gap: 15px;
+      }
+
+      #guest-room-1,
+      #guest-room-2 {
+        flex: 1;
+      }
+
+      #kitchen-living-room {
+        grid-column: 2;
+        grid-row: 1 / span 3;
+      }
+
+      #hall {
+        padding-top: 5px;
+        padding-bottom: 5px;
+      }
+
+      .room-area:hover {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        transform: scale(1.02);
+      }
+
+      .lights-on {
+        background-color: yellow;
+      }
+
+      #action-message {
+        margin-top: 10px;
+        text-align: center;
+        font-weight: bold;
+      }
+
+      #voice-control-panel {
+        text-align: center;
+      }
+
+      #voice-command-input {
+        padding: 8px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        min-width: 300px;
+      }
+
+      #voice-command-button {
+        padding: 8px 15px;
+        border: none;
+        border-radius: 5px;
+        background-color: #5cb85c;
+        color: white;
+        cursor: pointer;
+        margin-left: 10px;
+      }
+
+      #voice-command-button:hover {
+        background-color: #4cae4c;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="house-layout">
+      <div
+        id="main-room"
+        class="room-area"
+        data-lights="off"
+        data-room-name="Main Room"
+      >
+        Main Room
+      </div>
+      <div id="hall" class="room-area" data-lights="off" data-room-name="Hall">
+        Central Hall
+      </div>
+      <div id="guest-rooms">
+        <div
+          id="guest-room-1"
+          class="room-area"
+          data-lights="off"
+          data-room-name="Guest Room 1"
+        >
+          Guest Room 1
+        </div>
+        <div
+          id="guest-room-2"
+          class="room-area"
+          data-lights="off"
+          data-room-name="Guest Room 2"
+        >
+          Guest Room 2
+        </div>
+      </div>
+      <div
+        id="kitchen-living-room"
+        class="room-area"
+        data-lights="off"
+        data-room-name="Kitchen and Living Room"
+      >
+        Kitchen & Living Room
+      </div>
+    </div>
+    <p id="action-message"></p>
+
+    <div id="voice-control-panel">
+      <input
+        type="text"
+        id="voice-command-input"
+        placeholder="Enter voice command (e.g., Turn main room lights on)"
+      />
+      <button id="voice-command-button">Execute Command</button>
+    </div>
+
+    <script>
+      const houseLayout = document.getElementById("house-layout");
+      const actionMessage = document.getElementById("action-message");
+      const voiceCommandInput = document.getElementById("voice-command-input");
+      const voiceCommandButton = document.getElementById(
+        "voice-command-button"
+      );
+      const roomAreas = document.querySelectorAll(".room-area"); // Select all room areas
+
+      houseLayout.addEventListener("click", function (event) {
+        if (event.target.classList.contains("room-area")) {
+          toggleLights(event.target);
+        }
+      });
+
+      voiceCommandButton.addEventListener("click", processVoiceCommand);
+
+      voiceCommandInput.addEventListener("keypress", function (event) {
+        if (event.key === "Enter") {
+          processVoiceCommand();
+        }
+      });
+
+      function processVoiceCommand() {
+        const commandText = voiceCommandInput.value.trim().toLowerCase();
+        voiceCommandInput.value = ""; // Clear input after command execution
+
+        if (commandText.startsWith("turn all lights off")) {
+          roomAreas.forEach((room) => {
+            turnLightsOff(room);
+          });
+          actionMessage.textContent = "Lights turned OFF on all areas";
+        } else if (
+          (commandText.startsWith("turn") &&
+            commandText.endsWith("lights on")) ||
+          commandText.endsWith("lights off")
+        ) {
+          const parts = commandText.split(" ");
+          if (
+            parts.length >= 5 &&
+            parts[0] === "turn" &&
+            parts[parts.length - 2] === "lights"
+          ) {
+            const areaNameWords = parts.slice(1, parts.length - 2); // Extract room name words
+            const areaName = areaNameWords.join(" ").toLowerCase();
+            const action = parts[parts.length - 1].toLowerCase();
+
+            let targetRoom = null;
+            roomAreas.forEach((room) => {
+              if (room.dataset.roomName.toLowerCase() === areaName) {
+                targetRoom = room;
+              }
+            });
+
+            if (targetRoom) {
+              if (action === "on") {
+                turnLightsOn(targetRoom);
+              } else if (action === "off") {
+                turnLightsOff(targetRoom);
+              }
+            } else {
+              actionMessage.textContent = `Area "${areaName}" not found.`;
+            }
+          } else {
+            actionMessage.textContent = "Invalid command format.";
+          }
+        } else {
+          actionMessage.textContent = "Unrecognized command.";
+        }
+      }
+
+      function toggleLights(room) {
+        let lightsStatus = room.getAttribute("data-lights");
+        const roomName = room.dataset.roomName;
+
+        if (lightsStatus === "off") {
+          turnLightsOn(room);
+        } else {
+          turnLightsOff(room);
+        }
+      }
+
+      function turnLightsOn(room) {
+        room.classList.add("lights-on");
+        room.setAttribute("data-lights", "on");
+        actionMessage.textContent = `Lights turned ON on ${room.dataset.roomName}`;
+      }
+
+      function turnLightsOff(room) {
+        room.classList.remove("lights-on");
+        room.setAttribute("data-lights", "off");
+        actionMessage.textContent = `Lights turned OFF on ${room.dataset.roomName}`;
+      }
+    </script>
+  </body>
+</html>

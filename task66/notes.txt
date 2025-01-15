@@ -1,0 +1,16 @@
+
+Turn 2 solves the rendering issues and implements an infinite loop prevention braking the loop after a desired number of operations
+
+
+
+The code is very inefficient because it takes too long to load on the browser, it does not have multiple nested loops but still is requires
+considerable resources.
+
+The code has a major code output error because only a square can be seen but any maze or player is visible inside it.
+
+The code has an infinite loop in the generateMaze function, it is caused because the while loop can be only breaked if the stack length is
+negative or 0 which is impossible to make since it is always pushed and never sliced.
+
+The model does not implements a scaping path so the game is not playable (major code ouput error and doesn't understand the user intent)
+
+In turn 3 the model returns to the previous state and produces the same output as in the first turn. This code is useless

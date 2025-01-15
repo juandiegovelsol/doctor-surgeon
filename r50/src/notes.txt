@@ -1,0 +1,9 @@
+Misliading claim because the taskProvider can't wrapp the App component in the App.js file,
+this makes no sense because to wrapp a component it must be imported from a different file.
+
+Confusing structure because the model wraps the AddTaskForm.js, TaskList.js and TaskItem.js
+files in the same code snippet for explaining them, this can be confusing for the user. Also,
+the model does not implement the TodoList component in the App.js file so it is not clear for
+the user how to use the generated todo list.
+
+Repeated information for AddTaskForm, TaskList, TaskItem, TaskContext, index

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Simple RPG Combat Prototype</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="entity player">
+        <h2>Player</h2>
+        <div class="health-bar">
+          <div class="health-bar-fill player-health"></div>
+        </div>
+        <p>Health: <span class="health-text player-health-text">100</span></p>
+      </div>
+
+      <div class="entity enemy">
+        <h2>Training Dummy</h2>
+        <div class="health-bar">
+          <div class="health-bar-fill enemy-health"></div>
+        </div>
+        <p>Health: <span class="health-text enemy-health-text">100</span></p>
+      </div>
+
+      <div class="combat-log">
+        <div class="log-messages"></div>
+      </div>
+
+      <div class="action-menu">
+        <button id="attack-btn">Attack</button>
+        <button id="item-btn">Item</button>
+        <button id="magic-btn">Magic</button>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>

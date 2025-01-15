@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>House Layout</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+      }
+
+      #house-layout {
+        display: grid;
+        grid-template-columns: 2fr 3fr; /* Two main columns, Kitchen/Living room wider */
+        grid-template-rows: auto auto auto; /* Three rows: Main Room, Hall & Guests, Kitchen/Living height */
+        gap: 15px; /* Spacing between rooms */
+        width: 80vw; /* Adjust as needed, viewport width */
+        height: 70vh; /* Adjust as needed, viewport height */
+        background-color: #e0e0e0; /* Background of the house layout container */
+        padding: 20px;
+        box-sizing: border-box; /* To include padding and border in the element's total width and height */
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .room-area {
+        background-color: #fff; /* White background for rooms */
+        border: 1px solid #ccc; /* Light gray border for rooms */
+        border-radius: 8px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        font-weight: bold;
+        color: #333;
+        padding: 10px;
+        box-sizing: border-box; /* Ensure padding is inside the area */
+      }
+
+      #main-room {
+        grid-column: 1;
+        grid-row: 1;
+      }
+
+      #hall {
+        grid-column: 1;
+        grid-row: 2;
+      }
+
+      #guest-rooms {
+        grid-column: 1;
+        grid-row: 3;
+        display: flex; /* Arrange guest rooms horizontally */
+        gap: 15px; /* Spacing between guest rooms */
+      }
+
+      #guest-room-1,
+      #guest-room-2 {
+        flex: 1; /* Each guest room takes equal width within #guest-rooms */
+      }
+
+      #kitchen-living-room {
+        grid-column: 2;
+        grid-row: 1 / span 3; /* Spans all three rows */
+      }
+
+      /* Make the hall thinner and longer visually */
+      #hall {
+        /* Adjust height to make it thinner, and let width be determined by grid */
+        /* You can adjust these values to fine-tune the look */
+        padding-top: 5px;
+        padding-bottom: 5px;
+      }
+
+      /* Style for visual appeal, optional enhancements */
+      .room-area:hover {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        transform: scale(1.02);
+        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="house-layout">
+      <div id="main-room" class="room-area">Main Room</div>
+      <div id="hall" class="room-area">Central Hall</div>
+      <div id="guest-rooms">
+        <div id="guest-room-1" class="room-area">Guest Room 1</div>
+        <div id="guest-room-2" class="room-area">Guest Room 2</div>
+      </div>
+      <div id="kitchen-living-room" class="room-area">
+        Kitchen & Living Room
+      </div>
+    </div>
+  </body>
+</html>
