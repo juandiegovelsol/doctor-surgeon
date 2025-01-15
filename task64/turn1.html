@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Air Conditioner Controller</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background-color: #f4f7f9;
+        margin: 0;
+      }
+
+      .ac-controller {
+        background-color: #fff;
+        border-radius: 15px;
+        padding: 30px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .display {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      .temperature {
+        font-size: 3em;
+        color: #333;
+        margin-bottom: 5px;
+      }
+
+      .status {
+        font-size: 1.2em;
+        color: #666;
+        margin-bottom: 10px;
+      }
+
+      .command {
+        font-size: 0.9em;
+        color: #888;
+        min-height: 1em; /* Ensure space even when empty */
+      }
+
+      .buttons {
+        display: flex;
+        gap: 15px;
+      }
+
+      button {
+        padding: 12px 25px;
+        border: none;
+        border-radius: 8px;
+        font-size: 1em;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+      }
+
+      #power-btn {
+        background-color: #e74c3c; /* Red for Off */
+        color: white;
+      }
+
+      #power-btn.on {
+        background-color: #2ecc71; /* Green for On */
+      }
+
+      #up-btn,
+      #down-btn {
+        background-color: #3498db; /* Blue for Up/Down */
+        color: white;
+      }
+
+      button:hover {
+        opacity: 0.9;
+      }
+
+      button:focus {
+        outline: none;
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="ac-controller">
+      <div class="display">
+        <div class="temperature"><span id="temp-value">24</span>°C</div>
+        <div class="status">Status: <span id="status-value">OFF</span></div>
+        <div class="command" id="command-display"></div>
+      </div>
+      <div class="buttons">
+        <button id="power-btn">ON/OFF</button>
+        <button id="up-btn">Up</button>
+        <button id="down-btn">Down</button>
+      </div>
+    </div>
+
+    <script>
+      const tempValueSpan = document.getElementById("temp-value");
+      const statusValueSpan = document.getElementById("status-value");
+      const commandDisplayDiv = document.getElementById("command-display");
+      const powerBtn = document.getElementById("power-btn");
+      const upBtn = document.getElementById("up-btn");
+      const downBtn = document.getElementById("down-btn");
+
+      let currentTemperature = 24;
+      let isPowerOn = false;
+
+      function updateDisplay() {
+        tempValueSpan.textContent = currentTemperature;
+        statusValueSpan.textContent = isPowerOn ? "ON" : "OFF";
+        powerBtn.classList.toggle("on", isPowerOn);
+        powerBtn.textContent = isPowerOn ? "OFF" : "ON/OFF";
+      }
+
+      function displayCommand(message) {
+        commandDisplayDiv.textContent = "Sent command: " + message;
+        // Clear the message after a short delay (optional)
+        setTimeout(() => {
+          commandDisplayDiv.textContent = "";
+        }, 2000); // 2 seconds
+      }
+
+      powerBtn.addEventListener("click", () => {
+        isPowerOn = !isPowerOn;
+        updateDisplay();
+        displayCommand(isPowerOn ? "Turned ON" : "Turned OFF");
+      });
+
+      upBtn.addEventListener("click", () => {
+        if (isPowerOn) {
+          currentTemperature++;
+          updateDisplay();
+          displayCommand("Temperature increased");
+        } else {
+          displayCommand("Turn on AC first");
+        }
+      });
+
+      downBtn.addEventListener("click", () => {
+        if (isPowerOn) {
+          currentTemperature--;
+          updateDisplay();
+          displayCommand("Temperature decreased");
+        } else {
+          displayCommand("Turn on AC first");
+        }
+      });
+
+      updateDisplay(); // Initial display setup
+    </script>
+  </body>
+</html>

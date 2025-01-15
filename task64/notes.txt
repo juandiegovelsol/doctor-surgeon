@@ -1,0 +1,46 @@
+-I want to design an air conditioner controller with HTML, CSS, and JavaScript. It must consist of a central display showing the temperature in Celsius degrees, on/off status, and sent commands. It must also have on/off, up, and down buttons, and every button pressed must display the corresponding message. I want the design to be clean, minimalistic, and intuitive, with rounded edges and clear but well-differenced colors. Return the complete code.
+
+- I want to do some simple modifications. First, the ON/OFF button must show only one of the words according to the action after pressing it. Then, I want the displayed messages to remain a bit longer.
+
+- Now, I want to control the AC system through voice commands. "ON" should power the system on only if the previous state is OFF and vice versa. "UP" should raise the temperature and "DOWN" should lower the temperature. Display the messages to confirm which actions were taken.
+
+- I want the voice recognition system to work all the time the window is open, it must never be turned off.
+
+- Great, now please read a voice confirmation message only when voice commands are recognized and actions are taken. The voice message must be only one of these options: "AC turned on", "AC turned off", "Temperature raised", or "Temperature lowered".
+
+
+
+Turn 1 implements a minimalistic design with rounded edges and the 3 buttons as described,
+it is great that the model inferred the up and down buttons can't control the temperature
+if the AC system is not first powered on.
+
+Turn 2 implements the desired modifications, now the messages last longer and the button displays
+the required text.
+
+Turn 3 implements a voice recognition system that can be used to turn ON the AC system.
+
+Turn 4 implements the required voice recognition system that continuously listen while the window
+is open. This system allows
+
+Turn 3 implements the voice confirmation messages as requested.
+
+
+
+Turn 1 has a minor visual output error because the ON/OFF button must show only ON when the
+system is off and OFF when the system is on. Also, the message is displayed too short so the
+text can be correctly read when buttons are pressed too often, this is caused because the older active
+set timeout cleans the text even if the button is recently pressed.
+
+Turn 1 is overly simple because it does not provide a textual explanation. It was not explicitly
+requested but the model should explain the code to the users.
+
+Turn 3 has an incomplete code issue becuase the voice commands can only be used to turn ON the device
+and then the voice recognition system is turned off.
+
+Turn 3 has a Partial Fulfillment issue becuase voice commands can be recognized but the application is
+not fully usable.
+
+
+Turn 5 has a minor incomplete code error because the code does not ensures that the web browser is first
+muted, for chrome I have to mute and unmute the window to be able to hear the confirmation voices, in Edge 
+works perfectly without any action
