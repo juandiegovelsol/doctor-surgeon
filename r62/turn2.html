@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html ng-app="counterApp">
+  <head>
+    <title>Counter App</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background-color: #f4f4f4;
+      }
+
+      .counter-container {
+        text-align: center;
+        padding: 30px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        background-color: #fff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      button {
+        padding: 10px 20px;
+        font-size: 16px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin: 5px;
+      }
+
+      button.increment-button {
+        background-color: #4caf50;
+        color: white;
+      }
+
+      button.decrement-button {
+        background-color: #f44336;
+        color: white;
+      }
+
+      button:hover {
+        opacity: 0.8;
+      }
+
+      span {
+        font-size: 20px;
+        margin: 0 15px;
+      }
+    </style>
+  </head>
+  <body>
+    <div ng-controller="CounterController" class="counter-container">
+      <button ng-click="decrement()" class="decrement-button">Decrement</button>
+      <span>Count: {{ count }}</span>
+      <button ng-click="increment()" class="increment-button">Increment</button>
+    </div>
+
+    <script>
+      angular
+        .module("counterApp", [])
+        .controller("CounterController", function ($scope) {
+          $scope.count = 0;
+
+          $scope.increment = function () {
+            $scope.count++;
+          };
+
+          $scope.decrement = function () {
+            $scope.count--;
+          };
+        });
+    </script>
+  </body>
+</html>

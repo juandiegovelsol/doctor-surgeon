@@ -1,0 +1,9 @@
+// src/App.scss
+.app-container {
+  font-family: 'Arial', sans-serif;
+  background-color: #f9f9f9;
+  min-height: 100vh;
+  /* Ensure full viewport height */
+  display: flex;
+  flex-direction: column;
+}

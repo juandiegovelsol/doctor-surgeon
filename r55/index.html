@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Simple Target Shooting Game</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: #f0f0f0;
+        margin-top: 20px;
+      }
+
+      h1 {
+        margin-bottom: 20px;
+      }
+
+      canvas {
+        border: 2px solid black;
+        background-color: lightgrey;
+        cursor: crosshair;
+      }
+
+      #scoreDisplay,
+      #ammoDisplay,
+      #timeDisplay,
+      #messageDisplay {
+        margin-top: 10px;
+        font-size: 1.2em;
+        text-align: center;
+      }
+
+      #messageDisplay {
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Target Shooting Game</h1>
+    <canvas id="gameCanvas" width="1000" height="800"></canvas>
+    <!-- Increased canvas width to 1000 and height to 800 -->
+    <div id="scoreDisplay">Score: 0</div>
+    <div id="ammoDisplay">Ammo: 15</div>
+    <!-- Updated ammo display text for initial ammo count -->
+    <div id="timeDisplay">Time: 20</div>
+    <!-- New div to display the time -->
+    <div id="messageDisplay">Click to Start</div>
+    <script>
+      // --- Canvas and Context Setup ---
+      const canvas = document.getElementById("gameCanvas");
+      const ctx = canvas.getContext("2d");
+
+      // --- Display Elements ---
+      const scoreDisplay = document.getElementById("scoreDisplay");
+      const ammoDisplay = document.getElementById("ammoDisplay");
+      const timeDisplay = document.getElementById("timeDisplay");
+      const messageDisplay = document.getElementById("messageDisplay");
+
+      // --- Game State Variables ---
+      let gameState = "start";
+      let score = 0;
+      let ammo = 15;
+      let shotsFired = 0;
+      let timeLeft = 20;
+      let gameTimerInterval;
+
+      // --- Target Properties ---
+      const targetRadius = 100;
+      const numberOfRings = 5;
+      const centerScore = 50;
+      const edgeScore = 10;
+      const scoreDecrementPerRing =
+        (centerScore - edgeScore) / (numberOfRings - 1);
+      const ringRadii = [];
+      for (let i = 1; i <= numberOfRings; i++) {
+        ringRadii.push((targetRadius / numberOfRings) * i);
+      }
+
+      // --- Moving Target Properties ---
+      let targetX;
+      let targetY;
+      let initialTargetSpeed = 1; // Initial slow speed
+      let maxTargetSpeed = 3; // Maximum target speed (current speed)
+      let targetSpeed; // Current target speed, starts at initialTargetSpeed and increases
+      let targetDirection = 1;
+
+      // --- Game Loop ---
+      function gameLoop() {
+        if (gameState === "playing") {
+          updateTargetPosition();
+        }
+        draw();
+        requestAnimationFrame(gameLoop);
+      }
+
+      gameLoop();
+
+      // --- Function to initialize or reset the game ---
+      function startGame() {
+        gameState = "playing";
+        score = 0;
+        ammo = 15;
+        shotsFired = 0;
+        timeLeft = 20;
+        targetSpeed = initialTargetSpeed; // Set target speed to initial speed at game start
+        resetTargetPosition();
+        messageDisplay.textContent = "";
+        scoreDisplay.textContent = "Score: " + score;
+        ammoDisplay.textContent = "Ammo: " + ammo;
+        timeDisplay.textContent = "Time: " + timeLeft;
+
+        if (gameTimerInterval) {
+          clearInterval(gameTimerInterval);
+        }
+        gameTimerInterval = setInterval(updateTimer, 1000);
+      }
+
+      // --- Function to update the game timer ---
+      function updateTimer() {
+        timeLeft--;
+        timeDisplay.textContent = "Time: " + timeLeft;
+
+        if (timeLeft <= 0) {
+          timeLeft = 0;
+          gameState = "gameover";
+          messageDisplay.textContent = "Time Over! Game Over! Click to Restart";
+          clearInterval(gameTimerInterval);
+        }
+      }
+
+      // --- Function to reset target position ---
+      function resetTargetPosition() {
+        targetX =
+          targetRadius + Math.random() * (canvas.width - 2 * targetRadius);
+        targetY =
+          targetRadius + Math.random() * (canvas.height / 2 - 2 * targetRadius);
+        if (targetY > canvas.height - 2 * targetRadius) {
+          targetY = canvas.height / 2;
+        }
+        targetDirection = Math.random() > 0.5 ? 1 : -1;
+
+        // Increase target speed at each respawn, but not beyond maxTargetSpeed
+        if (targetSpeed < maxTargetSpeed) {
+          targetSpeed += 0.5; // Increment speed by a small amount, adjust as needed for desired progression
+          if (targetSpeed > maxTargetSpeed) {
+            targetSpeed = maxTargetSpeed; // Cap speed at maxTargetSpeed
+          }
+        }
+      }
+
+      // --- Function to update target position ---
+      function updateTargetPosition() {
+        targetX += targetSpeed * targetDirection; // Use the *current* targetSpeed
+
+        if (
+          targetX + targetRadius > canvas.width ||
+          targetX - targetRadius < 0
+        ) {
+          targetDirection *= -1;
+        }
+      }
+
+      // --- Drawing Function ---
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        if (gameState === "start") {
+          drawStartScreen();
+        } else if (gameState === "playing" || gameState === "gameover") {
+          drawTarget();
+          drawScoreAmmoTime();
+          if (gameState === "gameover") {
+            drawGameOverScreen();
+          }
+        }
+      }
+
+      // --- Function to draw the target ---
+      function drawTarget() {
+        const targetCenterX = targetX;
+        const targetCenterY = targetY;
+
+        for (let i = 0; i < numberOfRings; i++) {
+          ctx.beginPath();
+          ctx.arc(
+            targetCenterX,
+            targetCenterY,
+            ringRadii[numberOfRings - 1 - i],
+            0,
+            2 * Math.PI
+          );
+          let fillColor;
+          switch (i) {
+            case 0:
+              fillColor = "white";
+              break;
+            case 1:
+              fillColor = "lightblue";
+              break;
+            case 2:
+              fillColor = "lightgreen";
+              break;
+            case 3:
+              fillColor = "yellow";
+              break;
+            case 4:
+              fillColor = "red";
+              break;
+            default:
+              fillColor = "gray";
+          }
+          ctx.fillStyle = fillColor;
+          ctx.fill();
+          ctx.stroke();
+        }
+      }
+
+      // --- Function to draw score, ammo, and time displays (HTML elements) ---
+      function drawScoreAmmoTime() {
+        // Handled by updating textContent of HTML elements
+      }
+
+      // --- Function to handle mouse clicks ---
+      function handleMouseClick(event) {
+        if (gameState === "start") {
+          startGame();
+          return;
+        }
+
+        if (gameState !== "playing") {
+          return;
+        }
+
+        if (ammo <= 0) {
+          gameState = "gameover";
+          messageDisplay.textContent =
+            "Out of Ammo! Game Over! Click to Restart";
+          clearInterval(gameTimerInterval);
+          return;
+        }
+        if (timeLeft <= 0) {
+          return;
+        }
+
+        const rect = canvas.getBoundingClientRect();
+        const mouseX = event.clientX - rect.left;
+        const mouseY = event.clientY - rect.top;
+
+        const distanceToCenter = Math.sqrt(
+          Math.pow(mouseX - targetX, 2) + Math.pow(mouseY - targetY, 2)
+        );
+
+        if (distanceToCenter <= targetRadius) {
+          let shotScore = 0;
+          for (let i = 0; i < numberOfRings; i++) {
+            if (distanceToCenter <= ringRadii[i]) {
+              shotScore = centerScore - scoreDecrementPerRing * i;
+              break;
+            }
+          }
+          score += shotScore;
+          scoreDisplay.textContent = "Score: " + score;
+          drawShotMarker(mouseX, mouseY);
+        } else {
+          console.log("Missed the target");
+        }
+
+        ammo--;
+        ammoDisplay.textContent = "Ammo: " + ammo;
+        shotsFired++;
+
+        if (shotsFired >= 3) {
+          resetTargetPosition();
+          shotsFired = 0;
+        }
+
+        if (ammo <= 0 && gameState === "playing") {
+          gameState = "gameover";
+          messageDisplay.textContent =
+            "Out of Ammo! Game Over! Click to Restart";
+          clearInterval(gameTimerInterval);
+        }
+      }
+
+      // --- Function to draw shot marker ---
+      function drawShotMarker(x, y) {
+        ctx.beginPath();
+        ctx.arc(x, y, 5, 0, 2 * Math.PI);
+        ctx.fillStyle = "black";
+        ctx.fill();
+      }
+
+      // --- Function to draw the Start Screen ---
+      function drawStartScreen() {
+        ctx.fillStyle = "rgba(0, 0, 0, 0.8)";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        ctx.fillStyle = "white";
+        ctx.font = "24px sans-serif";
+        ctx.textAlign = "center";
+        ctx.fillText(
+          "Click to Start Game",
+          canvas.width / 2,
+          canvas.height / 2
+        );
+        ctx.font = "16px sans-serif";
+        ctx.fillText(
+          "Aim with mouse and left click to shoot.",
+          canvas.width / 2,
+          canvas.height / 2 + 30
+        );
+        ctx.fillText(
+          "Time Limit: 20 seconds, Ammo: 15",
+          canvas.width / 2,
+          canvas.height / 2 + 60
+        );
+        ctx.fillText(
+          "Target speed increases every 3 shots",
+          canvas.width / 2,
+          canvas.height / 2 + 90
+        ); // Added speed info
+      }
+
+      // --- Function to draw the Game Over Screen ---
+      function drawGameOverScreen() {
+        ctx.fillStyle = "rgba(0, 0, 0, 0.8)";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        ctx.fillStyle = "white";
+        ctx.font = "24px sans-serif";
+        ctx.textAlign = "center";
+        ctx.fillText("Game Over!", canvas.width / 2, canvas.height / 2 - 30);
+        ctx.fillText(
+          "Your Score: " + score,
+          canvas.width / 2,
+          canvas.height / 2
+        );
+        ctx.font = "16px sans-serif";
+        ctx.fillText(
+          "Click to Restart",
+          canvas.width / 2,
+          canvas.height / 2 + 30
+        );
+      }
+
+      // --- Event Listener for Mouse Clicks on the Canvas ---
+      canvas.addEventListener("mousedown", handleMouseClick);
+
+      // --- Initial Draw ---
+      draw();
+    </script>
+    <!-- Link to the Javascript file for game logic -->
+  </body>
+</html>

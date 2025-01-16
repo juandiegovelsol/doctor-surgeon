@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Pendulum Simulation</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+      }
+      #controls {
+        margin-bottom: 20px;
+      }
+      input[type="number"] {
+        width: 60px;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Pendulum Simulation</h2>
+    <div id="controls">
+      <label for="length">Length (pixels):</label>
+      <input type="number" id="length" value="200" />
+      <label for="angle">Initial Angle (°):</label>
+      <input type="number" id="angle" value="30" />
+      <button id="reset">Reset</button>
+    </div>
+    <canvas
+      id="pendulumCanvas"
+      width="400"
+      height="300"
+      style="border: 1px solid #d3d3d3"
+    ></canvas>
+
+    <script>
+      const canvas = document.getElementById("pendulumCanvas");
+      const ctx = canvas.getContext("2d");
+      const lengthInput = document.getElementById("length");
+      const angleInput = document.getElementById("angle");
+      const resetButton = document.getElementById("reset");
+
+      let length = parseFloat(lengthInput.value);
+      let angle = (parseFloat(angleInput.value) * Math.PI) / 180; // Convert to radians
+      let angularVelocity = 0;
+      const gravity = 0.098; // Adjust for visual speed, changed to 0.098
+      let pivotX = canvas.width / 2;
+      let pivotY = canvas.height / 4;
+      const bobRadius = 15;
+      let animationFrameId;
+
+      function drawPendulum() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Calculate bob position
+        let bobX = pivotX + length * Math.sin(angle);
+        let bobY = pivotY + length * Math.cos(angle);
+
+        // Draw the pendulum rod
+        ctx.beginPath();
+        ctx.moveTo(pivotX, pivotY);
+        ctx.lineTo(bobX, bobY);
+        ctx.strokeStyle = "black";
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        // Draw the bob
+        ctx.beginPath();
+        ctx.arc(bobX, bobY, bobRadius, 0, 2 * Math.PI);
+        ctx.fillStyle = "red";
+        ctx.fill();
+        ctx.strokeStyle = "black";
+        ctx.stroke();
+      }
+
+      function updatePendulum() {
+        const angularAcceleration = (-gravity * Math.sin(angle)) / length;
+        angularVelocity += angularAcceleration;
+        angle += angularVelocity;
+
+        drawPendulum();
+      }
+
+      function animate() {
+        updatePendulum();
+        animationFrameId = requestAnimationFrame(animate);
+      }
+
+      function resetSimulation() {
+        length = parseFloat(lengthInput.value);
+        angle = (parseFloat(angleInput.value) * Math.PI) / 180;
+        angularVelocity = 0;
+        cancelAnimationFrame(animationFrameId);
+        animate();
+      }
+
+      resetButton.addEventListener("click", resetSimulation);
+
+      // Initial draw and animation start
+      animate();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,21 @@
+// src/components/Content.module.scss
+.content {
+  display: flex; /* Changed to flexbox for horizontal layout and wrapping */
+  flex-wrap: wrap; /* Enable wrapping */
+  gap: 20px;
+  padding: 20px;
+  overflow-y: auto;
+  max-height: calc(100vh - 100px);
+  position: relative;
+  margin-top: 20px;
+  align-content: flex-start; /* Align items to the start of the container */
+  justify-content: flex-start; /* Align items to the start of the line */
+  width: 100%; /* Ensure content takes full width */
+}
+
+@media (max-width: 768px) {
+  .content {
+    display: flex;
+    flex-direction: column; /* Stays as column for mobile */
+  }
+}

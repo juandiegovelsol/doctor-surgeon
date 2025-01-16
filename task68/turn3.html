@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>CSS Sun Logo</title>
+    <style>
+      .logo-container {
+        width: 200px;
+        height: 200px;
+        position: relative;
+        /* Ensure rays are not clipped by container */
+        overflow: visible;
+      }
+
+      .sun {
+        width: 100px;
+        height: 100px;
+        background-color: yellow;
+        border-radius: 50%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        /* Ensure sun is visually on top of potential ray overlapping */
+        z-index: 1;
+      }
+
+      .ray {
+        position: absolute;
+        background-color: yellow; /* Ray color same as sun for seamless look */
+        width: 4px;
+        top: 50%;
+        left: 50%;
+        transform-origin: bottom center; /* Rotate around the bottom of the ray */
+      }
+
+      .ray:nth-child(odd) {
+        height: 90px; /* Odd - Longer ray, significantly increased */
+      }
+      .ray:nth-child(even) {
+        height: 70px; /* Even - Shorter ray, significantly increased */
+      }
+
+      .ray:nth-child(1) {
+        transform: translate(-50%, -100%) rotate(0deg);
+      }
+      .ray:nth-child(2) {
+        transform: translate(-50%, -100%) rotate(30deg);
+      }
+      .ray:nth-child(3) {
+        transform: translate(-50%, -100%) rotate(60deg);
+      }
+      .ray:nth-child(4) {
+        transform: translate(-50%, -100%) rotate(90deg);
+      }
+      .ray:nth-child(5) {
+        transform: translate(-50%, -100%) rotate(120deg);
+      }
+      .ray:nth-child(6) {
+        transform: translate(-50%, -100%) rotate(150deg);
+      }
+      .ray:nth-child(7) {
+        transform: translate(-50%, -100%) rotate(180deg);
+      }
+      .ray:nth-child(8) {
+        transform: translate(-50%, -100%) rotate(210deg);
+      }
+      .ray:nth-child(9) {
+        transform: translate(-50%, -100%) rotate(240deg);
+      }
+      .ray:nth-child(10) {
+        transform: translate(-50%, -100%) rotate(270deg);
+      }
+      .ray:nth-child(11) {
+        transform: translate(-50%, -100%) rotate(300deg);
+      }
+      .ray:nth-child(12) {
+        transform: translate(-50%, -100%) rotate(330deg);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="logo-container">
+      <div class="sun"></div>
+      <div class="ray"></div>
+      <div class="ray"></div>
+      <div class="ray"></div>
+      <div class="ray"></div>
+      <div class="ray"></div>
+      <div class="ray"></div>
+      <div class="ray"></div>
+      <div class="ray"></div>
+      <div class="ray"></div>
+      <div class="ray"></div>
+      <div class="ray"></div>
+      <div class="ray"></div>
+    </div>
+  </body>
+</html>

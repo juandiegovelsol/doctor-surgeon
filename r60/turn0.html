@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Travel Booking Site</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+      }
+      .package {
+        border: 1px solid #ccc;
+        padding: 10px;
+        margin-bottom: 10px;
+      }
+      button {
+        margin: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1 id="title">Explore Our Travel Packages</h1>
+    <div class="package">
+      <p id="description">
+        Discover amazing destinations and book your next adventure.
+      </p>
+      <button onclick="bookNow()">Book Now</button>
+      <a href="#" id="learnMore">Learn More</a>
+    </div>
+
+    <div>
+      <label for="language">Choose Language:</label>
+      <select id="language" onchange="changeLanguage()">
+        <option value="en">English</option>
+      </select>
+    </div>
+
+    <script>
+      const content = {
+        en: {
+          title: "Explore Our Travel Packages",
+          description:
+            "Discover amazing destinations and book your next adventure.",
+          bookNow: "Book Now",
+          learnMore: "Learn More",
+          alertMessage:
+            "This is a demo. Booking functionality is not available at the moment.",
+        },
+      };
+
+      function changeLanguage() {
+        const language = document.getElementById("language").value;
+        document.getElementById("title").textContent = content[language].title;
+        document.getElementById("description").textContent =
+          content[language].description;
+        document.querySelector('button[onclick="bookNow()"]').textContent =
+          content[language].bookNow;
+        document.getElementById("learnMore").textContent =
+          content[language].learnMore;
+      }
+
+      function bookNow() {
+        const language = document.getElementById("language").value;
+        alert(content[language].alertMessage);
+      }
+
+      // Initialize with default language
+      changeLanguage();
+    </script>
+  </body>
+</html>

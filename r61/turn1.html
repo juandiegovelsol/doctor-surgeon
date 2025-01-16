@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Online Magazine</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+      }
+
+      header {
+        background-color: #333;
+        color: white;
+        padding: 10px 0;
+        position: fixed; /* Fixed position */
+        top: 0;
+        width: 100%;
+        z-index: 100; /* Ensure it's on top of other content */
+      }
+
+      nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 20px; /* Add some padding on the sides */
+      }
+
+      .logo {
+        max-height: 50px; /* Adjust logo size as needed */
+      }
+
+      nav ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex; /* Make nav links horizontal */
+      }
+
+      nav ul li {
+        margin: 0; /* Remove default list item margins */
+      }
+
+      nav ul li a {
+        display: block; /* Make links block for better click area */
+        color: white;
+        text-decoration: none;
+        padding: 15px 15px; /* Add padding to links */
+        text-align: center; /* Center text in the links */
+      }
+
+      nav ul li a:hover {
+        background-color: #4caf50;
+        color: white; /* Ensure text color remains white on hover if needed */
+      }
+
+      /* Example content to show scrolling below header */
+      .content {
+        padding-top: 80px; /* Add padding to avoid content being hidden under fixed header */
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <nav>
+        <div class="logo">
+          <a href="/">
+            <img src="logo.png" alt="Magazine Logo" class="logo" />
+            <!-- Replace logo.png with your logo file -->
+          </a>
+        </div>
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/articles">Articles</a></li>
+          <li><a href="/reviews">Reviews</a></li>
+          <li><a href="/about">About</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <div class="content">
+      <h1>Welcome to the Online Magazine</h1>
+      <p>
+        This is example content to demonstrate the layout and scrolling behavior
+        below the fixed header.
+      </p>
+      <p>
+        Add your magazine content here. You can add more sections and articles
+        as needed.
+      </p>
+      <p>...</p>
+      <p>More content...</p>
+      <p>Even more content...</p>
+      <p>And some more content...</p>
+      <p>Last bit of content example.</p>
+    </div>
+  </body>
+</html>

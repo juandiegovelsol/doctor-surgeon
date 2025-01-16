@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Counter App</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.14/dist/vue.js"></script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background-color: #f4f4f4;
+      }
+
+      .counter-container {
+        text-align: center;
+        padding: 30px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        background-color: #fff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      button {
+        padding: 10px 20px;
+        font-size: 16px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin: 5px;
+      }
+
+      button.increment-button {
+        background-color: #4caf50;
+        color: white;
+      }
+
+      button.decrement-button {
+        background-color: #f44336;
+        color: white;
+      }
+
+      button:hover {
+        opacity: 0.8;
+      }
+
+      span {
+        font-size: 20px;
+        margin: 0 15px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app" class="counter-container">
+      <button v-on:click="decrement" class="decrement-button">Decrement</button>
+      <span>Count: {{ count }}</span>
+      <button v-on:click="increment" class="increment-button">Increment</button>
+    </div>
+
+    <script>
+      new Vue({
+        el: "#app",
+        data: {
+          count: 0,
+        },
+        methods: {
+          increment: function () {
+            this.count++;
+          },
+          decrement: function () {
+            this.count--;
+          },
+        },
+      });
+    </script>
+  </body>
+</html>

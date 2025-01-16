@@ -1,0 +1,27 @@
+
+Turn 1 implements a solution with 12 sun rays as required, all of them are yellow.
+
+Turn 1 provieds self contained code making the solution demosntrable as required.
+
+Turn 2 makes the rays longer but some of them are still not visible.
+
+
+
+
+Turn 1 has a brevity issue because the model doesn't provide a textual explanation.
+
+Turn 1 has a major visual code output error because the rays are not coming put from
+the sun, its dimension is too short so they are not visible.
+
+Turn 1 has an incorrect arguments issue becuase the first ray is not visible. This is caused
+caused by the nth-child pseudo class which can't be passed with 1 as a selector.
+
+Turn 1 has a Readability issue because the styles could be simplified, it is not
+necessary to define the heigth for each ray since they are repeated in even and odd rays
+
+Turn 3 has a minor inaccuracy issue because the visualization error for the first ray
+is not produced because of its length
+
+Turn 4 has a major inaccuracy issue because the elements were not initially styled as if
+they were the first element. This is not true, the first child can't be selected using
+nth-child(1), it is incorrect.

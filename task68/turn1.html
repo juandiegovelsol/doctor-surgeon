@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>CSS Sun Logo</title>
+    <style>
+      .logo-container {
+        width: 200px;
+        height: 200px;
+        position: relative;
+      }
+
+      .sun {
+        width: 100px;
+        height: 100px;
+        background-color: yellow;
+        border-radius: 50%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+
+      .ray {
+        position: absolute;
+        background-color: yellow; /* Ray color same as sun for seamless look */
+        width: 4px;
+        top: 50%;
+        left: 50%;
+        transform-origin: bottom center; /* Rotate around the bottom of the ray */
+      }
+
+      .ray:nth-child(1) {
+        height: 100px; /* Odd - Longer ray */
+        transform: translate(-50%, -100%) rotate(0deg);
+      }
+      .ray:nth-child(2) {
+        height: 80px; /* Even - Shorter ray */
+        transform: translate(-50%, -100%) rotate(30deg);
+      }
+      .ray:nth-child(3) {
+        height: 100px; /* Odd - Longer ray */
+        transform: translate(-50%, -100%) rotate(60deg);
+      }
+      .ray:nth-child(4) {
+        height: 80px; /* Even - Shorter ray */
+        transform: translate(-50%, -100%) rotate(90deg);
+      }
+      .ray:nth-child(5) {
+        height: 100px; /* Odd - Longer ray */
+        transform: translate(-50%, -100%) rotate(120deg);
+      }
+      .ray:nth-child(6) {
+        height: 80px; /* Even - Shorter ray */
+        transform: translate(-50%, -100%) rotate(150deg);
+      }
+      .ray:nth-child(7) {
+        height: 100px; /* Odd - Longer ray */
+        transform: translate(-50%, -100%) rotate(180deg);
+      }
+      .ray:nth-child(8) {
+        height: 80px; /* Even - Shorter ray */
+        transform: translate(-50%, -100%) rotate(210deg);
+      }
+      .ray:nth-child(9) {
+        height: 100px; /* Odd - Longer ray */
+        transform: translate(-50%, -100%) rotate(240deg);
+      }
+      .ray:nth-child(10) {
+        height: 80px; /* Even - Shorter ray */
+        transform: translate(-50%, -100%) rotate(270deg);
+      }
+      .ray:nth-child(11) {
+        height: 100px; /* Odd - Longer ray */
+        transform: translate(-50%, -100%) rotate(300deg);
+      }
+      .ray:nth-child(12) {
+        height: 80px; /* Even - Shorter ray */
+        transform: translate(-50%, -100%) rotate(330deg);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="logo-container">
+      <div class="sun"></div>
+      <div class="ray"></div>
+      <div class="ray"></div>
+      <div class="ray"></div>
+      <div class="ray"></div>
+      <div class="ray"></div>
+      <div class="ray"></div>
+      <div class="ray"></div>
+      <div class="ray"></div>
+      <div class="ray"></div>
+      <div class="ray"></div>
+      <div class="ray"></div>
+      <div class="ray"></div>
+    </div>
+  </body>
+</html>

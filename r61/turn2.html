@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Online Magazine</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background-color: #f9f9f9; /* Light grey background for the page */
+        color: #333; /* Dark grey default text color */
+      }
+
+      header {
+        background-color: #333;
+        color: white;
+        padding: 10px 0;
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 100;
+      }
+
+      nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 20px;
+      }
+
+      .logo {
+        max-height: 50px;
+      }
+
+      nav ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+      }
+
+      nav ul li {
+        margin: 0;
+      }
+
+      nav ul li a {
+        display: block;
+        color: white;
+        text-decoration: none;
+        padding: 15px 15px;
+        text-align: center;
+      }
+
+      nav ul li a:hover {
+        background-color: #4caf50;
+        color: white;
+      }
+
+      /* Main Content Area */
+      main {
+        padding: 80px 20px 20px 20px; /* Padding to avoid header overlap and side margins */
+        display: grid;
+        grid-template-columns: 2fr 1fr; /* Two main columns and one sidebar column ratio */
+        gap: 20px; /* Spacing between grid items */
+        max-width: 1200px; /* Maximum width of the content area */
+        margin: 0 auto; /* Center the content on the page */
+      }
+
+      /* Articles Column */
+      .articles-column,
+      .reviews-column {
+        padding: 20px;
+      }
+
+      .article-item {
+        display: flex;
+        margin-bottom: 20px;
+        border-bottom: 1px solid #eee; /* Light separator */
+        padding-bottom: 15px;
+      }
+
+      .article-item:last-child {
+        border-bottom: none; /* Remove border from the last article */
+        margin-bottom: 0;
+        padding-bottom: 0;
+      }
+
+      .article-thumbnail {
+        width: 100px;
+        height: 75px;
+        object-fit: cover; /* Ensure image covers the area */
+        margin-right: 15px;
+      }
+
+      .article-content {
+        flex-grow: 1; /* Allow content to take up remaining space */
+      }
+
+      .article-title {
+        font-size: 1.2em;
+        margin-top: 0;
+        margin-bottom: 5px;
+      }
+
+      .article-description {
+        font-size: 0.9em;
+        color: #666;
+        margin-bottom: 0;
+      }
+
+      /* Reviews Column */
+      .review-item {
+        display: flex;
+        margin-bottom: 20px;
+        border-bottom: 1px solid #eee; /* Light separator */
+        padding-bottom: 15px;
+      }
+
+      .review-item:last-child {
+        border-bottom: none; /* Remove border from the last review */
+        margin-bottom: 0;
+        padding-bottom: 0;
+      }
+
+      .review-image {
+        width: 80px;
+        height: 80px;
+        object-fit: contain; /* Ensure image is fully visible within the area */
+        margin-right: 15px;
+        border: 1px solid #ddd; /* Light border for product image */
+        padding: 5px;
+        background-color: white; /* White background for image */
+      }
+
+      .review-content {
+        flex-grow: 1;
+      }
+
+      .review-title {
+        font-size: 1.1em;
+        margin-top: 0;
+        margin-bottom: 5px;
+      }
+
+      .review-rating {
+        font-size: 0.9em;
+        color: #4caf50; /* Green color for rating */
+        margin-bottom: 0;
+      }
+
+      /* Sidebar Section */
+      .sidebar {
+        background-color: #f2f2f2;
+        padding: 20px;
+        box-shadow: 3px 0 5px -2px rgba(0, 0, 0, 0.1); /* Subtle right side shadow */
+        height: fit-content; /* Adjust sidebar height to content */
+        position: sticky; /* Make sidebar sticky */
+        top: 80px; /* Distance from the top to stick, same as header height + padding */
+      }
+
+      .sidebar-section {
+        margin-bottom: 25px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #ddd; /* Separator for sidebar sections */
+      }
+
+      .sidebar-section:last-child {
+        border-bottom: none; /* Remove border from last section */
+        margin-bottom: 0;
+        padding-bottom: 0;
+      }
+
+      .sidebar-title {
+        font-size: 1.1em;
+        margin-top: 0;
+        margin-bottom: 10px;
+        color: #555; /* Slightly darker title color */
+      }
+
+      .sidebar ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      .sidebar ul li {
+        margin-bottom: 8px;
+      }
+
+      .sidebar ul li:last-child {
+        margin-bottom: 0;
+      }
+
+      .sidebar ul li a {
+        text-decoration: none;
+        color: #777;
+        display: block; /* Full width clickable */
+        padding: 5px 0;
+      }
+
+      .sidebar ul li a:hover {
+        color: #4caf50; /* Green hover color for sidebar links */
+      }
+
+      .social-links a {
+        display: inline-block;
+        margin-right: 10px;
+        font-size: 1.5em; /* Adjust social icon size */
+        color: #777; /* Social icon color */
+      }
+
+      .social-links a:hover {
+        color: #4caf50; /* Green hover for social icons */
+      }
+
+      /* Responsive adjustments */
+      @media (max-width: 768px) {
+        main {
+          grid-template-columns: 1fr; /* Stack columns on smaller screens */
+        }
+
+        .sidebar {
+          border-top: 1px solid #ddd; /* Add top border to sidebar when stacked */
+          padding-top: 20px;
+          box-shadow: none; /* Remove sidebar shadow when stacked */
+          position: static; /* No sticky sidebar on smaller screens */
+        }
+
+        .articles-column,
+        .reviews-column {
+          padding: 10px; /* Reduce padding on smaller screens */
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <nav>
+        <div class="logo">
+          <a href="/">
+            <img src="logo.png" alt="Magazine Logo" class="logo" />
+          </a>
+        </div>
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/articles">Articles</a></li>
+          <li><a href="/reviews">Reviews</a></li>
+          <li><a href="/about">About</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+      <section class="articles-column">
+        <h2>Recent Articles</h2>
+        <div class="article-item">
+          <img
+            src="article-thumbnail1.jpg"
+            alt="Article Thumbnail"
+            class="article-thumbnail"
+          />
+          <div class="article-content">
+            <h3 class="article-title"><a href="#">Article Title 1</a></h3>
+            <p class="article-description">
+              Brief description of article 1. This should give a quick overview
+              of what the article is about to entice readers.
+            </p>
+          </div>
+        </div>
+        <div class="article-item">
+          <img
+            src="article-thumbnail2.jpg"
+            alt="Article Thumbnail"
+            class="article-thumbnail"
+          />
+          <div class="article-content">
+            <h3 class="article-title"><a href="#">Article Title 2</a></h3>
+            <p class="article-description">
+              Brief description of article 2. Another compelling summary to
+              attract readers to click and read the full article.
+            </p>
+          </div>
+        </div>
+        <!-- More articles here -->
+      </section>
+
+      <section class="reviews-column">
+        <h2>Recent Reviews</h2>
+        <div class="review-item">
+          <img
+            src="product-image1.jpg"
+            alt="Product Image"
+            class="review-image"
+          />
+          <div class="review-content">
+            <h3 class="review-title"><a href="#">Product Review 1</a></h3>
+            <p class="review-rating">Rating: ★★★★☆</p>
+          </div>
+        </div>
+        <div class="review-item">
+          <img
+            src="product-image2.jpg"
+            alt="Product Image"
+            class="review-image"
+          />
+          <div class="review-content">
+            <h3 class="review-title"><a href="#">Product Review 2</a></h3>
+            <p class="review-rating">Rating: ★★★★★</p>
+          </div>
+        </div>
+        <!-- More reviews here -->
+      </section>
+
+      <aside class="sidebar">
+        <div class="sidebar-section">
+          <h3 class="sidebar-title">Popular Articles</h3>
+          <ul>
+            <li><a href="#">Popular Article 1</a></li>
+            <li><a href="#">Popular Article 2</a></li>
+            <li><a href="#">Popular Article 3</a></li>
+          </ul>
+        </div>
+
+        <div class="sidebar-section">
+          <h3 class="sidebar-title">Categories</h3>
+          <ul>
+            <li><a href="#">Category 1</a></li>
+            <li><a href="#">Category 2</a></li>
+            <li><a href="#">Category 3</a></li>
+            <li><a href="#">Category 4</a></li>
+          </ul>
+        </div>
+
+        <div class="sidebar-section">
+          <h3 class="sidebar-title">Follow Us</h3>
+          <div class="social-links">
+            <a href="#" target="_blank"
+              ><i class="fab fa-facebook-square"></i
+            ></a>
+            <a href="#" target="_blank"
+              ><i class="fab fa-twitter-square"></i
+            ></a>
+            <a href="#" target="_blank"
+              ><i class="fab fa-instagram-square"></i
+            ></a>
+          </div>
+        </div>
+      </aside>
+    </main>
+
+    <!-- Font Awesome for icons (Social Media in sidebar) -->
+    <script
+      src="https://kit.fontawesome.com/your_fontawesome_kit_code.js"
+      crossorigin="anonymous"
+    ></script>
+    <!-- Replace with your Font Awesome Kit code, or use other icon library -->
+  </body>
+</html>

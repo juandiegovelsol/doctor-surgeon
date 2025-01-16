@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Online Magazine</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,700;1,400&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        margin: 0;
+        font-family: "Roboto", sans-serif; /* Using Google Font 'Roboto' */
+        background-color: #f9f9f9;
+        color: #333;
+        line-height: 1.6; /* Improved readability */
+      }
+
+      a {
+        color: inherit; /* Links inherit text color by default */
+        text-decoration: none; /* Remove default underlines from links */
+        transition: color 0.3s ease; /* Smooth color transitions for links */
+      }
+
+      a:hover {
+        color: #4caf50; /* Standard hover color */
+      }
+
+      /* Header Styles */
+      header {
+        background-color: #333;
+        color: white;
+        padding: 15px 0; /* Increased padding for better spacing */
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 100;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Subtle shadow for header */
+      }
+
+      nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 20px;
+      }
+
+      .logo {
+        max-height: 60px; /* Slightly larger logo */
+        transition: transform 0.3s ease; /* Example transition */
+      }
+
+      .logo:hover {
+        transform: scale(1.05); /* Example hover effect for logo */
+      }
+
+      nav ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+      }
+
+      nav ul li {
+        margin: 0;
+      }
+
+      nav ul li a {
+        display: block;
+        color: white;
+        text-decoration: none;
+        padding: 15px 20px; /* Adjusted link padding */
+        text-align: center;
+        transition: background-color 0.3s ease; /* Smooth background transition */
+      }
+
+      nav ul li a:hover {
+        background-color: #4caf50;
+      }
+
+      /* Main Content Area */
+      main {
+        padding: 90px 20px 30px 20px; /* Adjusted top padding to accommodate header and added bottom padding */
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 30px; /* Increased gap */
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .articles-column,
+      .reviews-column {
+        padding: 25px; /* Increased padding */
+        background-color: white; /* White background for content columns */
+        border-radius: 8px; /* Rounded corners for content columns */
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* Subtle shadow for columns */
+      }
+
+      .articles-column h2,
+      .reviews-column h2 {
+        color: #333; /* Darker heading color */
+        border-bottom: 2px solid #eee;
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+      }
+
+      .article-item,
+      .review-item {
+        display: flex;
+        margin-bottom: 25px; /* Increased spacing */
+        padding-bottom: 20px;
+        border-bottom: 1px solid #eee;
+      }
+
+      .article-item:last-child,
+      .review-item:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+        padding-bottom: 0;
+      }
+
+      .article-thumbnail {
+        width: 120px; /* Slightly larger thumbnails */
+        height: 90px;
+        object-fit: cover;
+        margin-right: 20px;
+        border-radius: 4px; /* Rounded corners for thumbnails */
+      }
+
+      .article-content,
+      .review-content {
+        flex-grow: 1;
+      }
+
+      .article-title,
+      .review-title {
+        font-size: 1.3em; /* Slightly larger titles */
+        margin-top: 0;
+        margin-bottom: 8px;
+        color: #333;
+      }
+
+      .article-title a,
+      .review-title a {
+        color: #333; /* Ensure titles are dark color */
+      }
+
+      .article-description {
+        font-size: 0.95em; /* Slightly larger description */
+        color: #666;
+        margin-bottom: 0;
+      }
+
+      .review-image {
+        width: 90px;
+        height: 90px;
+        object-fit: contain;
+        margin-right: 20px;
+        border: 1px solid #ddd;
+        padding: 8px;
+        background-color: white;
+        border-radius: 4px;
+      }
+
+      .review-rating {
+        font-size: 1em; /* Slightly larger rating */
+        color: #4caf50;
+        margin-bottom: 0;
+      }
+
+      /* Sidebar Section */
+      .sidebar {
+        background-color: #f2f2f2;
+        padding: 25px; /* Increased padding */
+        box-shadow: 3px 0 5px -2px rgba(0, 0, 0, 0.1);
+        height: fit-content;
+        position: sticky;
+        top: 90px; /* Adjusted top to match header padding */
+        border-radius: 8px; /* Rounded corners for sidebar */
+      }
+
+      .sidebar-section {
+        margin-bottom: 30px; /* Increased spacing */
+        padding-bottom: 20px;
+        border-bottom: 1px solid #ddd;
+      }
+
+      .sidebar-section:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+        padding-bottom: 0;
+      }
+
+      .sidebar-title {
+        font-size: 1.2em; /* Slightly larger sidebar titles */
+        margin-top: 0;
+        margin-bottom: 12px;
+        color: #555;
+      }
+
+      .sidebar ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      .sidebar ul li {
+        margin-bottom: 10px;
+      }
+
+      .sidebar ul li:last-child {
+        margin-bottom: 0;
+      }
+
+      .sidebar ul li a {
+        color: #777;
+        display: block;
+        padding: 8px 0; /* Increased padding */
+        border-radius: 4px; /* Rounded corners for sidebar links */
+        transition: background-color 0.2s ease, color 0.2s ease; /* Link hover transition */
+      }
+
+      .sidebar ul li a:hover {
+        color: #4caf50;
+        background-color: rgba(
+          76,
+          175,
+          80,
+          0.1
+        ); /* Light green background on hover */
+      }
+
+      .social-links a {
+        display: inline-block;
+        margin-right: 15px;
+        font-size: 1.6em; /* Slightly larger social icons */
+        color: #777;
+        transition: color 0.3s ease, transform 0.3s ease; /* Icon hover transitions */
+      }
+
+      .social-links a:hover {
+        color: #4caf50;
+        transform: scale(1.1); /* Example icon hover effect */
+      }
+
+      /* Footer Section */
+      footer {
+        background-color: #222;
+        color: white;
+        padding: 30px 20px;
+        text-align: center;
+        border-top: 3px solid #4caf50; /* Accent border at the top of the footer */
+      }
+
+      .footer-sections {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap; /* Allows sections to wrap on smaller screens */
+        margin-bottom: 20px;
+      }
+
+      .footer-section {
+        margin: 0 20px 20px 20px; /* Spacing for footer sections */
+      }
+
+      .footer-section h4 {
+        color: white;
+        margin-top: 0;
+        margin-bottom: 15px;
+        font-size: 1.1em;
+        border-bottom: 1px solid #555;
+        padding-bottom: 8px;
+      }
+
+      .footer-section ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      .footer-section ul li {
+        margin-bottom: 8px;
+      }
+
+      .footer-section ul li:last-child {
+        margin-bottom: 0;
+      }
+
+      .footer-section ul li a {
+        color: #ddd; /* Lighter color for footer links */
+      }
+
+      .footer-section ul li a:hover {
+        color: #ccc; /* Hover color for footer links as requested */
+      }
+
+      .footer-social-links a {
+        display: inline-block;
+        margin: 0 10px;
+        font-size: 1.5em;
+        color: #ddd;
+      }
+
+      .footer-social-links a:hover {
+        color: #ccc;
+      }
+
+      .footer-copyright {
+        font-size: 0.9em;
+        color: #aaa; /* Lighter copyright text */
+      }
+
+      /* Responsive adjustments */
+      @media (max-width: 768px) {
+        main {
+          grid-template-columns: 1fr;
+          padding-top: 140px; /* Adjust top padding for stacked layout */
+        }
+
+        .sidebar {
+          border-top: 1px solid #ddd;
+          padding-top: 20px;
+          box-shadow: none;
+          position: static;
+        }
+
+        .articles-column,
+        .reviews-column,
+        .sidebar {
+          padding: 20px; /* Adjusted padding for columns and sidebar on smaller screens */
+        }
+
+        .footer-sections {
+          flex-direction: column; /* Stack footer sections on smaller screens */
+          align-items: center; /* Center align stacked sections */
+        }
+
+        .footer-section {
+          margin: 0 0 30px 0; /* Adjust margin for stacked footer sections */
+          text-align: center; /* Center text in stacked sections */
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <nav>
+        <div class="logo">
+          <a href="/">
+            <img src="logo.png" alt="Magazine Logo" class="logo" />
+          </a>
+        </div>
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/articles">Articles</a></li>
+          <li><a href="/reviews">Reviews</a></li>
+          <li><a href="/about">About</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+      <section class="articles-column">
+        <h2>Recent Articles</h2>
+        <div class="article-item">
+          <img
+            src="article-thumbnail1.jpg"
+            alt="Article Thumbnail"
+            class="article-thumbnail"
+          />
+          <div class="article-content">
+            <h3 class="article-title"><a href="#">Article Title 1</a></h3>
+            <p class="article-description">
+              Brief description of article 1. This should give a quick overview
+              of what the article is about to entice readers.
+            </p>
+          </div>
+        </div>
+        <div class="article-item">
+          <img
+            src="article-thumbnail2.jpg"
+            alt="Article Thumbnail"
+            class="article-thumbnail"
+          />
+          <div class="article-content">
+            <h3 class="article-title"><a href="#">Article Title 2</a></h3>
+            <p class="article-description">
+              Brief description of article 2. Another compelling summary to
+              attract readers to click and read the full article.
+            </p>
+          </div>
+        </div>
+        <!-- More articles here -->
+      </section>
+
+      <section class="reviews-column">
+        <h2>Recent Reviews</h2>
+        <div class="review-item">
+          <img
+            src="product-image1.jpg"
+            alt="Product Image"
+            class="review-image"
+          />
+          <div class="review-content">
+            <h3 class="review-title"><a href="#">Product Review 1</a></h3>
+            <p class="review-rating">Rating: ★★★★☆</p>
+          </div>
+        </div>
+        <div class="review-item">
+          <img
+            src="product-image2.jpg"
+            alt="Product Image"
+            class="review-image"
+          />
+          <div class="review-content">
+            <h3 class="review-title"><a href="#">Product Review 2</a></h3>
+            <p class="review-rating">Rating: ★★★★★</p>
+          </div>
+        </div>
+        <!-- More reviews here -->
+      </section>
+
+      <aside class="sidebar">
+        <div class="sidebar-section">
+          <h3 class="sidebar-title">Popular Articles</h3>
+          <ul>
+            <li><a href="#">Popular Article 1</a></li>
+            <li><a href="#">Popular Article 2</a></li>
+            <li><a href="#">Popular Article 3</a></li>
+          </ul>
+        </div>
+
+        <div class="sidebar-section">
+          <h3 class="sidebar-title">Categories</h3>
+          <ul>
+            <li><a href="#">Category 1</a></li>
+            <li><a href="#">Category 2</a></li>
+            <li><a href="#">Category 3</a></li>
+            <li><a href="#">Category 4</a></li>
+          </ul>
+        </div>
+
+        <div class="sidebar-section">
+          <h3 class="sidebar-title">Follow Us</h3>
+          <div class="social-links">
+            <a href="#" target="_blank"
+              ><i class="fab fa-facebook-square"></i
+            ></a>
+            <a href="#" target="_blank"
+              ><i class="fab fa-twitter-square"></i
+            ></a>
+            <a href="#" target="_blank"
+              ><i class="fab fa-instagram-square"></i
+            ></a>
+          </div>
+        </div>
+      </aside>
+    </main>
+
+    <footer>
+      <div class="footer-sections">
+        <div class="footer-section">
+          <h4>Contact Us</h4>
+          <ul>
+            <li><a href="#">Email Us</a></li>
+            <li><a href="#">Contact Form</a></li>
+            <li>123 Main Street, City, Country</li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Terms & Policies</h4>
+          <ul>
+            <li><a href="#">Terms of Service</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Social</h4>
+          <div class="footer-social-links">
+            <a href="#" target="_blank"
+              ><i class="fab fa-facebook-square"></i
+            ></a>
+            <a href="#" target="_blank"
+              ><i class="fab fa-twitter-square"></i
+            ></a>
+            <a href="#" target="_blank"
+              ><i class="fab fa-instagram-square"></i
+            ></a>
+          </div>
+        </div>
+      </div>
+      <p class="footer-copyright">
+        &copy; 2023 Online Magazine. All rights reserved.
+      </p>
+    </footer>
+
+    <script
+      src="https://kit.fontawesome.com/your_fontawesome_kit_code.js"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>

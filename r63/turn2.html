@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Branching Narrative</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+      }
+
+      .story-container {
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        width: 80%;
+        max-width: 600px;
+      }
+
+      #story-text {
+        margin-bottom: 20px;
+      }
+
+      .choices-container {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .choice-button {
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        background-color: #007bff;
+        color: white;
+        cursor: pointer;
+        font-size: 16px;
+      }
+
+      .choice-button:hover {
+        background-color: #0056b3;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="story-container">
+      <div id="story-text"></div>
+      <div id="choices" class="choices-container"></div>
+    </div>
+
+    <script>
+      const narrativeData = {
+        start: {
+          text: "You find yourself at a crossroads in a mysterious forest. Do you:",
+          choices: [
+            {
+              option: "Take the left path",
+              next: "leftPath",
+            },
+            {
+              option: "Take the right path",
+              next: "rightPath",
+            },
+          ],
+        },
+        leftPath: {
+          text: "You walk down the left path and encounter a friendly fox. The fox offers to guide you through the forest. Do you:",
+          choices: [
+            {
+              option: "Follow the fox",
+              next: "followFox",
+            },
+            {
+              option: "Explore alone",
+              next: "exploreAlone",
+            },
+          ],
+        },
+        rightPath: {
+          text: "You take the right path and find a hidden treasure chest. Inside, you discover a map leading to more adventures. Do you:",
+          choices: [
+            {
+              option: "Follow the map",
+              next: "followMap",
+            },
+            {
+              option: "Leave the treasure",
+              next: "leaveTreasure",
+            },
+          ],
+        },
+        followFox: {
+          text: "The fox leads you to a beautiful clearing filled with rare flowers. You feel at peace and decide to rest here for a while.",
+          choices: [],
+        },
+        exploreAlone: {
+          text: "As you explore alone, you find a hidden waterfall. The sound of the water is soothing, and you decide to stay and enjoy the view.",
+          choices: [],
+        },
+        followMap: {
+          text: "The map leads you to an ancient ruin. You discover artifacts and learn about the history of the forest.",
+          choices: [],
+        },
+        leaveTreasure: {
+          text: "You decide to leave the treasure and continue your journey. You find a path that leads you back to the forest entrance.",
+          choices: [],
+        },
+      };
+
+      const storyTextElement = document.getElementById("story-text");
+      const choicesContainer = document.getElementById("choices");
+
+      function displayScene(sceneName) {
+        const scene = narrativeData[sceneName];
+        if (!scene) {
+          storyTextElement.textContent = "Error: Scene not found.";
+          choicesContainer.innerHTML = ""; // Clear any existing choices
+          return;
+        }
+
+        storyTextElement.textContent = scene.text;
+        choicesContainer.innerHTML = ""; // Clear previous choices
+
+        if (scene.choices && scene.choices.length > 0) {
+          scene.choices.forEach((choice) => {
+            const button = document.createElement("button");
+            button.textContent = choice.option;
+            button.classList.add("choice-button");
+            button.addEventListener("click", () => {
+              displayScene(choice.next);
+            });
+            choicesContainer.appendChild(button);
+          });
+        } else {
+          // If no choices, you can add a message or end the story here.
+          const endMessage = document.createElement("p");
+          endMessage.textContent = "The end.";
+          choicesContainer.appendChild(endMessage);
+        }
+      }
+
+      // Start the narrative at the 'start' scene
+      displayScene("start");
+    </script>
+  </body>
+</html>

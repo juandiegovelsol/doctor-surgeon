@@ -1,0 +1,8 @@
+Turn 2 has an undesired modification because shots are not visible as in the first turn,
+the model should have keeped this feature.
+
+Turn 3 has a doesn't understand the user intent issue because the target does not respawns in a
+random position, it restarts always in the same position.
+
+The ckick to restart issue is valid but is not explained in a detailed way. It is an incomplete
+code issue because the restart logic is not implemented
