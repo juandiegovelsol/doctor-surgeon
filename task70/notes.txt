@@ -1,0 +1,31 @@
+- I want to create a Newton pendulum simulator to understand easily how the energy is transferred from one moving object colliding with others. It must be simulated in a 2d scene with fixed and rigid ropes from where the spheres hang. The left pendulum must initiate its movement rotated 90 degrees to the left. The application must simulate real gravity forces with perfect collision (there must not be any energy losses). Provide the complete HTML, CSS, and JavaScript code
+
+- There is an issue I want to fix. The simulation allows spheres to overlap, causing a weird behavior where spheres are attached between them, creating simulation issues and "energy losses" because after some time the simulation is steady.
+
+- Now I want the initial spheres (the 4 ones that are initially steady) to be positioned as close as possible, as a real Newton pendulum is. This way the intermediate spheres' movement is reduced, and only the spheres on the extremes are lifted. The ropes must be vertical in the initial asked disposition.
+
+
+
+Turn 1 sucessfully simulates pendulum movements and collisions between the 2d spheres
+
+Turn 2 fixes the overlapping spheres issue, now the entire movement seems energy losses free to the user,
+and the spheres seems to move indefinitely.
+
+Turn 3 fully understand the prompt instructions, the 4 steady spheres in the original movement are
+positioned togheter as close as posible, simulating a more real Newton pendulum movement
+
+The explanations in turn 3 are very accurate and gives the user a clear understanding of which
+actions the model took.
+
+
+
+
+Turn 1 has a brevity issue becuase it does not provide any textual explanation. It should include
+at least a brief explanation.
+
+Turn 1 has an error handling issue becuase the collisions can make the spheres to overlap, affecting
+the energy transfer and making the simulation to eventually be steady.
+
+Turns 1 and 2 don't follow non-formatting constraints because the prompts ask to implement a energy-losses
+free simulation and the damping value is not 1, involving energy losses.
+

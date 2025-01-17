@@ -1,0 +1,167 @@
+/* style.css */
+
+#game-container {
+  display: flex;
+  flex-direction: column; /* Stack elements vertically */
+  align-items: center; /* Center content horizontally within game-container */
+}
+
+#kitchen-container {
+  display: block; /* Ensure kitchen is visible initially */
+  width: 800px; /* Set the width of the kitchen area */
+  height: 600px; /* Set the height of the kitchen area */
+  background-color: #f0e68c; /* Light yellow background for the kitchen */
+  border: 2px solid #8b4513; /* Brown border for the kitchen container */
+  position: relative; /* Important for positioning items inside */
+  margin: 20px auto; /* Center the kitchen on the page */
+}
+
+.kitchen-item {
+  width: 80px; /* Set a default width for kitchen items */
+  height: 80px; /* Set a default height for kitchen items */
+  background-color: #ddd; /* Light grey default background for items */
+  border: 1px solid #777; /* Darker grey border for items */
+  position: absolute; /* Allows us to position items exactly within the kitchen-container */
+  cursor: pointer; /* Change mouse cursor to a pointer when hovering over items */
+  display: flex; /* For centering text inside items */
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  color: #333; /* Dark text color */
+  font-weight: bold; /* Bold text */
+  border-radius: 5px; /* Slightly rounded corners */
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+}
+
+/* Positioning each kitchen item within the kitchen container */
+#oven {
+  top: 20px;
+  left: 20px;
+  background-color: #f0f0f0;
+} /* Light grey for oven */
+#hob {
+  top: 20px;
+  left: 120px;
+  background-color: #e0e0e0;
+} /* Slightly darker grey for hob */
+#microwave {
+  top: 20px;
+  left: 220px;
+  background-color: #f0f0f0;
+} /* Light grey for microwave */
+#fridge {
+  top: 20px;
+  left: 320px;
+  background-color: #add8e6;
+} /* Light blue for fridge */
+#sink {
+  top: 20px;
+  left: 420px;
+  background-color: #b0c4de;
+} /* Light steel blue for sink */
+#chopping-board {
+  top: 20px;
+  left: 520px;
+  background-color: #deb887;
+} /* Light wood color for chopping board */
+#knife {
+  top: 20px;
+  left: 620px;
+  background-color: #c0c0c0;
+} /* Silver color for knife */
+
+/* Add labels to the items using pseudo-elements */
+#oven::after {
+  content: "Oven";
+}
+#hob::after {
+  content: "Hob";
+}
+#microwave::after {
+  content: "Microwave";
+}
+#fridge::after {
+  content: "Fridge";
+}
+#sink::after {
+  content: "Sink";
+}
+#chopping-board::after {
+  content: "Board";
+}
+#knife::after {
+  content: "Knife";
+}
+
+#launch-quiz-button {
+  /* ... existing button styles ... */
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #4caf50; /* Green color */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  position: absolute; /* Position it within kitchen-container */
+  bottom: 20px; /* Position from the bottom */
+  right: 20px; /* Position from the right */
+  margin-top: 0; /* Remove top margin as it's positioned absolutely */
+  margin-bottom: 0; /* Remove bottom margin as it's positioned absolutely */
+}
+
+#launch-quiz-button:hover {
+  background-color: #45a049; /* Darker green on hover */
+}
+
+#quiz-container {
+  display: none; /* Initially hidden - Important! */
+  width: 80%; /* Quiz container width 80% of game-container */
+  padding: 20px;
+  background-color: #f9f9f9; /* Light grey background for quiz */
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  text-align: left; /* Align quiz text to the left */
+  margin-bottom: 20px; /* Space below quiz */
+}
+
+#quiz-container h2 {
+  text-align: center; /* Center the quiz title */
+  margin-bottom: 20px;
+}
+
+.question {
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed #ddd; /* Dashed line separator between questions */
+}
+
+.question p {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.answer-option label {
+  display: block; /* Each answer option on a new line */
+  margin-bottom: 5px;
+}
+
+#submit-quiz-button {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #007bff; /* Blue color */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+#submit-quiz-button:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+}
+
+#quiz-results {
+  margin-top: 20px;
+  font-weight: bold;
+  text-align: center;
+  display: none; /* Initially hidden */
+}

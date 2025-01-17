@@ -1,0 +1,7 @@
+Misliading claim, the model suggests to provide the store to the react application in a
+index.js or App.js file, including the code in a App.js file is impossible because
+an App component is imported and used in the self code.
+
+
+The CB wrote "In TaskDetailView the code `value={task.assigneeId || ''}` assumes assigneeId might be undefined but the Redux slice does not handle this case gracefully when assigning tasks"
+This claim is incorrect because the pointed code allows showing an empty value when the task array is empty, it has no relation with handling the edge case on the reducer.

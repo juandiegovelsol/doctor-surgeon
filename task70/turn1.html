@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Newton Pendulum Simulator</title>
+    <style>
+      body {
+        margin: 0;
+        overflow: hidden;
+      }
+      canvas {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="newtonCanvas"></canvas>
+
+    <script>
+      const canvas = document.getElementById("newtonCanvas");
+      const ctx = canvas.getContext("2d");
+
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      const numPendulums = 5;
+      const pendulumRadius = 30;
+      const ropeLength = 200;
+      const pendulumSpacing = pendulumRadius * 2.5;
+      const anchorY = 100;
+      const colors = ["#4285F4", "#DB4437", "#F4B400", "#0F9D58", "#AB47BC"]; // Google colors
+      const gravity = 0.5;
+      const damping = 0.999; // Very slight damping for realism (optional, set to 1 for perfect)
+
+      let pendulums = [];
+
+      class Pendulum {
+        constructor(x, y, radius, ropeLength, angle, color) {
+          this.anchorX = x;
+          this.anchorY = y;
+          this.radius = radius;
+          this.ropeLength = ropeLength;
+          this.angle = angle;
+          this.color = color;
+          this.angularVelocity = 0;
+          this.x = this.anchorX + this.ropeLength * Math.sin(this.angle);
+          this.y = this.anchorY + this.ropeLength * Math.cos(this.angle);
+        }
+
+        update() {
+          let acceleration =
+            (-gravity / this.ropeLength) * Math.sin(this.angle);
+          this.angularVelocity += acceleration;
+          this.angularVelocity *= damping; // Damping application
+          this.angle += this.angularVelocity;
+
+          this.x = this.anchorX + this.ropeLength * Math.sin(this.angle);
+          this.y = this.anchorY + this.ropeLength * Math.cos(this.angle);
+        }
+
+        draw() {
+          ctx.beginPath();
+          ctx.moveTo(this.anchorX, this.anchorY);
+          ctx.lineTo(this.x, this.y);
+          ctx.strokeStyle = "black";
+          ctx.lineWidth = 2;
+          ctx.stroke();
+          ctx.closePath();
+
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+          ctx.fillStyle = this.color;
+          ctx.fill();
+          ctx.strokeStyle = "black";
+          ctx.lineWidth = 1;
+          ctx.stroke();
+          ctx.closePath();
+        }
+      }
+
+      function initPendulums() {
+        pendulums = [];
+        let startX =
+          canvas.width / 2 -
+          (numPendulums * pendulumSpacing) / 2 +
+          pendulumSpacing / 2;
+        for (let i = 0; i < numPendulums; i++) {
+          let x = startX + i * pendulumSpacing;
+          let pendulum = new Pendulum(
+            x,
+            anchorY,
+            pendulumRadius,
+            ropeLength,
+            0,
+            colors[i % colors.length]
+          );
+          pendulums.push(pendulum);
+        }
+        pendulums[0].angle = -Math.PI / 2; // Initial 90 degrees to the left
+        pendulums[0].x =
+          pendulums[0].anchorX +
+          pendulums[0].ropeLength * Math.sin(pendulums[0].angle);
+        pendulums[0].y =
+          pendulums[0].anchorY +
+          pendulums[0].ropeLength * Math.cos(pendulums[0].angle);
+      }
+
+      function checkCollision(p1, p2) {
+        let dx = p2.x - p1.x;
+        let dy = p2.y - p1.y;
+        let distance = Math.sqrt(dx * dx + dy * dy);
+        return distance < p1.radius + p2.radius;
+      }
+
+      function resolveCollision(p1, p2) {
+        let v1 = p1.angularVelocity;
+        let v2 = p2.angularVelocity;
+
+        // Simplified 1D elastic collision for angular velocity (momentum transfer)
+        p1.angularVelocity = v2;
+        p2.angularVelocity = v1;
+      }
+
+      function animate() {
+        requestAnimationFrame(animate);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        pendulums.forEach((pendulum) => {
+          pendulum.update();
+          pendulum.draw();
+        });
+
+        // Collision detection and resolution
+        for (let i = 0; i < pendulums.length - 1; i++) {
+          if (checkCollision(pendulums[i], pendulums[i + 1])) {
+            resolveCollision(pendulums[i], pendulums[i + 1]);
+          }
+        }
+      }
+
+      initPendulums();
+      animate();
+
+      window.addEventListener("resize", () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        initPendulums(); // Re-initialize positions on resize if needed
+      });
+    </script>
+  </body>
+</html>

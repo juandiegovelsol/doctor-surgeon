@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Web Page Generator</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        display: flex;
+      }
+
+      #menu {
+        width: 200px;
+        background-color: #f4f4f4;
+        padding: 20px;
+        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        user-select: none; /* Prevent text selection in menu */
+        cursor: default; /* Set default cursor for menu area */
+      }
+
+      #menu-item {
+        background-color: #ddd;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        cursor: grab;
+        text-align: center;
+      }
+
+      #menu-item:active {
+        cursor: grabbing;
+      }
+
+      #content {
+        flex: 1;
+        padding: 20px;
+        position: relative; /* For absolute positioning of dragged elements */
+        cursor: crosshair; /* Indicate draggable area */
+      }
+
+      .drag-element {
+        position: absolute;
+        border: 1px solid #333;
+        padding: 10px;
+        cursor: grab;
+        user-select: none;
+        background-color: white;
+        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+      }
+
+      .drag-element:active {
+        cursor: grabbing;
+      }
+
+      .text-box {
+        min-width: 100px;
+        min-height: 30px;
+      }
+
+      .button-element {
+        padding: 8px 15px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="menu">
+      <h2>Elements</h2>
+      <div
+        id="menu-item-textbox"
+        class="menu-item"
+        draggable="true"
+        data-type="textbox"
+      >
+        Text Box
+      </div>
+      <div
+        id="menu-item-button"
+        class="menu-item"
+        draggable="true"
+        data-type="button"
+      >
+        Button
+      </div>
+    </div>
+
+    <div id="content">
+      <h1>Drag and Drop Area</h1>
+      <p>Drag elements from the left menu and drop them here.</p>
+    </div>
+
+    <script>
+      const menuItems = document.querySelectorAll(".menu-item");
+      console.log(menuItems);
+      const content = document.getElementById("content");
+      let draggedElement = null;
+      let offsetX = 0;
+      let offsetY = 0;
+
+      // Drag start for menu items
+      menuItems.forEach((item) => {
+        item.addEventListener("dragstart", (event) => {
+          event.dataTransfer.setData(
+            "text/plain",
+            item.getAttribute("data-type")
+          );
+        });
+      });
+
+      // Allow drop in content area
+      content.addEventListener("dragover", (event) => {
+        event.preventDefault(); // Necessary to allow dropping.
+      });
+
+      // Handle drop in content area
+      content.addEventListener("drop", (event) => {
+        event.preventDefault();
+        const elementType = event.dataTransfer.getData("text/plain");
+        if (elementType) {
+          createElement(elementType, event.clientX, event.clientY);
+        }
+      });
+
+      function createElement(type, mouseX, mouseY) {
+        let element;
+        if (type === "textbox") {
+          element = document.createElement("div");
+          element.className = "drag-element text-box";
+          element.contentEditable = "true";
+          element.textContent = "Text Box";
+        } else if (type === "button") {
+          element = document.createElement("button");
+          element.className = "drag-element button-element";
+          element.textContent = "Button";
+        }
+
+        if (element) {
+          content.appendChild(element);
+
+          // Calculate relative position within content area
+          const contentRect = content.getBoundingClientRect();
+          const x = mouseX - contentRect.left;
+          const y = mouseY - contentRect.top;
+
+          element.style.left = `${x - 20}px`; // Adjust offset to center element under cursor
+          element.style.top = `${y - 15}px`; // Adjust offset to center element under cursor
+
+          makeDraggable(element);
+        }
+      }
+
+      function makeDraggable(element) {
+        element.setAttribute("draggable", true);
+
+        element.addEventListener("dragstart", (event) => {
+          draggedElement = element;
+          offsetX = event.clientX - element.getBoundingClientRect().left;
+          offsetY = event.clientY - element.getBoundingClientRect().top;
+        });
+
+        content.addEventListener("dragover", (event) => {
+          event.preventDefault(); // Allow drop
+        });
+
+        content.addEventListener("dragend", (event) => {
+          if (draggedElement) {
+            const contentRect = content.getBoundingClientRect();
+            const x = event.clientX - contentRect.left;
+            const y = event.clientY - contentRect.top;
+
+            draggedElement.style.left = `${x - offsetX}px`;
+            draggedElement.style.top = `${y - offsetY}px`;
+            draggedElement = null; // Reset dragged element
+          }
+        });
+      }
+    </script>
+  </body>
+</html>

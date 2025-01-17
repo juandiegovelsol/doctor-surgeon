@@ -1,0 +1,31 @@
+- I want to create an application for a web page generator with HTML, CSS, and JavaScript. It must consist of a menu on the left of the window where users can select text boxes and buttons to drag and drop on the desired position. The elements can be dropped all over the web page, except by the menu where the items are selectable, and can be repositioned. Provide the complete code, ensuring a clean design.
+
+- The application has some issues that I would like to fix. First when I console log the menuItems array it is empty and nothing happens when I drop the dragged items.
+
+- You nailed it, now please allow the elements to be dropped all over the window, except by the menu container.
+
+
+Turn 2 solves the described issue by changing the ID selector to a class selector, now all menu-items
+can be dragged and dropped inside the dropping area.
+
+
+
+Turn 1 has a varbosity issue, the code explains almost all the css rules which is not necessary.
+
+Turn 1 doesn't follow non-formatting constraints because the elements can't be dropped all over the
+webpage as the prompt required.
+
+Turn 1 has a wrong method error because the model tries to select all the menu-item elements using an
+ID selector while it should use a class selector, causing the menuItems variable to be an empty array
+
+Turn 1 has a major code output error becuase the code is unusable, the elements can be dragged but
+when dropped anything happens
+
+Turn 1 has a doesn't understand the user intent issue because the prompt asks that the elements can
+be dropped all over the page and the Drag and drop area does not extend the entire window
+
+Turn 3 is not able to achieve the desired changes so it has an incomplete code and a doesn't understand
+the user intent error, the items are not droppable all over the window.
+
+
+

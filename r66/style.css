@@ -1,0 +1,22 @@
+body {
+  margin: 0;
+  overflow: hidden; /* Prevent scrollbars */
+  background-color: #000; /* Black background */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh; /* Full viewport height */
+  font-family: monospace;
+  color: #fff; /* White text color */
+}
+
+#gameCanvas {
+  background-color: #222; /* Dark grey canvas background */
+  border: 2px solid #fff; /* White border */
+}
+
+#score {
+  margin-top: 10px;
+  font-size: 1.2em;
+}

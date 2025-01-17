@@ -1,0 +1,39 @@
+body {
+  font-family: sans-serif; /* Basic font for the page */
+  margin: 0; /* Remove default body margins */
+  display: flex; /* Use flexbox for centering */
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  min-height: 100vh; /* Ensure body takes at least full viewport height */
+  background-color: #f0f0f0; /* Light gray background */
+}
+
+.game-container {
+  text-align: center; /* Center text within the game container */
+  background-color: #fff; /* White background for the game area */
+  padding: 20px; /* Padding around the game content */
+  border: 1px solid #ccc; /* Light border around the game container */
+  border-radius: 5px; /* Rounded corners for the container */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
+#tetris-canvas {
+  border: 2px solid black; /* Visible border around the canvas area */
+  background-color: #ddd; /* Light gray background for the canvas itself */
+  display: block; /* Prevents extra spacing below the canvas in some layouts */
+  margin-bottom: 20px; /* Space between canvas and UI elements below */
+}
+
+.ui {
+  /* Style for the UI elements container if needed later */
+}
+
+.score {
+  font-size: 1.2em; /* Slightly larger font for the score */
+  margin-bottom: 10px; /* Spacing below the score display */
+}
+
+.lines {
+  font-size: 1.2em; /* Same font size as score for consistency */
+  margin-bottom: 10px; /* Spacing below the lines display */
+}
