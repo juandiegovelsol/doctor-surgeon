@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Simple Save Game Demo</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="game-container">
+      <h1>Simple Save Game Demo</h1>
+
+      <div id="game-state-display">
+        <p>Position: <span id="player-position"></span></p>
+        <p>Score: <span id="player-score"></span></p>
+      </div>
+
+      <div class="controls">
+        <button id="move-button-up">Move Up</button>
+        <button id="move-button-down">Move Down</button>
+        <button id="move-button-left">Move Left</button>
+        <button id="move-button-right">Move Right</button>
+        <button id="increase-score-button">Increase Score</button>
+      </div>
+
+      <div class="save-load-controls">
+        <button id="save-button">Save Game</button>
+        <button id="load-button">Load Game</button>
+      </div>
+
+      <p id="message-display"></p>
+      <!-- For displaying messages like "Game Saved", "Game Loaded" -->
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>

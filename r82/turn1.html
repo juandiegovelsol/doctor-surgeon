@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>2D Top-Down RPG</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background-color: #f0f0f0;
+      }
+      canvas {
+        display: none; /* Initially hidden, shown when game starts */
+        background-color: #f0f0f0;
+      } /* Optional background color */
+
+      /* --- Menu CSS (Combined and Adjusted) --- */
+      .menu {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        z-index: 10;
+      }
+
+      .menu.hidden {
+        display: none;
+      }
+
+      .menu h2 {
+        color: white;
+        margin-bottom: 20px;
+        text-align: center; /* Center the title text */
+      }
+
+      .menu button {
+        padding: 10px 20px;
+        margin: 10px;
+        font-size: 16px;
+        cursor: pointer;
+        border: none;
+        border-radius: 5px;
+        background-color: #4caf50;
+        color: white;
+        transition: background-color 0.3s ease;
+        min-width: 150px; /* Ensure buttons are wide enough to contain text on multiple lines */
+        text-align: center; /* Center text within buttons */
+      }
+
+      .menu button:hover {
+        background-color: #45a049;
+      }
+
+      .menu button:focus {
+        outline: none;
+        box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.5);
+      }
+      /* --- End Menu CSS --- */
+
+      #gameCanvas {
+        display: none; /* Hidden initially, shown when game starts */
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="gameCanvas" width="500" height="500"></canvas>
+
+    <!-- Main Menu HTML (Added) -->
+    <div id="main-menu" class="menu">
+      <h2>Main Menu</h2>
+      <button id="start-button">Start Game</button>
+      <button id="main-options-button">Options</button>
+      <button id="main-exit-button">Exit Game</button>
+    </div>
+
+    <!-- Pause Menu HTML (Modified - Exit Game -> Exit to Main Menu) -->
+    <div id="pause-menu" class="menu hidden">
+      <h2>Game Paused</h2>
+      <button id="resume-button">Resume</button>
+      <button id="options-button">Options</button>
+      <button id="exit-main-menu-button">Exit to Main Menu</button>
+      <!-- Changed Button Text and ID -->
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>

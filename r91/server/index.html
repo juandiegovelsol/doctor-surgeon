@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Collaborative Drawing</title>
+    <style>
+      body {
+        margin: 0;
+      }
+      canvas {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas
+      id="drawingCanvas"
+      width="800"
+      height="600"
+      style="border: 1px solid black"
+    ></canvas>
+    <script>
+      const canvas = document.getElementById("drawingCanvas");
+      const ctx = canvas.getContext("2d");
+      const websocket = new WebSocket("ws://localhost:8080"); // Connect to server on localhost:8080
+
+      let drawingQueue = [];
+      let isDrawing = false;
+      let lastX = 0;
+      let lastY = 0;
+      let isMouseDrawing = false;
+      let drawColor = "black"; // Default drawing color
+      let lineWidth = 2; // Default line width
+
+      websocket.onopen = () => {
+        console.log("WebSocket connection opened");
+        // Optionally send a message to the server on connection
+        // websocket.send(JSON.stringify({ type: 'hello', message: 'Client connected' }));
+      };
+
+      websocket.onmessage = (event) => {
+        try {
+          const message = JSON.parse(event.data);
+          if (message.type === "draw") {
+            drawingQueue.push(message);
+            if (!isDrawing) {
+              isDrawing = true;
+              requestAnimationFrame(renderCanvas);
+            }
+          } else if (message.type === "error") {
+            console.error("Server error:", message.message);
+            alert("Server error: " + message.message); // Or handle error display in UI
+          } else {
+            console.warn("Received unknown message type:", message);
+          }
+        } catch (e) {
+          console.error("Error parsing WebSocket message:", e);
+          console.warn("Malformed message received:", event.data);
+          // Optionally display an error to the user
+          // alert('Error processing drawing update. Check console.');
+        }
+      };
+
+      websocket.onclose = () => {
+        console.log("WebSocket connection closed");
+        alert(
+          "WebSocket connection closed. Collaborative drawing may be interrupted."
+        ); // Inform user
+        // Optionally try to reconnect
+      };
+
+      websocket.onerror = (error) => {
+        console.error("WebSocket error:", error);
+        alert("WebSocket connection error. Check console for details."); // Inform user
+        // Optionally handle error (e.g., display a disconnection message)
+      };
+
+      function renderCanvas() {
+        if (drawingQueue.length > 0) {
+          for (const drawCommand of drawingQueue) {
+            drawOnCanvas(drawCommand);
+          }
+          drawingQueue = [];
+        }
+
+        isDrawing = false;
+        if (drawingQueue.length > 0) {
+          isDrawing = true;
+          requestAnimationFrame(renderCanvas);
+        }
+      }
+
+      function drawOnCanvas(drawCommand) {
+        ctx.beginPath();
+        ctx.strokeStyle = drawCommand.color;
+        ctx.lineWidth = drawCommand.lineWidth;
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
+
+        if (drawCommand.prevX !== null && drawCommand.prevY !== null) {
+          ctx.moveTo(drawCommand.prevX, drawCommand.prevY);
+          ctx.lineTo(drawCommand.x, drawCommand.y);
+        } else {
+          ctx.arc(
+            drawCommand.x,
+            drawCommand.y,
+            drawCommand.lineWidth / 2,
+            0,
+            2 * Math.PI
+          );
+          ctx.fillStyle = drawCommand.color;
+          ctx.fill();
+        }
+        ctx.stroke();
+        ctx.closePath();
+      }
+
+      canvas.addEventListener("mousedown", startDrawing);
+      canvas.addEventListener("mouseup", stopDrawing);
+      canvas.addEventListener("mouseout", stopDrawing);
+      canvas.addEventListener("mousemove", draw);
+
+      function startDrawing(e) {
+        console.log(e);
+        isMouseDrawing = true;
+        lastX = e.offsetX;
+        lastY = e.offsetY;
+      }
+
+      function stopDrawing() {
+        isMouseDrawing = false;
+        lastX = 0;
+        lastY = 0;
+      }
+
+      function draw(e) {
+        if (!isMouseDrawing) return;
+
+        const x = e.offsetX;
+        const y = e.offsetY;
+
+        const drawData = {
+          type: "draw",
+          userId: "yourClientId", // Replace with a unique user ID in a real app
+          x: x,
+          y: y,
+          prevX: lastX,
+          prevY: lastY,
+          color: drawColor,
+          lineWidth: lineWidth,
+        };
+
+        console.log(drawData);
+        websocket.send(JSON.stringify(drawData));
+
+        lastX = x;
+        lastY = y;
+      }
+    </script>
+  </body>
+</html>

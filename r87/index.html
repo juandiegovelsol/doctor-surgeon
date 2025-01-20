@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fill-in-the-Blanks English Game</title>
+    <link rel="stylesheet" href="style.css" />
+    <!-- Link to CSS file -->
+  </head>
+  <body>
+    <div class="game-container">
+      <h1>Fill-in-the-Blanks</h1>
+      <div id="question-container">
+        <p id="question-text">
+          <!-- Question text with blanks will be here. JavaScript will insert spans for blanks -->
+        </p>
+        <div id="answer-options">
+          <!-- Optional: Answer options can be placed here if you want to use multiple choice for blanks -->
+        </div>
+        <div id="feedback-container" style="display: none">
+          <p id="feedback-message"></p>
+        </div>
+        <!-- ADDED: Check Answers Button -->
+        <button id="check-button">Check Answers</button>
+      </div>
+      <div id="result-container" style="display: none">
+        <h2>Game Result</h2>
+        <p id="result-message"></p>
+        <p>
+          Your score: <span id="score"></span> / <span id="total-blanks"></span>
+        </p>
+        <button id="restart-button">Restart Game</button>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+    <!-- Link to JavaScript file -->
+  </body>
+</html>

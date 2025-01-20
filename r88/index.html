@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>My First Quiz</title>
+    <style>
+      body {
+        font-family: sans-serif;
+      }
+
+      #quiz-container {
+        width: 600px;
+        margin: 20px auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+
+      .question-block {
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 1px dashed #eee;
+      }
+
+      button {
+        padding: 10px 20px;
+        margin: 5px;
+        cursor: pointer;
+      }
+
+      .feedback-correct {
+        color: green;
+        font-weight: bold;
+      }
+
+      .feedback-incorrect {
+        color: red;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>History Quiz - Romans in Britain</h1>
+
+    <div id="quiz-container">
+      <div class="question-block">
+        <!-- Question 1 Block -->
+        <p id="question-1" class="question">
+          What year did the Romans invade Britain?
+        </p>
+        <div id="options-1" class="options">
+          <button onclick="checkAnswer('a', 1)">a) 43 AD</button>
+          <button onclick="checkAnswer('b', 1)">b) 1066 AD</button>
+          <button onclick="checkAnswer('c', 1)">c) 1666 AD</button>
+          <button onclick="checkAnswer('d', 1)">d) 1944 AD</button>
+        </div>
+        <p id="feedback-1" class="feedback"></p>
+      </div>
+
+      <div class="question-block">
+        <!-- Question 2 Block -->
+        <p id="question-2" class="question">
+          What was the name of the Roman road connecting London to York?
+        </p>
+        <div id="options-2" class="options">
+          <button onclick="checkAnswer('a', 2)">a) Fosse Way</button>
+          <button onclick="checkAnswer('b', 2)">b) Watling Street</button>
+          <button onclick="checkAnswer('c', 2)">c) Ermine Street</button>
+          <button onclick="checkAnswer('d', 2)">d) Akeman Street</button>
+        </div>
+        <p id="feedback-2" class="feedback"></p>
+      </div>
+
+      <div class="question-block">
+        <!-- Question 3 Block -->
+        <p id="question-3" class="question">
+          Which Roman Emperor ordered the building of Hadrian's Wall?
+        </p>
+        <div id="options-3" class="options">
+          <button onclick="checkAnswer('a', 3)">a) Claudius</button>
+          <button onclick="checkAnswer('b', 3)">b) Nero</button>
+          <button onclick="checkAnswer('c', 3)">c) Hadrian</button>
+          <button onclick="checkAnswer('d', 3)">d) Augustus</button>
+        </div>
+        <p id="feedback-3" class="feedback"></p>
+      </div>
+    </div>
+    <!-- End of quiz-container -->
+
+    <script>
+      const correctAnswers = {
+        // Object to store correct answers for each question
+        1: { answer: "a", text: "43 AD" }, // Question 1: Correct answer is 'a', text is '43 AD'
+        2: { answer: "b", text: "Watling Street" }, // Question 2: Correct answer is 'b', text is 'Watling Street'
+        3: { answer: "c", text: "Hadrian" }, // Question 3: Correct answer is 'c', text is 'Hadrian'
+        // Add more questions here as needed... e.g., 4: {answer: 'd', text: '...' },
+      };
+
+      function checkAnswer(selectedOption, questionNumber) {
+        const correctAnswerData = correctAnswers[questionNumber]; // Get correct answer data for the question
+        let feedbackElement = document.getElementById(
+          "feedback-" + questionNumber
+        );
+
+        if (selectedOption === correctAnswerData.answer) {
+          feedbackElement.textContent = "Correct! Well done!";
+          feedbackElement.className = "feedback-correct";
+        } else {
+          feedbackElement.textContent = `Incorrect. The correct answer was ${correctAnswerData.answer}) ${correctAnswerData.text}.`; // Customized incorrect feedback
+          feedbackElement.className = "feedback-incorrect";
+        }
+      }
+    </script>
+  </body>
+</html>

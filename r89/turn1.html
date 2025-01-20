@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://cdn.babylonjs.com/babylon.js"></script>
+    <script src="https://cdn.babylonjs.com/gui/babylon.gui.min.js"></script>
+    <style>
+      html,
+      body {
+        overflow: hidden;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+
+      #renderCanvas {
+        width: 100%;
+        height: 100%;
+        touch-action: none;
+      }
+    </style>
+  </head>
+
+  <body>
+    <canvas id="renderCanvas"></canvas>
+    <script>
+      const canvas = document.getElementById("renderCanvas");
+      const engine = new BABYLON.Engine(canvas, true);
+
+      const createScene = () => {
+        const scene = new BABYLON.Scene(engine);
+
+        scene.collisionsEnabled = true;
+
+        const camera = new BABYLON.FreeCamera(
+          "camera",
+          new BABYLON.Vector3(-40, 10, -30),
+          scene
+        );
+        camera.setTarget(new BABYLON.Vector3(-40, 1, 0));
+        camera.checkCollisions = false;
+        camera.applyGravity = false;
+
+        // Hemispheric light (ambient light - keep this)
+        const light = new BABYLON.HemisphericLight(
+          "light",
+          new BABYLON.Vector3(0, 1, 0),
+          scene
+        );
+        light.intensity = 0.7; // Slightly increase intensity
+
+        // Directional light (for direct illumination and color visibility)
+        const directionalLight = new BABYLON.DirectionalLight(
+          "directionalLight",
+          new BABYLON.Vector3(1, -1, 1),
+          scene
+        );
+        directionalLight.intensity = 1.0;
+
+        const groundMat = new BABYLON.StandardMaterial("groundMat", scene);
+        groundMat.diffuseColor = BABYLON.Color3.Green;
+
+        const platformMat = new BABYLON.StandardMaterial("platformMat", scene);
+        platformMat.diffuseColor = BABYLON.Color3.Gray;
+
+        const playerMat = new BABYLON.StandardMaterial("playerMat", scene);
+        playerMat.diffuseColor = BABYLON.Color3.Red;
+
+        const flagMat = new BABYLON.StandardMaterial("flagMat", scene);
+        flagMat.diffuseColor = BABYLON.Color3.White;
+
+        const ground = BABYLON.MeshBuilder.CreateBox(
+          "ground",
+          { width: 100, height: 0.2, depth: 8 },
+          scene
+        );
+        ground.position.y = -0.1;
+        ground.checkCollisions = true;
+        ground.material = groundMat;
+
+        const platform1 = BABYLON.MeshBuilder.CreateBox(
+          "platform1",
+          { width: 3, height: 0.2, depth: 4 },
+          scene
+        );
+        platform1.position = new BABYLON.Vector3(-16, 2, 0);
+        platform1.material = platformMat;
+        platform1.checkCollisions = true;
+
+        const platform2 = BABYLON.MeshBuilder.CreateBox(
+          "platform2",
+          { width: 3, height: 0.2, depth: 4 },
+          scene
+        );
+        platform2.position = new BABYLON.Vector3(-8, 4, 0);
+        platform2.material = platformMat;
+        platform2.checkCollisions = true;
+
+        const platform3 = BABYLON.MeshBuilder.CreateBox(
+          "platform2",
+          { width: 3, height: 0.2, depth: 4 },
+          scene
+        );
+        platform3.position = new BABYLON.Vector3(0, 6, 0);
+        platform3.material = platformMat;
+        platform3.checkCollisions = true;
+
+        const platform4 = BABYLON.MeshBuilder.CreateBox(
+          "platform2",
+          { width: 3, height: 8, depth: 4 },
+          scene
+        );
+        platform4.position = new BABYLON.Vector3(8, 4, 0);
+        platform4.material = platformMat;
+        platform4.checkCollisions = true;
+
+        const flag = BABYLON.MeshBuilder.CreateBox(
+          "flag",
+          { width: 1, height: 4, depth: 1 },
+          scene
+        );
+        flag.position = new BABYLON.Vector3(45, 1.5, 0);
+        flag.material = flagMat;
+
+        const player = BABYLON.MeshBuilder.CreateBox(
+          "player",
+          { width: 1, height: 2, depth: 1 },
+          scene
+        );
+        player.position = new BABYLON.Vector3(-45, 1, 0);
+        player.material = playerMat;
+        player.checkCollisions = true;
+        player.ellipsoid = new BABYLON.Vector3(0.4, 1, 0.4);
+        player.ellipsoidOffset = new BABYLON.Vector3(0, 1, 0);
+
+        scene.onBeforeRenderObservable.add(() => {
+          camera.position.x = player.position.x - 10;
+          camera.target = new BABYLON.Vector3(
+            player.position.x,
+            player.position.y + 1,
+            player.position.z
+          );
+        });
+
+        const inputMap = { left: false, right: false, jump: false };
+        let canJump = true;
+
+        window.addEventListener("keydown", (evt) => {
+          switch (evt.code) {
+            case "ArrowLeft":
+            case "KeyA":
+              inputMap.left = true;
+              break;
+            case "ArrowRight":
+            case "KeyD":
+              inputMap.right = true;
+              break;
+            case "Space":
+            case "ArrowUp":
+            case "KeyW":
+              if (canJump && onGround) {
+                verticalVel = jumpSpeed;
+                canJump = false;
+              }
+              break;
+          }
+        });
+
+        window.addEventListener("keyup", (evt) => {
+          switch (evt.code) {
+            case "ArrowLeft":
+            case "KeyA":
+              inputMap.left = false;
+              break;
+            case "ArrowRight":
+            case "KeyD":
+              inputMap.right = false;
+              break;
+            case "Space":
+            case "ArrowUp":
+            case "KeyW":
+              canJump = true;
+
+              break;
+          }
+        });
+
+        const moveSpeed = 0.1;
+        const jumpSpeed = 0.2;
+        let verticalVel = 0;
+        const gravity = -0.005;
+        let onGround = false;
+
+        scene.onBeforeRenderObservable.add(() => {
+          const dt = engine.getDeltaTime() * 0.001;
+
+          let horizontalMove = 0;
+          if (inputMap.left) {
+            horizontalMove = -1;
+          }
+          if (inputMap.right) {
+            horizontalMove = 1;
+          }
+
+          const moveVec = new BABYLON.Vector3(horizontalMove * moveSpeed, 0, 0);
+          player.moveWithCollisions(moveVec);
+
+          verticalVel += gravity;
+
+          const ray = new BABYLON.Ray(
+            player.position,
+            new BABYLON.Vector3(0, -1, 0),
+            1.1
+          );
+          const pick = scene.pickWithRay(
+            ray,
+            (mesh) => mesh === ground || mesh.name.startsWith("platform")
+          );
+
+          onGround = pick.hit;
+
+          if (onGround && verticalVel < 0) {
+            verticalVel = 0;
+          }
+
+          player.moveWithCollisions(new BABYLON.Vector3(0, verticalVel, 0));
+
+          if (player.position.y < -30) {
+            player.position = new BABYLON.Vector3(-45, 1, 0);
+            verticalVel = 0;
+          }
+
+          const distToFlag = BABYLON.Vector3.Distance(
+            player.position,
+            flag.position
+          );
+          if (distToFlag < 2) {
+            alert("Level Complete!");
+
+            player.position = new BABYLON.Vector3(-45, 1, 0);
+            verticalVel = 0;
+
+            inputMap.left = false;
+            inputMap.right = false;
+            inputMap.jump = false;
+          }
+        });
+
+        return scene;
+      };
+
+      const scene = createScene();
+      engine.runRenderLoop(() => {
+        scene.render();
+      });
+      window.addEventListener("resize", () => {
+        engine.resize();
+      });
+    </script>
+  </body>
+</html>

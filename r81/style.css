@@ -1,0 +1,120 @@
+body {
+  font-family: monospace;
+  background-color: #f0e68c; /* Light yellow background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+}
+
+#combat-area {
+  display: flex;
+  flex-direction: column;
+  background-color: #d2b48c; /* Light brown combat area */
+  padding: 20px;
+  border: 2px solid #8b4513; /* Darker brown border */
+  border-radius: 10px;
+}
+
+#party-area,
+#enemy-area {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+}
+
+.character-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 10px;
+}
+
+.character-representation {
+  width: 50px;
+  height: 50px;
+  background-color: #87cefa; /* Light blue for characters */
+  border: 1px solid #4682b4; /* Steel blue border */
+  border-radius: 5px;
+  margin-bottom: 5px;
+}
+
+.enemy-representation {
+  width: 50px;
+  height: 50px;
+  background-color: #fa8072; /* Light red for enemies */
+  border: 1px solid #8b0000; /* Dark red border */
+  border-radius: 5px;
+  margin-bottom: 5px;
+}
+
+.character-name,
+.enemy-name {
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.hp-container,
+.atb-container {
+  width: 80px;
+  height: 8px;
+  background-color: #333;
+  border: 1px solid #555;
+  margin-bottom: 5px;
+}
+
+.hp-bar {
+  height: 100%;
+  width: 100%; /* Start full */
+  background-color: red;
+}
+
+.atb-bar {
+  height: 100%;
+  width: 0%; /* Starts empty */
+  background-color: green;
+}
+
+#action-menu-container {
+  display: none; /* Hidden by default */
+  position: absolute; /* Positioned over the combat area */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #f8f8ff; /* White background for menu */
+  padding: 20px;
+  border: 2px solid #888;
+  border-radius: 10px;
+  box-shadow: 5px 5px 10px #888;
+  text-align: center;
+}
+
+#action-menu-container h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+.action-button {
+  padding: 10px 20px;
+  margin: 5px;
+  border: none;
+  border-radius: 5px;
+  background-color: #4caf50; /* Green button color */
+  color: white;
+  cursor: pointer;
+}
+
+.action-button:hover {
+  background-color: #45a049; /* Darker green on hover */
+}
+
+#combat-log {
+  background-color: #eee;
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-top: 20px;
+  height: 100px;
+  overflow-y: scroll;
+  font-size: 0.8em;
+}

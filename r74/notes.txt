@@ -1,0 +1,80 @@
+Failures:
+
+-Error 1
+--Turn(s): 1
+---Type(s):
+Reasoning Errors/Logical Reasoning/Gaps in logical reasoning
+Reasoning Errors/Analytical Thinking/Incorrect Decomposition
+Reasoning Errors/Causal Reasoning/Weak Causality
+Coding/Semantic/Garbage Code/Meaningless Code Snippet
+Coding/Semantic/Garbage Code/Wrong (Logical) Direction
+---Explanation:
+The Assistant proposes that the lack of a scene background color may be causing the issue for the game not to load. The Assistant should have been able to look over the code and realize this makes no sense as the default value if a darkish blue. If the game is completely white and not loading, setting a scene color will not change this. The Assistant should have realized that adding in more scene defining code would not work if the scene itself is not loaded.
+
+-Error 2
+--Turn(s): 1
+---Type(s):
+Coding/Semantic/Computation Error
+---Explanation:
+The Assistant proposes that the User's movement controls are wrong. Firstly, they are not. They are set precisely for what this engine and project needs them to be. Secondly, this does not prevent the game from loading even if they were as these would have been logical errors, not syntax or undefined errors. The Assistant should have realized this is not the main cause of the current issue.
+
+-Error 3
+--Turn(s): 1
+---Type(s):
+Reasoning Errors/Logical Reasoning/Inconsistent Reasoning
+---Explanation:
+The Assistant states they "found a couple of things that might be causing the issue, and one potential logic error", which would be a total of three potential errors (couple plus one equals three). However, the Assistant only present two potential errors (neither of which are errors).
+
+-Error 4
+--Turn(s): 2
+---Type(s):
+Reasoning Errors/Logical Reasoning/Gaps in logical reasoning
+Reasoning Errors/Causal Reasoning/False Causality
+Knowledge Errors/Inaccuracy/Inaccurate Claim/Major Inaccuracy
+Knowledge Errors/Inaccuracy/Inaccurate Claim/Misleading Claim
+Knowledge Errors/Inaccuracy/Inaccurate Claim/Misleading Claim/False Equivalency
+---Explanation:
+The Assistant claims that "the JavaScript is being executed to some extent, as the instructions are part of the HTML" but this is not true. The instructions are part of the HTML, not the JavaScript. And the JavaScript itself cannot properly function because the CDN link in the `<script>` element is not accurate.
+
+-Error 5
+--Turn(s): 2, 3
+---Type(s):
+Knowledge Errors/Inaccuracy/Inaccurate Claim/Major Inaccuracy
+Knowledge Errors/Domain-specific Knowledge Gap
+---Explanation:
+The Assistant presents a code snippet that still contains inaccuracies as though it were correct (`https://cdn.babylonjs.net/babylon` when it should be `https://cdn.babylonjs.com/babylon.js`).
+
+-Error 6
+--Turn(s): 2
+---Type(s):
+Coding/Semantic/Garbage Code/Meaningless Code Snippet
+Reasoning Errors/Feasibility Errors
+Coding/Semantic/Garbage Code/Wrong (Logical) Direction
+Reasoning Errors/Logical Reasoning/Gaps in logical reasoning
+---Explanation:
+The Assistant suggests adding a debug console logs to the script to see if the canvas, engine, and scene are rendering, but without the proper CDN link, this code snippet will not register. The Assistant repeats the mistake when trying to provide a basic scene script for Babylon, completely missing the fact that the CDN links are still wrong.
+
+-Error 7
+--Turn(s): 3
+---Type(s):
+Knowledge Errors/Inaccuracy/Inaccurate Claim/Major Inaccuracy
+Knowledge Errors/Domain-specific Knowledge Gap
+Reasoning Errors/Logical Reasoning/Gaps in logical reasoning
+---Explanation:
+The Assistant presents code it should clearly be able to see is unchanged, telling the User to "make sure". If the User already used the code they provided, and stated that they also used the code the Assistant provided, and all these scripts have the same code in these portions, then it makes no logical sense to present these code snippets as though they must be included or triple-checked, as they have not been changed. It should be more than clear by now that the issue is the CDN links themselves.
+
+-Error 8
+--Turn(s): 4
+---Type(s):
+Instruction Following Issues/Redundant Information Generation
+---Explanation:
+The Assistant presents the same code snippets twice and instructs the User to replace code twice. This can obviously be consolidated.
+
+-Error 9
+--Turn(s): 4
+---Type(s):
+Knowledge Errors/Inaccuracy/Inaccurate Claim/Major Inaccuracy
+Knowledge Errors/Domain-specific Knowledge Gap
+Reasoning Errors/Pattern Recognition/Failure to Make Connections Between Topics
+---Explanation:
+The Assistant still claims `cdn.babylonjs.net` to be a potentially valid site that contains valid CDN links when the TLD is wrong (it should be `.com`). The Assistant even suggests downloading and using a localized version of Babylon from `https://www.babylonjs.com/download/`, and earlier the User provided a console log that showed an error with the CDN link even though the User was using the links provided by the Assistant, yet, it never realizes that the TLD is different in this link than it is in the CDN links throughout the conversation (`.net` versus `.com`). The Assistant should have realized this error when the User provided the console log error a turn earlier.

@@ -1,0 +1,366 @@
+/* style.css */
+
+:root {
+  --scandi-bg: #f8f9fa;
+  --scandi-light-grey: #e9ecef;
+  --scandi-grey: #adb5bd;
+  --scandi-dark-grey: #343a40;
+  --scandi-accent: #a7c957;
+  --font-sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+body {
+  font-family: var(--font-sans);
+  margin: 0;
+  padding-top: 60px; /* Height of navbar */
+  background-color: var(--scandi-bg);
+  color: var(--scandi-dark-grey);
+  line-height: 1.6;
+}
+
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: var(--scandi-bg);
+  border-bottom: 1px solid var(--scandi-light-grey);
+  z-index: 100; /* Ensure it's on top */
+}
+
+.navbar-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.nav-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: start; /* Align nav items to the start */
+  height: 60px; /* Fixed height for navbar */
+  align-items: center; /* Vertically center items */
+}
+
+.nav-links li {
+  margin-right: 20px;
+}
+
+.nav-links li:last-child {
+  margin-right: 0;
+}
+
+.nav-link {
+  display: block;
+  padding: 10px 15px;
+  text-decoration: none;
+  color: var(--scandi-grey);
+  border-radius: 5px;
+  font-weight: medium;
+}
+
+.nav-link:hover,
+.nav-link.active {
+  background-color: var(--scandi-light-grey);
+  color: var(--scandi-dark-grey);
+}
+
+.nav-link.active {
+  font-weight: bold; /* Make active link bold */
+}
+
+.content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.page {
+  display: none; /* Hidden by default */
+}
+
+.page.active-page {
+  display: block; /* Shown when active */
+}
+
+.container {
+  max-width: 800px; /* Adjust container width as needed */
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Homepage Styles - Updated for bigger cards and scrollable list */
+.articles-container {
+  display: flex; /* Changed to flex for vertical scrolling list */
+  flex-direction: column; /* Arrange items in a column */
+  gap: 30px; /* Increased gap between cards */
+  margin-top: 30px; /* Increased top margin */
+  padding-bottom: 30px; /* Add padding at the bottom for better scroll ending */
+}
+
+.article-card {
+  background-color: white;
+  border-radius: 12px; /* Slightly larger border radius */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Slightly stronger shadow */
+  padding: 30px; /* Increased padding significantly */
+  margin-bottom: 0; /* Remove bottom margin as gap is handled by container */
+}
+
+.article-card h2 {
+  margin-top: 0;
+  margin-bottom: 15px; /* Increased bottom margin */
+  color: var(--scandi-dark-grey);
+  font-size: 1.75em; /* Increased font size for titles */
+}
+
+.article-card p {
+  color: var(--scandi-grey);
+  margin-bottom: 25px; /* Increased bottom margin */
+  font-size: 1.1em; /* Slightly increased font size for text */
+  line-height: 1.7; /* Improved line height for readability */
+}
+
+.read-more-button {
+  background-color: var(--scandi-accent);
+  color: white;
+  border: none;
+  padding: 12px 25px; /* Slightly larger button padding */
+  border-radius: 8px; /* Slightly larger button border radius */
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1.1em; /* Slightly increased button font size */
+  transition: background-color 0.2s;
+}
+
+.read-more-button:hover {
+  background-color: #8cba4a; /* Darker shade of accent */
+}
+
+/* Profile Page Styles */
+.profile-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center items horizontally */
+}
+
+.profile-picture-upload {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.profile-picture-placeholder {
+  width: 96px; /* Slightly smaller than React version, adjust as needed */
+  height: 96px;
+  border-radius: 50%;
+  background-color: var(--scandi-light-grey);
+  border: 2px solid var(--scandi-grey);
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.profile-icon {
+  width: 48px; /* Adjust icon size */
+  height: 48px;
+  color: var(--scandi-grey);
+}
+
+.upload-picture-button {
+  margin-top: 10px;
+  padding: 8px 16px;
+  background-color: var(--scandi-light-grey);
+  color: var(--scandi-dark-grey);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: background-color 0.2s;
+}
+
+.upload-picture-button:hover {
+  background-color: var(--scandi-grey);
+  color: white;
+}
+
+.profile-form {
+  width: 100%;
+  max-width: 500px; /* Limit form width */
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  color: var(--scandi-grey);
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--scandi-light-grey);
+  border-radius: 5px;
+  background-color: var(--scandi-bg);
+  color: var(--scandi-dark-grey);
+  font-family: inherit; /* Inherit font from body */
+  font-size: inherit; /* Inherit font size */
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.06); /* Subtle shadow */
+  transition: border-color 0.2s;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--scandi-accent);
+  box-shadow: 0 0 0 2px rgba(var(--scandi-accent-rgb, 167, 201, 87), 0.2); /* Need to define --scandi-accent-rgb if using rgba */
+}
+
+.save-profile-button {
+  width: 100%;
+  padding: 10px 20px;
+  background-color: var(--scandi-accent);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s;
+}
+
+.save-profile-button:hover {
+  background-color: #8cba4a;
+}
+
+/* Settings Page Styles */
+.settings-list {
+  list-style: none;
+  padding: 0;
+  margin-top: 20px;
+  border-top: 1px solid var(--scandi-light-grey);
+}
+
+.setting-item {
+  padding: 15px 0;
+  border-bottom: 1px solid var(--scandi-light-grey);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.setting-details h3 {
+  margin-top: 0;
+  margin-bottom: 5px;
+}
+
+.setting-details p {
+  color: var(--scandi-grey);
+  margin: 0;
+}
+
+.manage-setting-button {
+  padding: 8px 16px;
+  background-color: var(--scandi-light-grey);
+  color: var(--scandi-dark-grey);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: background-color 0.2s;
+}
+
+.manage-setting-button:hover {
+  background-color: var(--scandi-grey);
+  color: white;
+}
+
+/* Projects Page Styles - Updated for bigger cards and scrollable list, and new Create Project Button style */
+.projects-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.create-project-button {
+  background-color: transparent; /* Make background transparent */
+  color: var(--scandi-accent); /* Set text color to accent */
+  border: 2px solid var(--scandi-accent); /* Add border with accent color */
+  padding: 10px 20px;
+  border-radius: 8px; /* Keep rounded corners */
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1em; /* Adjust font size if needed */
+  transition: background-color 0.2s, color 0.2s; /* Transition for both background and color */
+}
+
+.create-project-button:hover {
+  background-color: var(
+    --scandi-light-grey
+  ); /* Hover to light grey background */
+  color: var(--scandi-dark-grey); /* Change text color on hover to dark grey */
+  border-color: var(--scandi-light-grey); /* Match border color on hover */
+}
+
+.projects-container {
+  display: flex; /* Changed to flex for vertical scrolling list */
+  flex-direction: column; /* Arrange items in a column */
+  gap: 30px; /* Increased gap between cards */
+  margin-top: 30px; /* Increased top margin */
+  padding-bottom: 30px; /* Add padding at the bottom for better scroll ending */
+}
+
+.project-card {
+  background-color: white;
+  border-radius: 12px; /* Slightly larger border radius */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Slightly stronger shadow */
+  padding: 30px; /* Increased padding significantly */
+  margin-bottom: 0; /* Remove bottom margin as gap is handled by container */
+}
+
+.project-card h2 {
+  margin-top: 0;
+  margin-bottom: 15px; /* Increased bottom margin */
+  color: var(--scandi-dark-grey);
+  font-size: 1.75em; /* Increased font size for titles */
+}
+
+.project-card p {
+  color: var(--scandi-grey);
+  margin-bottom: 25px; /* Increased bottom margin */
+  font-size: 1.1em; /* Slightly increased font size for text */
+  line-height: 1.7; /* Improved line height for readability */
+}
+
+.project-status {
+  color: var(--scandi-grey);
+  margin-bottom: 15px; /* Increased bottom margin */
+  font-size: 1em; /* Slightly increased status font size */
+}
+
+.project-status span {
+  font-weight: bold;
+}
+
+.view-project-button {
+  background-color: var(--scandi-accent);
+  color: white;
+  border: none;
+  padding: 12px 25px; /* Slightly larger button padding */
+  border-radius: 8px; /* Slightly larger button border radius */
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1.1em; /* Slightly increased button font size */
+  transition: background-color 0.2s;
+}
+
+.view-project-button:hover {
+  background-color: #8cba4a; /* Darker shade of accent */
+}

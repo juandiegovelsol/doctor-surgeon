@@ -1,0 +1,15 @@
+body {
+  font-family: sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #000; /* Black background, like classic arcade games */
+  color: #fff; /* White text for contrast */
+  margin: 0; /* Reset default margin */
+  overflow: hidden; /* Prevent scrollbars if content overflows */
+}
+
+#gameCanvas {
+  background-color: #111; /* Dark grey canvas background */
+  border: 2px solid #eee; /* Light border for visibility */
+}

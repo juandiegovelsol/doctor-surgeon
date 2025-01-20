@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Simple RPG Combat Prototype</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="entity player">
+        <h2>Player</h2>
+        <div class="health-bar">
+          <div class="health-bar-fill player-health"></div>
+        </div>
+      </div>
+
+      <div class="enemies-container">
+        <button class="entity enemy" id="enemy-1" data-enemy-id="1">
+          <h2>Dummy 1 (Water)</h2>
+          <div class="health-bar">
+            <div class="health-bar-fill enemy-health enemy-health-1"></div>
+          </div>
+        </button>
+        <button class="entity enemy" id="enemy-2" data-enemy-id="2">
+          <h2>Dummy 2 (Fire)</h2>
+          <div class="health-bar">
+            <div class="health-bar-fill enemy-health enemy-health-2"></div>
+          </div>
+        </button>
+        <button class="entity enemy" id="enemy-3" data-enemy-id="3">
+          <h2>Dummy 3 (Wind)</h2>
+          <div class="health-bar">
+            <div class="health-bar-fill enemy-health enemy-health-3"></div>
+          </div>
+        </button>
+      </div>
+
+      <div class="combat-log">
+        <div class="log-messages"></div>
+      </div>
+
+      <div class="action-menu" id="action-menu">
+        <button id="attack-btn">Attack</button>
+        <button id="item-btn">Item</button>
+        <button id="magic-btn">Magic</button>
+      </div>
+
+      <div class="magic-menu" id="magic-menu" style="display: none">
+        <h3>Select Magic Type</h3>
+        <button id="magic-ice-btn">Ice</button>
+        <button id="magic-fire-btn">Fire</button>
+        <button id="magic-lightning-btn">Lightning</button>
+        <button id="magic-back-btn">Back</button>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>

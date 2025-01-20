@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Interactive Bar Chart of Emissions</title>
+    <style>
+      .bar {
+        fill: steelblue;
+      }
+      .bar-highlight {
+        fill: orange;
+      }
+      .axis {
+        font: 10px sans-serif;
+      }
+      .axis path,
+      .axis line {
+        fill: none;
+        stroke: black;
+        shape-rendering: crispEdges;
+      }
+      .tooltip {
+        position: absolute;
+        text-align: center;
+        width: auto;
+        height: auto;
+        padding: 8px;
+        font: 12px sans-serif;
+        background: lightsteelblue;
+        border: 0px;
+        border-radius: 8px;
+        pointer-events: none;
+        opacity: 0;
+      }
+      .title {
+        font-size: 16px;
+        font-weight: bold;
+        text-anchor: middle;
+      }
+      .axis-label {
+        font-size: 14px;
+        text-anchor: middle;
+      }
+      .story-text {
+        font-size: 12px;
+        text-anchor: middle;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="chart"></div>
+
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script>
+      const data = [
+        {
+          sector: "Electricity & Heat",
+          emissions: 25,
+          story:
+            "Electricity generation is a major contributor to global carbon emissions, primarily from burning fossil fuels like coal and natural gas.",
+        },
+        {
+          sector: "Transportation",
+          emissions: 14,
+          story:
+            "Transportation, including cars, trucks, planes, and ships, accounts for a significant portion of global carbon emissions.",
+        },
+        {
+          sector: "Industry",
+          emissions: 21,
+          story:
+            "Industrial processes, including manufacturing and construction, produce substantial greenhouse gas emissions.",
+        },
+        {
+          sector: "Agriculture",
+          emissions: 11,
+          story:
+            "Agricultural activities, including livestock and rice production, contribute to methane and nitrous oxide emissions.",
+        },
+        {
+          sector: "Buildings",
+          emissions: 6,
+          story:
+            "Residential and commercial buildings emit carbon through heating, cooling, and electricity consumption.",
+        },
+        {
+          sector: "Other",
+          emissions: 23,
+          story:
+            "Various other sources, including waste management and industrial processes, contribute to global carbon emissions.",
+        },
+      ];
+
+      const margin = { top: 60, right: 20, bottom: 120, left: 60 }; // Increased bottom margin for story text
+      const width = 700 - margin.left - margin.right;
+      const height = 500 - margin.top - margin.bottom;
+
+      const svg = d3
+        .select("#chart")
+        .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+      const x = d3.scaleBand().range([0, width]).padding(0.1);
+      const y = d3.scaleLinear().range([height, 0]);
+
+      const xAxis = d3.axisBottom(x);
+      const yAxis = d3.axisLeft(y).ticks(10);
+
+      x.domain(data.map((d) => d.sector));
+      y.domain([0, d3.max(data, (d) => d.emissions)]);
+
+      svg
+        .append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis)
+        .selectAll("text")
+        .style("text-anchor", "end")
+        .attr("dx", "-.8em")
+        .attr("dy", ".15em")
+        .attr("transform", "rotate(-45)");
+
+      svg.append("g").attr("class", "y axis").call(yAxis);
+
+      svg
+        .selectAll(".bar")
+        .data(data)
+        .enter()
+        .append("rect")
+        .attr("class", "bar")
+        .attr("x", (d) => x(d.sector))
+        .attr("width", x.bandwidth())
+        .attr("y", (d) => y(d.emissions))
+        .attr("height", (d) => height - y(d.emissions))
+        .on("mouseover", function (event, d) {
+          d3.select(this).classed("bar-highlight", true);
+          storyText.text(d.story); // Update story text
+        })
+        .on("mouseout", function () {
+          d3.select(this).classed("bar-highlight", false);
+          storyText.text(""); // Clear story text
+        });
+
+      // Add chart title
+      svg
+        .append("text")
+        .attr("x", width / 2)
+        .attr("y", 0 - margin.top / 2)
+        .attr("class", "title")
+        .text("Carbon Emission Data");
+
+      // Add x-axis label
+      svg
+        .append("text")
+        .attr(
+          "transform",
+          "translate(" + width / 2 + " ," + (height + margin.bottom - 70) + ")"
+        ) // Adjusted position
+        .attr("class", "axis-label")
+        .text("Emission Sector");
+
+      // Add y-axis label
+      svg
+        .append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 0 - margin.left + 15)
+        .attr("x", 0 - height / 2)
+        .attr("class", "axis-label")
+        .text("Emissions (%)");
+
+      // Add story text element below x-axis
+      const storyText = svg
+        .append("text")
+        .attr("x", width / 2)
+        .attr("y", height + margin.bottom - 20) // Position below x-axis and label
+        .attr("class", "story-text")
+        .text(""); // Initially empty
+    </script>
+  </body>
+</html>

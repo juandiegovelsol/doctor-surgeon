@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Minimalist Website</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="navbar-container">
+        <ul class="nav-links">
+          <li>
+            <a href="#home" class="nav-link active" data-page="home">Home</a>
+          </li>
+          <li>
+            <a href="#profile" class="nav-link" data-page="profile">Profile</a>
+          </li>
+          <li>
+            <a href="#settings" class="nav-link" data-page="settings"
+              >Settings</a
+            >
+          </li>
+          <li>
+            <a href="#projects" class="nav-link" data-page="projects"
+              >Projects</a
+            >
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="content">
+      <section id="home-page" class="page active-page">
+        <div class="container">
+          <h1>Welcome to the Homepage</h1>
+          <div class="articles-container">
+            <div class="article-card">
+              <h2>Minimalist Design Trends</h2>
+              <p>Explore the latest trends in minimalist web design...</p>
+              <button class="read-more-button">Read More</button>
+            </div>
+            <div class="article-card">
+              <h2>The Art of Scandi Style</h2>
+              <p>Learn about the core principles of Scandinavian design...</p>
+              <button class="read-more-button">Read More</button>
+            </div>
+            <div class="article-card">
+              <h2>Creating Clean User Interfaces</h2>
+              <p>Tips and tricks for developing user-friendly interfaces...</p>
+              <button class="read-more-button">Read More</button>
+            </div>
+            <!-- More article cards here -->
+          </div>
+        </div>
+      </section>
+
+      <section id="profile-page" class="page">
+        <div class="container">
+          <h1>Your Profile</h1>
+          <div class="profile-section">
+            <div class="profile-picture-upload">
+              <div class="profile-picture-placeholder">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="profile-icon"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.995 8.995 0 0112 21a8.995 8.995 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z"
+                  />
+                </svg>
+              </div>
+              <button class="upload-picture-button">Upload Picture</button>
+            </div>
+            <form class="profile-form">
+              <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" placeholder="Your Name" />
+              </div>
+              <div class="form-group">
+                <label for="interests">Interests</label>
+                <textarea
+                  id="interests"
+                  rows="3"
+                  placeholder="Your Interests"
+                ></textarea>
+              </div>
+              <div class="form-group">
+                <label for="about">About</label>
+                <textarea
+                  id="about"
+                  rows="5"
+                  placeholder="About Yourself"
+                ></textarea>
+              </div>
+              <button type="submit" class="save-profile-button">
+                Save Profile
+              </button>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <section id="settings-page" class="page">
+        <div class="container">
+          <h1>Settings</h1>
+          <ul class="settings-list">
+            <li class="setting-item">
+              <div class="setting-details">
+                <h3>Notifications</h3>
+                <p>Manage your notification preferences.</p>
+              </div>
+              <button class="manage-setting-button">Manage</button>
+            </li>
+            <li class="setting-item">
+              <div class="setting-details">
+                <h3>Privacy</h3>
+                <p>Control your privacy settings.</p>
+              </div>
+              <button class="manage-setting-button">Manage</button>
+            </li>
+            <li class="setting-item">
+              <div class="setting-details">
+                <h3>Account</h3>
+                <p>Update your account information.</p>
+              </div>
+              <button class="manage-setting-button">Manage</button>
+            </li>
+            <li class="setting-item">
+              <div class="setting-details">
+                <h3>Appearance</h3>
+                <p>Customize the look of your website.</p>
+              </div>
+              <button class="manage-setting-button">Manage</button>
+            </li>
+            <!-- More settings items here -->
+          </ul>
+        </div>
+      </section>
+
+      <section id="projects-page" class="page">
+        <div class="container">
+          <div class="projects-header">
+            <h1>Projects</h1>
+            <button class="create-project-button">Create New Project</button>
+          </div>
+          <div class="projects-container">
+            <div class="project-card">
+              <h2>Website Redesign</h2>
+              <p>Redesigning the company website for a modern look.</p>
+              <p class="project-status">Status: <span>In Progress</span></p>
+              <button class="view-project-button">View Project</button>
+            </div>
+            <div class="project-card">
+              <h2>Mobile App Development</h2>
+              <p>Developing a new mobile application for iOS and Android.</p>
+              <p class="project-status">Status: <span>Planning</span></p>
+              <button class="view-project-button">View Project</button>
+            </div>
+            <div class="project-card">
+              <h2>Marketing Campaign</h2>
+              <p>Launching a new marketing campaign for the summer season.</p>
+              <p class="project-status">Status: <span>Completed</span></p>
+              <button class="view-project-button">View Project</button>
+            </div>
+            <!-- More project cards here -->
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>

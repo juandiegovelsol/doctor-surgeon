@@ -1,0 +1,7 @@
+Response 2 repeats the entire application code 2 times which is unnecessary and adds complexity to the response 
+
+Pointed error in turn 2 valid, in turn 3 valid
+
+Response 5 has a minor visual error because the score is overflowed and can't be correctly seen
+
+Mismatched error because the model expects the ball to start moving and is not

@@ -1,0 +1,81 @@
+/* style.css */
+
+body {
+  font-family: sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+  background-color: #f4f4f4;
+}
+
+.game-container {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  width: 80%;
+  max-width: 600px;
+  text-align: center;
+}
+
+#question-text {
+  font-size: 1.2em;
+  line-height: 1.6; /* Improve line spacing for readability */
+  margin-bottom: 20px;
+}
+
+/* Style for the blank spans */
+.blank {
+  display: inline-block; /* To control width and padding */
+  min-width: 80px; /* Minimum width for blanks */
+  padding: 5px 8px;
+  margin: 0 5px;
+  border-bottom: 2px dashed #ccc; /* Dashed underline to represent the blank */
+  text-align: center;
+  cursor: text; /* Change cursor to text type */
+  user-select: none; /* Prevent text selection within blanks - makes it look cleaner */
+}
+
+.blank.correct {
+  border-bottom-color: green;
+  color: green; /* Optional: change text color to green if correct */
+  font-weight: bold;
+}
+
+.blank.incorrect {
+  border-bottom-color: red;
+  color: red; /* Optional: change text color to red if incorrect */
+  font-weight: bold;
+}
+
+#feedback-container {
+  margin-bottom: 15px;
+  font-weight: bold;
+}
+
+#result-container {
+  margin-top: 20px;
+  padding: 20px;
+  border-top: 1px solid #ccc;
+}
+
+#result-message {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+#restart-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #6c757d;
+  color: white;
+  cursor: pointer;
+  font-size: 1em;
+}
+
+#restart-button:hover {
+  background-color: #5a6268;
+}

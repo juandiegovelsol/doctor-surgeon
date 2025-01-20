@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script src="https://cdn.babylonjs.com/babylon.js"></script>
+  </head>
+  <body>
+    <canvas id="renderCanvas" style="width: 100%; height: 100vh"></canvas>
+    <script>
+      const canvas = document.getElementById("renderCanvas");
+      const engine = new BABYLON.Engine(canvas, true);
+
+      const createScene = function () {
+        const scene = new BABYLON.Scene(engine);
+        const cellSize = 3;
+        const mazeSize = 11;
+        const maze = generateMaze(mazeSize);
+
+        const { startPos, goalPos } = findLongestPath(maze, mazeSize);
+        const startX =
+          startPos.x * cellSize - (mazeSize / 2) * cellSize + cellSize / 2;
+        const startZ =
+          startPos.z * cellSize - (mazeSize / 2) * cellSize + cellSize / 2;
+
+        const goalX =
+          goalPos.x * cellSize - (mazeSize / 2) * cellSize + cellSize / 2;
+        const goalZ =
+          goalPos.z * cellSize - (mazeSize / 2) * cellSize + cellSize / 2;
+
+        const camera = new BABYLON.UniversalCamera(
+          "camera",
+          new BABYLON.Vector3(startX, 2.8, startZ),
+          scene
+        );
+        camera.attachControl(canvas, true);
+        camera.keysUp.push(87);
+        camera.keysDown.push(83);
+        camera.keysLeft.push(65);
+        camera.keysRight.push(68);
+        camera.checkCollisions = true;
+        camera.applyGravity = true;
+        camera.ellipsoid = new BABYLON.Vector3(0.8, 1.6, 0.8);
+        camera.ellipsoidOffset = new BABYLON.Vector3(0, 0.8, 0);
+        camera.minZ = 0.2;
+        camera.speed = 0.5;
+
+        scene.gravity = new BABYLON.Vector3(0, -0.1, 0);
+        scene.collisionsEnabled = true;
+
+        const light = new BABYLON.HemisphericLight(
+          "light",
+          new BABYLON.Vector3(0, 1, 0),
+          scene
+        );
+        light.intensity = 0.8;
+
+        const ground = BABYLON.MeshBuilder.CreateGround(
+          "ground",
+          { width: mazeSize * cellSize, height: mazeSize * cellSize },
+          scene
+        );
+        ground.checkCollisions = true;
+
+        const wallMaterial = new BABYLON.StandardMaterial("wallMat", scene);
+        wallMaterial.diffuseColor = BABYLON.Color3.Green; // Or Red, whichever you are testing with
+        for (let i = 0; i < mazeSize; i++) {
+          for (let j = 0; j < mazeSize; j++) {
+            if (maze[i][j] === 1) {
+              const wall = BABYLON.MeshBuilder.CreateBox(
+                "wall",
+                { width: cellSize, height: 3, depth: cellSize },
+                scene
+              );
+              wall.position.x =
+                i * cellSize - (mazeSize / 2) * cellSize + cellSize / 2;
+              wall.position.z =
+                j * cellSize - (mazeSize / 2) * cellSize + cellSize / 2;
+              wall.position.y = 1.5;
+              wall.material = wallMaterial; // Material applied here
+              wall.checkCollisions = true;
+            }
+          }
+        }
+
+        const goal = BABYLON.MeshBuilder.CreateSphere(
+          "goal",
+          { diameter: 1.5 },
+          scene
+        );
+        goal.position = new BABYLON.Vector3(goalX, 0.75, goalZ);
+        goal.material = new BABYLON.StandardMaterial("goalMat", scene);
+        goal.material.diffuseColor = new BABYLON.Color3(0, 1, 0);
+
+        const playerMarker = BABYLON.MeshBuilder.CreateSphere(
+          "playerMarker",
+          { diameter: 1 },
+          scene
+        );
+        playerMarker.position = new BABYLON.Vector3(startX, 0.5, startZ);
+        playerMarker.material = new BABYLON.StandardMaterial(
+          "playerMarkerMat",
+          scene
+        );
+        playerMarker.material.diffuseColor = new BABYLON.Color3(0, 0, 1);
+
+        let goalReached = false;
+        scene.onBeforeRenderObservable.add(() => {
+          const playerPos = camera.position;
+          const goalPos = goal.position;
+          const distanceToGoal = BABYLON.Vector3.Distance(playerPos, goalPos);
+
+          if (!goalReached && distanceToGoal < 2) {
+            goalReached = true;
+            alert("Congratulations! You reached the goal!");
+            setTimeout(() => {
+              resetGame(camera, startX, startZ);
+              goalReached = false;
+            }, 2000);
+          }
+        });
+
+        return scene;
+      };
+
+      function resetGame(camera, startX, startZ) {
+        camera.position = new BABYLON.Vector3(startX, 2.8, startZ);
+      }
+
+      function generateMaze(size) {
+        const maze = Array(size)
+          .fill(null)
+          .map(() => Array(size).fill(1));
+
+        function carvePassages(x, y) {
+          const directions = [
+            [0, -2],
+            [0, 2],
+            [-2, 0],
+            [2, 0],
+          ].sort(() => Math.random - 0.5);
+
+          directions.forEach(([dx, dy]) => {
+            const nx = x + dx,
+              ny = y + dy;
+            if (
+              nx > 0 &&
+              ny > 0 &&
+              nx < size &&
+              ny < size &&
+              maze[nx][ny] === 1
+            ) {
+              maze[x + dx / 2][y + dy / 2] = 0;
+              maze[nx][ny] = 0;
+              carvePassages(nx, ny);
+            }
+          });
+        }
+
+        maze[1][1] = 0;
+        carvePassages(1, 1);
+        maze[size - 2][size - 2] = 0;
+        return maze;
+      }
+
+      function findLongestPath(maze, mazeSize) {
+        const startPos = { x: 1, z: 1 };
+        const goalPos = bfs(maze, startPos, mazeSize);
+        return { startPos, goalPos };
+      }
+
+      function bfs(maze, startPos, mazeSize) {
+        const directions = [
+          [0, 1],
+          [1, 0],
+          [0, -1],
+          [-1, 0],
+        ];
+        const queue = [startPos];
+        const visited = Array.from({ length: mazeSize }, () =>
+          Array(mazeSize).fill(false)
+        );
+        visited[startPos.x][startPos.z] = true;
+        let goalPos = startPos;
+
+        while (queue.length > 0) {
+          const { x, z } = queue.shift();
+          goalPos = { x, z };
+
+          for (const [dx, dz] of directions) {
+            const nx = x + dx;
+            const nz = z + dz;
+            if (
+              nx >= 0 &&
+              nz >= 0 &&
+              nx < mazeSize &&
+              nz < mazeSize &&
+              !visited[nx][nz] &&
+              maze[nx][nz] === 0
+            ) {
+              visited[nx][nz] = true;
+              queue.push({ x: nx, z: nz });
+            }
+          }
+        }
+
+        return goalPos;
+      }
+
+      const scene = createScene();
+      engine.runRenderLoop(() => {
+        scene.render();
+      });
+
+      window.addEventListener("resize", () => {
+        engine.resize();
+      });
+    </script>
+  </body>
+</html>
