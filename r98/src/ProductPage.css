@@ -1,0 +1,25 @@
+.product-page {
+  display: flex;
+  gap: 20px;
+}
+
+@media (max-width: 767px) {
+  .product-page {
+    flex-direction: column;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .product-page {
+    flex-direction: column;
+  }
+}
+
+@media (min-width: 1024px) {
+  .product-details {
+    flex: 2;
+  }
+  .related-products {
+    flex: 1;
+  }
+}

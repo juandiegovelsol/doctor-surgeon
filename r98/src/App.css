@@ -1,0 +1,5 @@
+/* In your global styles or a dedicated breakpoints file */
+:root {
+  --breakpoint-mobile: 767px; /* Example mobile breakpoint */
+  --breakpoint-tablet: 1023px; /* Example tablet breakpoint */
+}

@@ -1,0 +1,15 @@
+.related-products-content {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.3s ease-in-out;
+}
+
+.related-products-content.expanded {
+  max-height: 500px; /* Adjust as needed */
+}
+
+@media (min-width: 768px) {
+  .related-products-content {
+    max-height: none; /* Always show on tablet and desktop */
+  }
+}
